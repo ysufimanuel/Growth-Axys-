@@ -21,7 +21,7 @@ $("logoutButton")?.addEventListener("click", async () => {
 });
 
 function parseGalleryUrls(value) {
-  return value.split(/[\\n,]+/).map(url => url.trim()).filter(Boolean);
+  return value.split(/[\n,]+/).map(url => url.trim()).filter(Boolean);
 }
 
 function validateMediaUrl(value, fieldName) {
