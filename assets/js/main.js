@@ -48,7 +48,7 @@ if (!reduceMotion && "IntersectionObserver" in window) {
   revealItems.forEach(element => element.classList.add("is-visible"));
 }
 
-const waNumber = "6281234567890"; // Ganti nomor WhatsApp admin, format internasional tanpa tanda +.
+const waNumber = "6285880089081"; // Ganti nomor WhatsApp admin, format internasional tanpa tanda +.
 document.querySelectorAll(".wa-float").forEach(a => {
   a.href = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo PT Pillarians Group, saya ingin bertanya mengenai layanan konstruksi.")}`;
 });
