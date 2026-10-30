@@ -46,6 +46,10 @@ function formData() {
     cover,
     description: $("projectDescription").value.trim(),
     gallery,
+    mediaSettings: {
+      autoplay: $("mediaAutoplay").checked,
+      muted: $("mediaMuted").checked
+    },
     updatedAt: serverTimestamp(),
     updatedBy: currentUser?.uid || null
   };
@@ -71,6 +75,8 @@ function resetForm() {
   $("projectForm").reset();
   $("projectId").value = "";
   $("projectFormTitle").textContent = "Tambah proyek baru";
+  $("mediaAutoplay").checked = false;
+  $("mediaMuted").checked = true;
 }
 $("cancelEdit")?.addEventListener("click", resetForm);
 $("refreshProjects")?.addEventListener("click", loadProjects);
@@ -111,7 +117,9 @@ async function loadProjects() {
         $("projectValue").value = p.value || "";
         $("projectCover").value = p.cover || "";
         $("projectDescription").value = p.description || "";
-        $("projectGallery").value = (p.gallery || []).join("\\n");
+        $("projectGallery").value = (p.gallery || []).join("\n");
+        $("mediaAutoplay").checked = Boolean(p.mediaSettings?.autoplay);
+        $("mediaMuted").checked = p.mediaSettings?.muted !== false;
         $("projectFormTitle").textContent = "Edit proyek";
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
