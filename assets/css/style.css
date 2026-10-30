@@ -69,3 +69,18 @@
 .media-option small{font-size:10px;font-weight:400;color:var(--muted);line-height:1.5}
 @media(max-width:760px){.media-options{grid-column:span 1;grid-template-columns:1fr}.three-scene{opacity:.52}.service-card,.value-grid article,.cert-grid article,.equipment-grid>div,.contact-form,.project-facts{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}}
 @media(prefers-reduced-motion:reduce){.three-scene{display:none!important}}
+
+
+/* Admin account management */
+.admin-account-row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:15px 0;border-bottom:1px solid var(--line)}
+.admin-account-row>div:first-child{display:flex;flex-direction:column;min-width:0}
+.admin-account-row b{font:700 13px var(--heading);color:var(--navy);overflow-wrap:anywhere}
+.admin-account-row small{font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+.admin-role-tag{font:700 9px var(--heading);letter-spacing:.08em;color:var(--navy);background:#e9eff8;padding:7px 9px;border-radius:5px;white-space:nowrap}
+.admin-form-note{grid-column:span 2}
+.account-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.account-settings-grid form{padding:20px;border:1px solid var(--line);border-radius:10px;background:rgba(245,248,252,.7)}
+.account-settings-grid h3,.admin-list-heading h3{font:700 14px var(--heading);color:var(--navy);margin:0 0 16px}
+.is-error{color:#b42318!important}.is-success{color:#167647!important}
+button:disabled{opacity:.6;cursor:wait}
+@media(max-width:760px){.account-settings-grid{grid-template-columns:1fr}.admin-account-row{align-items:flex-start;flex-direction:column}.admin-form-note{grid-column:span 1}}
