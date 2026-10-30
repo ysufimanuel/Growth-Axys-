@@ -133,3 +133,20 @@ button:disabled{opacity:.6;cursor:wait}
   .main-nav.is-open>a:nth-child(7){animation-delay:.21s}
 }
 @keyframes navItemIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+
+
+/* Account settings: explicit stacked fields, never inline label/input flow */
+.account-settings-grid{align-items:start;gap:18px}
+.account-settings-grid .account-settings-form{display:flex;flex-direction:column;align-items:stretch;gap:9px;min-width:0;padding:24px;background:#f8f9fc;border:1px solid #e2e7ef;border-radius:12px}
+.account-settings-form h3{margin:0 0 2px;font-size:17px}
+.account-settings-form .account-form-help{margin:0 0 8px;color:#78869a;font-size:12px;line-height:1.55}
+.account-settings-form label{display:block;margin:5px 0 0;color:#43516a;font-size:12px;font-weight:700;line-height:1.4}
+.account-settings-form input{display:block;width:100%;min-width:0;height:46px;padding:0 13px;border:1px solid #d8dee8;border-radius:7px;background:#fff;color:#172b4d;font:400 14px inherit;box-sizing:border-box;outline:none}
+.account-settings-form input:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff95001c}
+.account-settings-form button{align-self:flex-start;width:auto;max-width:100%;min-height:46px;margin-top:10px;padding:0 20px;white-space:normal;line-height:1.35}
+.account-settings-form .form-note{min-height:0;margin:2px 0 0;overflow-wrap:anywhere}
+@media(max-width:760px){
+ .account-settings-grid{grid-template-columns:minmax(0,1fr);gap:14px}
+ .account-settings-grid .account-settings-form{padding:19px 16px}
+ .account-settings-form button{align-self:stretch;width:100%;padding:12px 14px}
+}
