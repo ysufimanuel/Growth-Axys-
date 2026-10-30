@@ -2,7 +2,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
 
 const firebaseConfig = {
@@ -17,12 +16,11 @@ const firebaseConfig = {
 
 export const firebaseConfigured =
   Boolean(firebaseConfig.apiKey) &&
-  !firebaseConfig.apiKey.startsWith("AIzaSyA7JIIetP_avf5LCtUwRONNIrErbP-voKc");
+  !firebaseConfig.apiKey.startsWith("GANTI_");
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
 
 // Analytics is optional and only supported in compatible environments.
 export let analytics = null;
