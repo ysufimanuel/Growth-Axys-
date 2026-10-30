@@ -1,19 +1,19 @@
-const IMAGE_EXT = /\\.(avif|gif|jpe?g|png|webp|svg)(?:$|[?#])/i;
-const VIDEO_EXT = /\\.(mp4|webm|ogg|mov)(?:$|[?#])/i;
+const IMAGE_EXT = /\.(avif|gif|jpe?g|png|webp|svg)(?:$|[?#])/i;
+const VIDEO_EXT = /\.(mp4|webm|ogg|mov)(?:$|[?#])/i;
 
 function youtubeId(url) {
-  const host = url.hostname.replace(/^www\\./, "");
+  const host = url.hostname.replace(/^www\./, "");
   if (host === "youtu.be") return url.pathname.split("/").filter(Boolean)[0] || null;
   if (host.endsWith("youtube.com") || host === "youtube-nocookie.com") {
     if (url.pathname === "/watch") return url.searchParams.get("v");
-    const match = url.pathname.match(/^\\/(?:embed|shorts|live)\\/([^/?]+)/);
+    const match = url.pathname.match(/^\/(?:embed|shorts|live)\/([^/?]+)/);
     return match?.[1] || null;
   }
   return null;
 }
 
 function driveId(url) {
-  return url.pathname.match(/\\/file\\/d\\/([^/]+)/)?.[1] || url.searchParams.get("id");
+  return url.pathname.match(/\/file\/d\/([^/]+)/)?.[1] || url.searchParams.get("id");
 }
 
 export function mediaInfo(rawUrl) {
@@ -21,7 +21,7 @@ export function mediaInfo(rawUrl) {
   try { url = new URL(rawUrl); } catch { return { kind: "invalid" }; }
   if (url.protocol !== "https:") return { kind: "invalid" };
 
-  const host = url.hostname.toLowerCase().replace(/^www\\./, "");
+  const host = url.hostname.toLowerCase().replace(/^www\./, "");
   const ytId = youtubeId(url);
   if (ytId && /^[a-zA-Z0-9_-]{6,}$/.test(ytId)) {
     return {
@@ -33,7 +33,7 @@ export function mediaInfo(rawUrl) {
 
   if (host === "vimeo.com" || host === "player.vimeo.com") {
     const id = url.pathname.split("/").filter(Boolean).pop();
-    if (id && /^\\d+$/.test(id)) return { kind: "embed", embedUrl: `https://player.vimeo.com/video/${id}`, label: "Vimeo video" };
+    if (id && /^\d+$/.test(id)) return { kind: "embed", embedUrl: `https://player.vimeo.com/video/${id}`, label: "Vimeo video" };
   }
 
   if (host.endsWith("drive.google.com") || host.endsWith("docs.google.com")) {
@@ -42,7 +42,7 @@ export function mediaInfo(rawUrl) {
   }
 
   if (host.endsWith("pinterest.com") || host.endsWith("pin.it")) {
-    const match = url.pathname.match(/\\/pin\\/(\\d+)/);
+    const match = url.pathname.match(/\/pin\/(\d+)/);
     if (match) return { kind: "embed", embedUrl: `https://assets.pinterest.com/ext/embed.html?id=${match[1]}`, label: "Pinterest Pin" };
     return { kind: "link", href: url.href, label: "Pinterest" };
   }
