@@ -103,9 +103,13 @@ export function createMediaElement(rawUrl, options = {}) {
     const video = document.createElement("video");
     video.src = info.src;
     video.controls = true;
-    video.preload = "metadata";
+    video.preload = options.autoplay ? "auto" : "metadata";
     video.playsInline = true;
+    video.muted = Boolean(options.muted || options.autoplay);
+    video.autoplay = Boolean(options.autoplay);
+    video.loop = Boolean(options.autoplay);
     video.className = className;
+    if (video.autoplay) video.play().catch(() => {});
     return video;
   }
 
@@ -126,7 +130,19 @@ export function createMediaElement(rawUrl, options = {}) {
       return tile;
     }
     const frame = document.createElement("iframe");
-    frame.src = info.embedUrl;
+    const embed = new URL(info.embedUrl);
+    if (options.autoplay) {
+      if (embed.hostname.includes("youtube")) {
+        embed.searchParams.set("autoplay", "1");
+        embed.searchParams.set("mute", options.muted === false ? "0" : "1");
+        embed.searchParams.set("playsinline", "1");
+      } else if (embed.hostname.includes("vimeo")) {
+        embed.searchParams.set("autoplay", "1");
+        embed.searchParams.set("muted", options.muted === false ? "0" : "1");
+        embed.searchParams.set("loop", "1");
+      }
+    }
+    frame.src = embed.href;
     frame.title = alt;
     frame.loading = "lazy";
     frame.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
