@@ -20,11 +20,16 @@ export const firebaseConfigured =
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-// Use long polling to improve Firestore connectivity on mobile browsers
-// and networks that interfere with the default WebChannel transport.
-export const db = initializeFirestore(app, {
-  experimentalForceLongPolling: true
-});
+
+// Connect explicitly to the named Firestore database "default".
+// Without the third argument, the SDK targets the special "(default)" database.
+export const db = initializeFirestore(
+  app,
+  {
+    experimentalForceLongPolling: true
+  },
+  "default"
+);
 
 // Analytics is optional and only supported in compatible environments.
 export let analytics = null;
