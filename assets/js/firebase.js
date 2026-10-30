@@ -1,7 +1,7 @@
 // Firebase Web SDK configuration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { initializeFirestore } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
 
 const firebaseConfig = {
@@ -20,7 +20,11 @@ export const firebaseConfigured =
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+// Use long polling to improve Firestore connectivity on mobile browsers
+// and networks that interfere with the default WebChannel transport.
+export const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true
+});
 
 // Analytics is optional and only supported in compatible environments.
 export let analytics = null;
