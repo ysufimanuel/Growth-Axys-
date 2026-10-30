@@ -1,6 +1,6 @@
 # PT Growth Axys - Company Profile Website
 
-Website company profile statis berbasis **HTML, CSS, Vanilla JavaScript** dengan Firebase Authentication, Firestore, dan Storage. Tidak memakai framework frontend.
+Website company profile statis berbasis **HTML, CSS, Vanilla JavaScript** dengan Firebase Authentication dan Firestore. Media proyek memakai URL eksternal sehingga tidak membutuhkan Firebase Storage dan cocok untuk paket Spark. Tidak memakai framework frontend.
 
 ## Isi project
 
@@ -13,7 +13,7 @@ Website company profile statis berbasis **HTML, CSS, Vanilla JavaScript** dengan
 - `contact.html` - kontak dan form inquiry via WhatsApp
 - `admin/` - login dan dashboard CMS
 - `assets/js/firebase.js` - konfigurasi Firebase
-- `firestore.rules`, `storage.rules` - aturan akses Firebase
+- `firestore.rules` - aturan akses Firestore
 
 ## 1. Persiapan Firebase
 
@@ -21,9 +21,8 @@ Website company profile statis berbasis **HTML, CSS, Vanilla JavaScript** dengan
 2. Tambahkan Web App pada project.
 3. Aktifkan **Authentication > Sign-in method > Email/Password**.
 4. Buat Firestore Database.
-5. Aktifkan Firebase Storage.
-6. Salin konfigurasi Web App ke `assets/js/firebase.js`.
-7. Deploy `firestore.rules` ke Firestore Rules dan `storage.rules` ke Storage Rules.
+5. Salin konfigurasi Web App ke `assets/js/firebase.js`.
+6. Deploy `firestore.rules` ke Firestore Rules. Firebase Storage tidak digunakan oleh CMS media eksternal.
 
 Isi konfigurasi yang masih berupa `GANTI_...`. Jalankan melalui server lokal, jangan membuka file dengan `file://`.
 
@@ -91,9 +90,17 @@ Ganti nomor WhatsApp contoh `6281234567890` di:
 
 Ganti email, alamat, NIB, SBU, tahun berdiri, dan seluruh placeholder lain dengan data resmi perusahaan. Ganti logo GA sementara dengan logo resmi perusahaan.
 
-## 5. Upload foto proyek
+## 5. Media proyek melalui URL (Firebase Spark)
 
-CMS mendukung upload foto cover dan beberapa foto galeri langsung ke Firebase Storage (maksimal 10 MB per foto), atau memakai URL gambar yang sudah di-host. URL hasil upload disimpan ke dokumen Firestore. Jangan menggunakan link Google Drive privat atau URL sementara.
+CMS menyimpan URL media ke Firestore, bukan mengunggah file. Kolom media utama dan galeri menerima:
+
+- URL gambar langsung, termasuk `images.unsplash.com` dan `i.pinimg.com`.
+- YouTube (`youtube.com/watch`, `youtu.be`, `/shorts/`) melalui embed privasi `youtube-nocookie.com`.
+- Google Drive melalui `/file/d/FILE_ID/view` atau `open?id=FILE_ID`; ubah akses file menjadi **Anyone with the link**.
+- Pinterest Pin melalui URL `pinterest.com/pin/ID/` menggunakan embed Pinterest.
+- Vimeo, serta URL file video langsung `.mp4`, `.webm`, atau `.ogg`.
+
+Masukkan satu URL media utama dan satu URL per baris di galeri. Untuk Unsplash, gunakan alamat gambar langsung dari `images.unsplash.com`, bukan halaman foto `unsplash.com/photos/...`. Pinterest short link `pin.it` yang belum berupa URL Pin penuh akan ditampilkan sebagai tautan keluar. Pastikan pemilik media mengizinkan penyematan dan publikasi.
 
 ## 6. Form kontak
 
@@ -102,12 +109,12 @@ Form kontak saat ini menyusun pesan dan membuka WhatsApp admin. Ini sengaja tida
 ## 7. Keamanan dan go-live checklist
 
 - [ ] Isi Firebase config asli.
-- [ ] Deploy Firestore dan Storage Rules.
+- [ ] Deploy Firestore Rules.
 - [ ] Buat admin dan set custom claim `admin: true` dari lingkungan tepercaya.
 - [ ] Ganti nomor WA, email, alamat, Google Maps, dan seluruh data placeholder.
 - [ ] Ganti foto stok/placeholder dengan dokumentasi proyek asli yang boleh dipublikasikan.
 - [ ] Verifikasi NIB, SBU, KBLI, sertifikasi, nilai proyek, dan klaim pengalaman.
-- [ ] Tambahkan upload file Storage di CMS sebelum menyatakan fitur upload admin selesai.
+- [ ] Uji URL gambar, video, YouTube, Google Drive, dan Pinterest dari perangkat publik.
 - [ ] Uji akses publik dan admin, termasuk percobaan akses tanpa login.
 - [ ] Deploy ke hosting dengan HTTPS dan domain perusahaan.
 - [ ] Uji Lighthouse / PageSpeed pada domain produksi.
