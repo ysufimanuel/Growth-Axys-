@@ -262,3 +262,25 @@ $("accountPasswordForm")?.addEventListener("submit", async event => {
     showAccountMessage("accountPasswordMessage", error.code === "auth/weak-password" ? "Password terlalu lemah. Gunakan minimal 8 karakter." : error.message, true);
   }
 });
+
+
+// Admin dashboard navigation: show one focused panel at a time.
+const adminTabs = [...document.querySelectorAll("[data-admin-tab]")];
+const adminPanels = [...document.querySelectorAll("[data-admin-panel]")];
+function activateAdminTab(id, updateHash = true) {
+  if (!adminPanels.some(panel => panel.dataset.adminPanel === id)) id = "projects";
+  adminPanels.forEach(panel => { panel.hidden = panel.dataset.adminPanel !== id; });
+  adminTabs.forEach(tab => {
+    const active = tab.dataset.adminTab === id;
+    tab.classList.toggle("admin-active", active);
+    if (active) tab.setAttribute("aria-current", "page");
+    else tab.removeAttribute("aria-current");
+  });
+  if (updateHash && location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+}
+adminTabs.forEach(tab => tab.addEventListener("click", event => {
+  event.preventDefault();
+  activateAdminTab(tab.dataset.adminTab);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}));
+activateAdminTab(location.hash.slice(1) || "projects", false);
