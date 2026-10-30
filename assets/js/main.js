@@ -106,3 +106,7 @@ import("./firebase.js").then(async ({ db, firebaseConfigured }) => {
     }
   }
 }).catch(error => console.warn("Firebase belum tersedia:", error.message));
+
+
+// Real-time 3D scene (Three.js). The module self-disables for reduced motion.
+import("./three-scene.js").catch(error => console.warn("Three.js scene unavailable:", error));
