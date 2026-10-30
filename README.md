@@ -32,29 +32,33 @@ python -m http.server 8000
 ```
 Buka `http://localhost:8000`.
 
-## 2. Mengatur akun admin (wajib)
+## 2. Deploy ke Vercel dan konfigurasi backend admin
 
-Dashboard menggunakan **Firebase custom claim `admin: true`**. Tidak cukup hanya membuat akun email/password biasa.
+Repository ini dapat di-deploy sebagai satu project: file HTML/CSS/JS disajikan sebagai frontend statis, sedangkan file di folder \`api/\` dijalankan sebagai Vercel Functions.
 
-Cara aman:
-1. Buat akun admin melalui Firebase Authentication.
-2. Jalankan script admin claim dari lingkungan tepercaya (misalnya komputer admin/server lokal yang memiliki Firebase Admin SDK dan service account).
-3. Jangan pernah menaruh service account JSON atau private key di folder website publik.
+1. Import repository GitHub ini ke Vercel dan pilih branch \`main\`.
+2. Biarkan Root Directory di root repository. Tidak perlu framework preset.
+3. Tambahkan environment variables pada Vercel (Production; Preview hanya jika memang diperlukan):
+   - \`FIREBASE_PROJECT_ID\`: \`growth-axys\`
+   - \`FIREBASE_CLIENT_EMAIL\`: nilai \`client_email\` dari Firebase Service Account JSON.
+   - \`FIREBASE_PRIVATE_KEY\`: nilai \`private_key\` dari Service Account JSON. Simpan hanya di environment variables Vercel.
+   - \`SUPER_ADMIN_UID\`: UID akun utama yang menjadi satu-satunya Super Admin.
+4. Buat/unduh Service Account key dari Firebase Console > Project settings > Service accounts. Pastikan service account memiliki izin mengelola Firebase Authentication.
+5. Deploy ulang setelah environment variables disimpan.
+6. Pastikan akun Super Admin sudah memiliki custom claim \`admin: true\`. UID-nya harus sama persis dengan \`SUPER_ADMIN_UID\`.
 
-Contoh script Node.js terpisah, dijalankan hanya di lingkungan tepercaya setelah memasang `firebase-admin` dan mengatur `GOOGLE_APPLICATION_CREDENTIALS`:
+**Penting:** jangan pernah commit Service Account JSON, private key, atau password sementara ke repository. Jika private key pernah terekspos, segera revoke dan buat key baru. Vercel Functions hanya memakai key tersebut di sisi server.
 
-```js
-const admin = require("firebase-admin");
-admin.initializeApp();
-async function grantAdmin(email) {
-  const user = await admin.auth().getUserByEmail(email);
-  await admin.auth().setCustomUserClaims(user.uid, { admin: true });
-  console.log(`Admin claim diberikan ke ${email}. Login ulang untuk refresh token.`);
-}
-grantAdmin("admin@perusahaan.co.id");
-```
+### Endpoint admin
 
-Setelah claim diberikan, logout lalu login kembali. Custom claim harus diberikan hanya kepada personel berwenang.
+- \`POST /api/admin/create\` - membuat akun admin baru.
+- \`GET /api/admin/list\` - menampilkan akun dengan custom claim \`admin: true\`.
+- \`POST /api/admin/delete\` - menghapus akun admin.
+- Hanya UID yang cocok dengan \`SUPER_ADMIN_UID\` dan memiliki claim admin yang boleh memakai endpoint manajemen admin.
+
+Di dashboard, Super Admin dapat membuat admin dan menghapus akun admin. Setiap admin juga dapat mengganti email (melalui verifikasi email) dan password sendiri dari bagian Pengaturan Akun Saya. Pembuatan admin memakai password sementara minimal 12 karakter; sampaikan kredensial kepada penerima melalui kanal aman dan minta mereka menggantinya setelah login.
+
+Untuk menjalankan lokal, isi environment variables yang sama di file \`.env.local\` (jangan commit file tersebut), lalu gunakan Vercel CLI untuk menjalankan project secara lokal.
 
 ## 3. Struktur data Firestore
 
