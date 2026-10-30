@@ -1,0 +1,12 @@
+{
+  "name": "growth-axys",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pillarians Group company profile and admin CMS",
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.4.0"
+  }
+}
