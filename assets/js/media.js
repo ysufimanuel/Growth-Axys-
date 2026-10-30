@@ -47,6 +47,19 @@ export function mediaInfo(rawUrl) {
     return { kind: "link", href: url.href, label: "Pinterest" };
   }
 
+  // Unsplash photo-page URLs are HTML pages, not image files. Use the
+  // photo's download redirect as an <img> source so existing saved URLs work.
+  // For guaranteed hotlinking and attribution, prefer images.unsplash.com URLs.
+  if (host === "unsplash.com") {
+    const match = url.pathname.match(/^\/photos\/([a-zA-Z0-9_-]+)\/?$/);
+    if (match) {
+      return {
+        kind: "image",
+        src: `https://unsplash.com/photos/${match[1]}/download?force=true`
+      };
+    }
+  }
+
   if (IMAGE_EXT.test(url.pathname + url.search) ||
       host === "images.unsplash.com" ||
       host === "i.pinimg.com" ||
@@ -74,7 +87,7 @@ export function createMediaElement(rawUrl, options = {}) {
     img.addEventListener("error", () => {
       const fallback = document.createElement("div");
       fallback.className = "media-fallback";
-      fallback.textContent = "Gambar tidak dapat dimuat";
+      fallback.textContent = "Gambar tidak dapat dimuat. Gunakan URL langsung dari images.unsplash.com.";
       img.replaceWith(fallback);
     }, { once: true });
     return img;
