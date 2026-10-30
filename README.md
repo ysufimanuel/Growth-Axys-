@@ -1,4 +1,4 @@
-# PT Growth Axys - Company Profile Website
+# PT Pillarians Group - Company Profile Website
 
 Website company profile statis berbasis **HTML, CSS, Vanilla JavaScript** dengan Firebase Authentication dan Firestore. Media proyek memakai URL eksternal sehingga tidak membutuhkan Firebase Storage dan cocok untuk paket Spark. Tidak memakai framework frontend.
 
