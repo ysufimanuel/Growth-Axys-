@@ -36,14 +36,16 @@ set("detailDescription", project.description);
 
 const cover = document.getElementById("detailCover");
 if (cover && project.cover) {
-  cover.replaceChildren(createMediaElement(project.cover, { alt: project.name || "Media utama proyek", className: "detail-media-element" }));
+  const mediaSettings = project.mediaSettings || { autoplay: false, muted: true };
+  cover.replaceChildren(createMediaElement(project.cover, { alt: project.name || "Media utama proyek", className: "detail-media-element", autoplay: Boolean(mediaSettings.autoplay), muted: mediaSettings.muted !== false }));
 }
 
 const gallery = document.getElementById("detailGallery");
 if (gallery && Array.isArray(project.gallery) && project.gallery.length) {
   gallery.innerHTML = "";
   project.gallery.forEach((url, i) => {
-    gallery.append(createMediaElement(url, { alt: `Dokumentasi proyek ${i + 1}`, className: "gallery-media-element" }));
+    const mediaSettings = project.mediaSettings || { autoplay: false, muted: true };
+    gallery.append(createMediaElement(url, { alt: `Dokumentasi proyek ${i + 1}`, className: "gallery-media-element", autoplay: Boolean(mediaSettings.autoplay), muted: mediaSettings.muted !== false }));
   });
 }
 
