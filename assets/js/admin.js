@@ -149,7 +149,7 @@ async function adminApi(path, options = {}) {
     headers: { "Content-Type": "application/json", Authorization: "Bearer " + token, ...(options.headers || {}) }
   });
   const payload = await response.json().catch(() => ({}));
-  if (!response.ok) throw new Error(payload.error || "Permintaan gagal.");
+  if (!response.ok) { const error = new Error(payload.error || "Permintaan gagal."); error.status = response.status; throw error; }
   return payload;
 }
 function showAccountMessage(id, message, isError = false) {
@@ -208,6 +208,11 @@ async function loadAdminAccounts() {
       root.append(note);
     }
   } catch (error) {
+    if (error.status === 403) {
+      $("adminAccounts")?.setAttribute("hidden", "");
+      Array.from(document.querySelectorAll("a")).filter(link => link.getAttribute("href") === "#adminAccounts").forEach(link => link.setAttribute("hidden", ""));
+      return;
+    }
     root.textContent = error.message;
     showAccountMessage("adminAccountMessage", error.message, true);
   }
