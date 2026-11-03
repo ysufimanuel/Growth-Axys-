@@ -20,22 +20,22 @@ if (!host || reduceMotion || !("WebGLRenderingContext" in window)) {
   camera.position.set(0, 0, 9);
 
   scene.add(new THREE.AmbientLight(0xffffff, 1.5));
-  const key = new THREE.DirectionalLight(0xffb45c, 2.2);
+  const key = new THREE.DirectionalLight(0xf3dcae, 2.0);
   key.position.set(4, 5, 7);
   scene.add(key);
-  const fill = new THREE.PointLight(0x75b7ff, 28, 18);
+  const fill = new THREE.PointLight(0xa9c4b2, 22, 18);
   fill.position.set(-4, -2, 4);
   scene.add(fill);
 
   const group = new THREE.Group();
   scene.add(group);
   const material = new THREE.MeshPhysicalMaterial({
-    color: 0x7eafe5, metalness: .42, roughness: .18,
+    color: 0x9fb3a5, metalness: .42, roughness: .18,
     transmission: .18, thickness: .8, transparent: true, opacity: .78,
     clearcoat: 1, clearcoatRoughness: .12
   });
   const orange = new THREE.MeshPhysicalMaterial({
-    color: 0xff9a2f, metalness: .62, roughness: .22,
+    color: 0xC5A059, metalness: .62, roughness: .22,
     clearcoat: 1, transparent: true, opacity: .9
   });
 
@@ -51,7 +51,7 @@ if (!host || reduceMotion || !("WebGLRenderingContext" in window)) {
 
   const wire = new THREE.Mesh(
     new THREE.TorusGeometry(2.25, .012, 8, 120),
-    new THREE.MeshBasicMaterial({ color: 0xffb65b, transparent: true, opacity: .58 })
+    new THREE.MeshBasicMaterial({ color: 0xC5A059, transparent: true, opacity: .58 })
   );
   wire.position.set(3.0, -.1, -2);
   wire.rotation.set(.8, .25, .2);

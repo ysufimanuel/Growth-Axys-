@@ -21,7 +21,7 @@ if (header) window.addEventListener("scroll", () => header.classList.toggle("scr
 
 // Subtle motion system: reveal content as it enters the viewport.
 const revealSelector = [
-  ".stats-grid > *", ".about-visual", ".about-copy", ".section-heading",
+  ".stats-grid > *", ".bento > *", ".about-visual", ".about-copy", ".section-heading",
   ".service-card", ".project-card", ".client-logos > *", ".cta-inner > *",
   ".service-detail", ".value-grid article", ".legal-grid > div",
   ".cert-grid article", ".equipment-grid > div", ".contact-info",
