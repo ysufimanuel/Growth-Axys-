@@ -126,3 +126,31 @@ Form kontak saat ini menyusun pesan dan membuka WhatsApp admin. Ini sengaja tida
 ## Catatan
 
 Website ini adalah starter project fungsional untuk dikembangkan dan diuji. Bukan berarti sudah terkoneksi dengan Firebase perusahaan atau siap go-live: konfigurasi, data resmi, foto, custom claim, dan pengujian produksi tetap diperlukan. Gambar eksternal pada demo hanyalah placeholder visual.
+
+
+---
+
+## Repository hygiene and security notes
+
+The `main` branch contains the public company website, Firebase client integration, Firestore/Storage rules, and Vercel API functions. The frontend Firebase Web configuration is intentionally client-visible; it is not a service-account credential. Restrict the API key to the intended APIs and application domains where supported, and rely on Firebase Authentication plus Firestore/Storage Rules for authorization.
+
+The following values must remain server-side environment variables in Vercel and in local `.env.local` files:
+
+- `FIREBASE_PROJECT_ID`
+- `FIREBASE_CLIENT_EMAIL`
+- `FIREBASE_PRIVATE_KEY`
+- `SUPER_ADMIN_UID`
+
+Never commit a service-account JSON file, private key, or real local environment file. If a private key has ever been exposed, revoke it and issue a replacement.
+
+## Local setup
+
+```bash
+npm install
+cp .env.example .env.local
+python -m http.server 8000
+```
+
+Open `http://localhost:8000` for the static site. Vercel Functions require the Vercel runtime (for example, `vercel dev`) and the server-side environment variables above. A static Python server does not execute the `/api` endpoints.
+
+Before production use, replace company placeholders and verify every legal, contact, certification, and project claim with authorized company information.
