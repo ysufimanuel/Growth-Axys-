@@ -1,5 +1,5 @@
 const form = document.getElementById("contactForm");
-const adminNumber = "6285880089081"; // Nomor WhatsApp tujuan dalam format internasional tanpa tanda +.
+const adminNumber = "628138744366"; // Nomor WhatsApp tujuan dalam format internasional tanpa tanda +.
 
 form?.addEventListener("submit", event => {
   event.preventDefault();
