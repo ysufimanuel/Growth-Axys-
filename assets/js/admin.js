@@ -264,7 +264,39 @@ $("accountPasswordForm")?.addEventListener("submit", async event => {
 });
 
 
-// Admin dashboard navigation: show one focused panel at a time.
+// Admin dashboard navigation + GSAP motion (dashboard scope only).
+const gsap = window.gsap;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const adminTabs = [...document.querySelectorAll("[data-admin-tab]")];
+const adminPanels = [...document.querySelectorAll("[data-admin-panel]")];
+function activateAdminTab(id, updateHash = true) {
+  if (!adminPanels.some(panel => panel.dataset.adminPanel === id)) id = "projects";
+  const nextPanel = adminPanels.find(panel => panel.dataset.adminPanel === id);
+  const wasHidden = nextPanel?.hidden;
+  adminPanels.forEach(panel => { panel.hidden = panel !== nextPanel; });
+  adminTabs.forEach(tab => {
+    const active = tab.dataset.adminTab === id;
+    tab.classList.toggle("admin-active", active);
+    if (active) tab.setAttribute("aria-current", "page");
+    else tab.removeAttribute("aria-current");
+  });
+  if (updateHash && location.hash !== "#" + id) history.replaceState(null, "", "#" + id);
+  if (nextPanel && wasHidden && gsap && !reduceMotion) {
+    gsap.fromTo(nextPanel, { autoAlpha: 0, y: 14, scale: 0.99 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.42, ease: "power3.out", clearProps: "transform" });
+    gsap.fromTo(nextPanel.querySelectorAll("h2, .admin-list-heading, .admin-form, .admin-project-row, .admin-account-row, .account-settings-form"), { y: 10, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.34, stagger: 0.035, delay: 0.05, ease: "power2.out", clearProps: "transform,opacity,visibility" });
+  }
+}
+adminTabs.forEach(tab => tab.addEventListener("click", event => {
+  event.preventDefault();
+  activateAdminTab(tab.dataset.adminTab);
+  window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+}));
+if (gsap && !reduceMotion) {
+  gsap.fromTo(".admin-top > *", { y: 16, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.55, stagger: 0.08, ease: "power3.out", clearProps: "transform,opacity,visibility" });
+  gsap.fromTo(".admin-glass-nav", { y: 26, xPercent: -50, autoAlpha: 0 }, { y: 0, xPercent: -50, autoAlpha: 1, duration: 0.65, delay: 0.15, ease: "power3.out", clearProps: "opacity,visibility" });
+}
+activateAdminTab(location.hash.slice(1) || "projects", false);
+
 const adminTabs = [...document.querySelectorAll("[data-admin-tab]")];
 const adminPanels = [...document.querySelectorAll("[data-admin-panel]")];
 function activateAdminTab(id, updateHash = true) {
