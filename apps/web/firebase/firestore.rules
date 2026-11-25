@@ -1,0 +1,48 @@
+rules_version = '2';
+
+// Aturan TARGET untuk versi Next.js. JANGAN deploy sebelum cutover:
+// situs vanilla yang masih live membaca `projects` langsung dari browser tanpa filter publishStatus,
+// sehingga query-nya akan ditolak oleh aturan ini. Versi baru membaca semua data lewat Admin SDK
+// (server) dan menulis lewat endpoint server, sehingga client tidak membutuhkan akses tulis sama sekali.
+//
+// Uji dengan Firebase Emulator Suite sebelum deploy:
+//   firebase emulators:exec --only firestore "npm test"
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isPublished() {
+      // Dokumen legacy tanpa field publishStatus sudah publik di situs lama.
+      return resource.data.get('publishStatus', 'published') == 'published';
+    }
+
+    // Konten publik: hanya baca yang published. Query client wajib memfilter publishStatus.
+    match /{collection}/{id} {
+      allow read: if collection in ['projects', 'services', 'articles', 'certifications'] && isPublished();
+      allow write: if false; // semua penulisan lewat server (Admin SDK) yang memverifikasi token + role
+    }
+
+    // Statistik publik (hanya baca).
+    match /siteContent/{id} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Profil: pengguna hanya boleh membaca profilnya sendiri. Role/status TIDAK dapat ditulis client.
+    match /profiles/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // Privat: hanya server. auditLogs, invitations, revisions, redirects, siteSettings.
+    match /auditLogs/{id} { allow read, write: if false; }
+    match /invitations/{id} { allow read, write: if false; }
+    match /revisions/{id} { allow read, write: if false; }
+    match /redirects/{id} { allow read, write: if false; }
+    match /siteSettings/{id} { allow read, write: if false; }
+
+    // Default tolak.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
