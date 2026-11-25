@@ -82,7 +82,8 @@ export const createDefaults: Record<ContentType, Record<string, unknown>> = {
 /** Create: semua field opsional kecuali judul/nama; sisanya diisi createDefaults. */
 export function createSchema(type: ContentType) {
   const key = type === "certifications" ? "name" : "title";
-  return (schemas[type] as z.ZodObject).partial().required({ [key]: true });
+  // `key` is narrowed at runtime, but Zod 4 cannot infer a valid required-mask from a computed string key.
+  return (schemas[type] as z.ZodObject).partial().required({ [key]: true } as never);
 }
 
 /** Update parsial; `redirectConfirmed` wajib bila slug konten published berubah. */
