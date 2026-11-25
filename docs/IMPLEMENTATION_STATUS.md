@@ -1,12 +1,12 @@
 # Status Implementasi: Next.js Rebuild (`feature/nextjs-rebuild`)
 
 Dokumen ini adalah hasil audit repo + status pekerjaan terhadap
-`Pillarians_Group_Technical_Spec_SEO_GEO`. Aplikasi baru ada di `apps/web`.
+`Pillarians_Group_Technical_Spec_SEO_GEO`. Aplikasi baru berada di root branch ini.
 **File situs vanilla yang sedang production (root repo) tidak diubah.**
 
-> Penting: kode di `apps/web` **belum pernah di-build atau dijalankan** karena instalasi paket
+> Penting: kode di root branch **belum pernah di-build atau dijalankan** karena instalasi paket
 > (`npm install`) tidak tersedia di sesi pengerjaan. Yang sudah diverifikasi dijelaskan di bagian
-> "Verifikasi" di bawah. Jalankan `npm install && npm run typecheck && npm run build` di `apps/web`
+> "Verifikasi" di bawah. Jalankan `npm install && npm run typecheck && npm run build` di root branch
 > sebelum menganggap branch ini siap.
 
 ## 1. Hasil audit (Phase 0)
@@ -14,7 +14,7 @@ Dokumen ini adalah hasil audit repo + status pekerjaan terhadap
 | Temuan | Dampak |
 |---|---|
 | Situs = HTML statis + `assets/js/*.js`; data proyek dibaca **langsung dari browser** ke Firestore | Konten proyek tidak ada di HTML awal; pindah ke render server |
-| `firestore.rules` di repo **kosong (0 byte)**; rules yang aktif di Firebase tidak diketahui | Harus dicek di Firebase Console. Rules target ada di `apps/web/firebase/firestore.rules` |
+| `firestore.rules` di repo **kosong (0 byte)**; rules yang aktif di Firebase tidak diketahui | Harus dicek di Firebase Console. Rules target ada di `firebase/firestore.rules` |
 | Database Firestore bernama `default` (bukan `(default)`) | Admin SDK memakai `FIREBASE_DATABASE_ID=default` |
 | Role: hanya claim `admin: true` + satu `SUPER_ADMIN_UID` (env) | Dipetakan ke `admin`/`superadmin`; claim lama tetap dihormati |
 | `package.json` root: `engines.node = 26.x`, API di `/api/admin/*` (create/list/delete) | Tidak disentuh; endpoint baru ada di `apps/web/app/api` |
@@ -78,8 +78,8 @@ daftar layanan sesuai KBLI/SBU · persetujuan publikasi proyek (NDA) · domain c
 Isi di `apps/web/lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/stats`, `projects`, `certifications`, dll.).
 
 ## 5. Langkah menuju preview & cutover
-1. `cd apps/web && npm install && npm run typecheck && npm test && npm run build`.
-2. Buat **project Vercel terpisah** dengan *Root Directory* `apps/web` (project produksi saat ini men-deploy root vanilla; jangan diubah). Isi env sesuai `.env.example`.
+1. `npm install && npm run typecheck && npm test && npm run build`.
+2. Buat **project Vercel terpisah** dengan *Root Directory* `.` (project produksi saat ini men-deploy root vanilla; jangan diubah). Isi env sesuai `.env.example`.
 3. Jalankan `npm run bootstrap:superadmin -- email@…` secara lokal untuk Superadmin pertama.
 4. Uji Rules di Emulator; bandingkan konten/URL/metadata dengan situs lama; jalankan Lighthouse.
 5. Backup Firestore (+ Storage bila dipakai) → deploy Rules → pindahkan domain → submit sitemap di Search Console.

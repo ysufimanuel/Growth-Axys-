@@ -1,12 +1,32 @@
 {
-  "name": "growth-axys",
-  "version": "1.0.0",
+  "name": "pillarians-web",
+  "version": "0.1.0",
   "private": true,
-  "description": "Pillarians Group company profile and admin CMS",
+  "type": "module",
+  "description": "Pillarians Group company profile (Next.js App Router) + admin CMS",
   "engines": {
-    "node": "26.x"
+    "node": ">=20.9.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"tests/**/*.test.ts\"",
+    "bootstrap:superadmin": "node scripts/bootstrap-superadmin.mjs"
   },
   "dependencies": {
-    "firebase-admin": "^13.4.0"
+    "firebase": "^12.0.0",
+    "firebase-admin": "^13.4.0",
+    "next": "^16.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.9.0"
   }
 }
