@@ -1,11 +1,9 @@
 # Pillarians Group — Next.js (App Router)
 
-Versi baru website company profile + dashboard admin. Situs vanilla di root repo tetap menjadi
-production sampai versi ini lolos pengujian. Status, audit, dan keputusan: [`docs/IMPLEMENTATION_STATUS.md`](../../docs/IMPLEMENTATION_STATUS.md).
+Versi baru website company profile + dashboard admin. Situs vanilla di branch `main` tetap menjadi production sampai versi ini lolos pengujian. Status, audit, dan keputusan: [`docs/IMPLEMENTATION_STATUS.md`](docs/IMPLEMENTATION_STATUS.md).
 
 ## Menjalankan
 ```bash
-cd apps/web
 cp .env.example .env.local   # isi kredensial (jangan di-commit)
 npm install
 npm run dev                  # http://localhost:3000
