@@ -21,10 +21,10 @@ export default async function PageSeoPage() {
   const complete = groups.reduce((n, g) => n + g.rows.filter((r) => r.seoTitle.trim() && r.description.trim()).length, 0);
   return <>
     <div className="adm-pagehead"><div><h1>SEO halaman</h1><p>Tinjau metadata konten dan buka editor untuk mengubah judul, deskripsi, serta gambar Open Graph. Canonical/noindex hanya untuk Superadmin.</p></div></div>
-    <div className="adm-stats-grid">
-      <article className="adm-stat"><span>Total konten</span><strong>{total}</strong></article>
-      <article className="adm-stat"><span>Metadata lengkap</span><strong>{complete}</strong></article>
-      <article className="adm-stat"><span>Perlu dilengkapi</span><strong>{total - complete}</strong></article>
+    <div className="adm-grid adm-grid-kpi">
+      <article className="adm-card adm-stat"><span className="adm-stat-label">Total konten</span><strong className="adm-stat-value">{total}</strong></article>
+      <article className="adm-card adm-stat"><span className="adm-stat-label">Metadata lengkap</span><strong className="adm-stat-value">{complete}</strong></article>
+      <article className="adm-card adm-stat"><span className="adm-stat-label">Perlu dilengkapi</span><strong className="adm-stat-value">{total - complete}</strong></article>
     </div>
     {groups.map(({ type, rows }) => <section className="adm-card adm-seo-group" key={type}>
       <h2>{labels[type]}</h2>
