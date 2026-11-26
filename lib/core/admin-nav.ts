@@ -19,7 +19,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: "articles", label: "Artikel", href: "/admin/content/articles", permission: "content.edit", group: "content", available: true },
   { id: "certifications", label: "Sertifikasi", href: "/admin/content/certifications", permission: "content.edit", group: "content", available: true },
   { id: "media", label: "Media", href: "/admin/media", permission: "media.manage", group: "site", available: false },
-  { id: "seo", label: "SEO halaman", href: "/admin/seo", permission: "seo.page", group: "site", available: false },
+  { id: "seo", label: "SEO halaman", href: "/admin/seo", permission: "seo.page", group: "site", available: true },
   { id: "seo-global", label: "SEO global", href: "/admin/settings/seo", permission: "seo.global", group: "site", available: false },
   { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: true },
   { id: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
