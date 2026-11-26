@@ -224,3 +224,60 @@ export async function deleteContent(actor: Actor, type: ContentType, id: string)
   revalidateFor(type, String(snap.get("slug") || id));
   return { id };
 }
+
+
+export interface RevisionSummary {
+  id: string;
+  timestamp: number | null;
+  editorUid: string;
+  deleted: boolean;
+  title: string;
+  publishStatus: Status;
+}
+
+/** Riwayat versi untuk satu dokumen. Snapshot penuh tidak dikirim ke daftar. */
+export async function listRevisions(type: ContentType, id: string): Promise<RevisionSummary[]> {
+  const snap = await adminDb().collection("revisions")
+    .where("targetType", "==", type)
+    .where("targetId", "==", id)
+    .get();
+  return snap.docs.map((d) => {
+    const data = d.data() as Doc;
+    const snapshot = (data.snapshot && typeof data.snapshot === "object" ? data.snapshot : {}) as Doc;
+    return {
+      id: d.id,
+      timestamp: toMillis(data.timestamp),
+      editorUid: String(data.editorUid ?? ""),
+      deleted: data.deleted === true,
+      title: String(snapshot.title ?? snapshot.name ?? "(tanpa judul)"),
+      publishStatus: statusOf(snapshot),
+    };
+  }).sort((a, b) => (b.timestamp ?? 0) - (a.timestamp ?? 0)).slice(0, 50);
+}
+
+/** Restore hanya Superadmin. Versi saat ini ikut disimpan agar restore bisa dibatalkan. */
+export async function restoreRevision(actor: Actor, type: ContentType, id: string, revisionId: string) {
+  if (!can(actor.role, "backup.restore")) throw new HttpError(403, "Hanya Superadmin yang dapat memulihkan revisi.");
+  const revisionRef = adminDb().collection("revisions").doc(revisionId);
+  const revisionSnap = await revisionRef.get();
+  if (!revisionSnap.exists) throw new HttpError(404, "Revisi tidak ditemukan.");
+  const revision = revisionSnap.data() as Doc;
+  if (revision.targetType !== type || revision.targetId !== id || !revision.snapshot || typeof revision.snapshot !== "object") {
+    throw new HttpError(400, "Revisi tidak cocok dengan konten yang diminta.");
+  }
+
+  const ref = col(type).doc(id);
+  const current = await ref.get();
+  if (current.exists) {
+    await adminDb().collection("revisions").add({
+      targetType: type, targetId: id, snapshot: current.data(), editorUid: actor.uid,
+      timestamp: FieldValue.serverTimestamp(), restoreCheckpoint: true,
+    });
+  }
+  const snapshot = revision.snapshot as Doc;
+  const restored = { ...snapshot, updatedAt: FieldValue.serverTimestamp(), updatedBy: actor.uid };
+  await ref.set(restored, { merge: false });
+  await writeAudit(actor, "content.revision_restored", type, id, `Revisi ${revisionId} dipulihkan.`);
+  revalidateFor(type, String(restored.slug || id));
+  return { id, title: String(restored.title ?? restored.name ?? id), publishStatus: statusOf(restored) };
+}
