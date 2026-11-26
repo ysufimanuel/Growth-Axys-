@@ -23,7 +23,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: "seo-global", label: "SEO global", href: "/admin/settings/seo", permission: "seo.global", group: "site", available: false },
   { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: false },
   { id: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
-  { id: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: false },
+  { id: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: true },
   { id: "backup", label: "Backup", href: "/admin/backup", permission: "backup.restore", group: "system", available: false },
 ] as const;
 
