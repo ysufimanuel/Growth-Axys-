@@ -7,7 +7,9 @@ import { clientAuth } from "../../../lib/firebase-client";
 
 function LoginForm() {
   const router = useRouter();
-  const invited = useSearchParams().get("invited") === "1";
+  const search = useSearchParams();
+  const invited = search.get("invited") === "1";
+  const passwordChanged = search.get("passwordChanged") === "1";
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -47,7 +49,7 @@ function LoginForm() {
     <main className="login-page">
       <form className="login-card" onSubmit={onSubmit}>
         <h1>Admin Pillarians</h1>
-        {invited ? <p>Password sudah disetel? Masuk di bawah untuk mengaktifkan akun Anda.</p> : <p>Masuk untuk mengelola konten website.</p>}
+        {passwordChanged ? <p role="status">Password berhasil diubah. Silakan masuk dengan password baru.</p> : invited ? <p>Password sudah disetel? Masuk di bawah untuk mengaktifkan akun Anda.</p> : <p>Masuk untuk mengelola konten website.</p> }
         <label>
           Email
           <input name="email" type="email" autoComplete="username" required />
