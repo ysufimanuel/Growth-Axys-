@@ -2,6 +2,7 @@ import "server-only";
 import { adminAuth, adminDb } from "./firebase-admin";
 import { can, resolveRole, type AccountStatus, type Permission, type Role } from "../core/permissions";
 import { HttpError } from "./http";
+import { CSRF_HEADER, isCookieRequestAllowed, readCookie } from "../core/csrf";
 
 export interface Actor {
   uid: string;
@@ -42,14 +43,39 @@ export async function loadActor(uid: string, options: LoadOptions = {}): Promise
   return { uid, email: user.email ?? "", role, status };
 }
 
-/** Untuk Route Handler: Authorization: Bearer <Firebase ID token>. Tidak memakai cookie => tidak rentan CSRF. */
+/**
+ * Untuk Route Handler. Dua cara autentikasi:
+ *  1) Authorization: Bearer <Firebase ID token> (tidak rentan CSRF karena tidak dikirim otomatis);
+ *  2) session cookie HttpOnly `pg_session` (dipakai dashboard). Untuk metode yang mengubah data,
+ *     wajib lolos pemeriksaan same-origin + header X-Admin-Request (lihat lib/core/csrf.ts).
+ */
 export async function requireActor(req: Request, options: LoadOptions = {}): Promise<Actor> {
   const match = (req.headers.get("authorization") ?? "").match(/^Bearer\s+(.+)$/i);
-  if (!match) throw new HttpError(401, "Token autentikasi tidak ditemukan.");
+  if (!match) return requireActorFromCookie(req, options);
   let uid: string;
   try {
     const decoded = await adminAuth().verifyIdToken(match[1]!, true); // true = cek token yang dicabut
     uid = decoded.uid;
+  } catch {
+    throw new HttpError(401, "Sesi tidak valid atau sudah kedaluwarsa.");
+  }
+  return loadActor(uid, options);
+}
+
+async function requireActorFromCookie(req: Request, options: LoadOptions): Promise<Actor> {
+  const cookie = readCookie(req.headers.get("cookie"), SESSION_COOKIE);
+  if (!cookie) throw new HttpError(401, "Token autentikasi tidak ditemukan.");
+  const allowed = isCookieRequestAllowed({
+    method: req.method,
+    origin: req.headers.get("origin"),
+    host: req.headers.get("host"),
+    secFetchSite: req.headers.get("sec-fetch-site"),
+    customHeader: req.headers.get(CSRF_HEADER),
+  });
+  if (!allowed) throw new HttpError(403, "Permintaan lintas-situs ditolak.");
+  let uid: string;
+  try {
+    uid = (await adminAuth().verifySessionCookie(cookie, true)).uid;
   } catch {
     throw new HttpError(401, "Sesi tidak valid atau sudah kedaluwarsa.");
   }

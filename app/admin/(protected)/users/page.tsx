@@ -14,11 +14,15 @@ export default async function UsersPage() {
 
   return (
     <>
-      <h1>Akun admin</h1>
-      <p>
-        Undang, ubah role, atau nonaktifkan akun melalui <code>POST /api/admin/invitations</code> dan <code>PATCH /api/admin/users/[uid]</code>. Antarmuka form akan ditambahkan pada fase berikutnya.
-      </p>
-      <table>
+      <div className="adm-pagehead">
+        <div>
+          <h1>Akun admin</h1>
+          <p>Daftar akun (hanya baca). Undangan, ubah role, dan nonaktifkan akun saat ini melalui API; antarmuka formnya belum tersedia.</p>
+        </div>
+      </div>
+      <div className="adm-card adm-tablewrap">
+      <table className="adm-table">
+        <caption className="adm-sr">Daftar akun admin</caption>
         <thead>
           <tr>
             <th scope="col">Email</th>
@@ -40,6 +44,7 @@ export default async function UsersPage() {
           ))}
         </tbody>
       </table>
+      </div>
       {truncated ? <p>Daftar dipotong pada 1000 akun pertama.</p> : null}
     </>
   );

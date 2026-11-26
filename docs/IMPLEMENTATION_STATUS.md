@@ -17,14 +17,14 @@ Dokumen ini adalah hasil audit repo + status pekerjaan terhadap
 | `firestore.rules` di repo **kosong (0 byte)**; rules yang aktif di Firebase tidak diketahui | Harus dicek di Firebase Console. Rules target ada di `firebase/firestore.rules` |
 | Database Firestore bernama `default` (bukan `(default)`) | Admin SDK memakai `FIREBASE_DATABASE_ID=default` |
 | Role: hanya claim `admin: true` + satu `SUPER_ADMIN_UID` (env) | Dipetakan ke `admin`/`superadmin`; claim lama tetap dihormati |
-| `package.json` root: `engines.node = 26.x`, API di `/api/admin/*` (create/list/delete) | Tidak disentuh; endpoint baru ada di `apps/web/app/api` |
+| `package.json` root: `engines.node = 26.x`, API di `/api/admin/*` (create/list/delete) | Tidak disentuh; endpoint baru ada di `app/api` |
 | Halaman memakai placeholder: `[Nomor NIB]`, `[Alamat kantor]`, "Sejak [tahun]", logo klien `[Nama Klien]`, kotak peta, proyek demo | **Tidak dimigrasikan** (dilarang spec). Data hanya tampil bila diisi |
 | Angka statistik bawaan (8+ tahun, 45+ proyek, 30+ klien) tanpa sumber | **Tidak dimigrasikan.** Tampil hanya bila `siteContent/stats` diisi admin |
 | Merek tidak konsisten: "Growth Axys" (repo, email `@growthaxys.co.id`) vs "Pillarians Group" | Email dipertahankan, ditandai `TODO` di `lib/site.ts` |
 | Three.js dimuat dari CDN untuk hero | Dihapus (JS berat, merugikan LCP/INP); hero memakai CSS |
 | Google Fonts via `@import` CSS (render-blocking) | Diganti `next/font` (self-hosted) |
 | Gambar semua stok Unsplash | Dipertahankan sementara; **ganti dengan dokumentasi asli** |
-| `.well-known/axflor-verification/*.txt` | Disalin ke `apps/web/public` |
+| `.well-known/axflor-verification/*.txt` | Disalin ke `public` |
 
 ## 2. Status checklist spec
 
@@ -48,7 +48,7 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 - 🟡 Verifikasi ID token + cek token dicabut + akun aktif + role di **setiap** endpoint
 - 🟡 Undangan Admin dengan masa berlaku 72 jam, status `invited` ditolak semua endpoint; nonaktifkan akun + cabut token
 - 🟡 Audit log ditulis server; tidak ada endpoint tulis/ubah/hapus audit log
-- 🟡 Firestore Rules target (`apps/web/firebase/firestore.rules`) — **belum diuji di Emulator, jangan deploy sebelum cutover**
+- 🟡 Firestore Rules target (`firebase/firestore.rules`) — **belum diuji di Emulator, jangan deploy sebelum cutover**
 - 🟡 Header keamanan; CSP dalam mode **Report-Only** (ubah ke enforce setelah uji preview)
 - 🟡 Rate limit **in-memory per instance** (pengaman dasar; produksi: Vercel Firewall/Upstash)
 - ⬜ MFA Superadmin (perlu Identity Platform), re-auth untuk tindakan destruktif
@@ -56,8 +56,11 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 
 ### CMS
 - 🟡 API konten (projects/services/articles/certifications): draft/published/archived, update parsial, slug unik, redirect saat slug berubah (perlu `redirectConfirmed`), revisi disimpan, hapus permanen hanya Superadmin & hanya jika sudah archived
-- 🟡 Dashboard ringkas + daftar akun (server-gated, `noindex`)
-- ⬜ **Editor visual** (form React Hook Form), preview draft, UI undangan/role, UI redirect, UI revisi/restore
+- 🟡 **Dashboard admin Liquid Glass (Fase 1 `docs/ADMIN_DASHBOARD_SPEC.md`)**: AdminShell (sidebar desktop, drawer mobile, breadcrumb, logout), menu difilter izin, menu belum jadi tampil "Segera" (bukan tautan mati); ringkasan dari Firestore (error ≠ angka 0; aktivitas hanya untuk `audit.view`); daftar konten dengan cari/filter/paginasi di server; editor (create/edit parsial), pratinjau, terbitkan/tarik/arsip/pulihkan/hapus permanen dengan dialog konfirmasi; peringatan editorial
+- 🟡 Dashboard memakai session cookie + proteksi CSRF (same-origin + header `X-Admin-Request`) di `requireActor`; Bearer token tetap didukung. ✅ logika diuji (`tests/admin.test.ts`)
+- 🟡 Daftar akun (hanya baca, server-gated)
+- ⬜ UI undangan/role/nonaktif, UI redirect, UI revisi/restore, UI audit log (endpoint audit belum dipakai UI), halaman SEO/Media/Backup
+- ⬜ Editor belum bisa **mengosongkan** field URL opsional (gambar/sampul): skema server menolak string kosong
 - ⬜ Media library (upload, validasi MIME, referensi). Saat ini media = URL HTTPS
 - ⬜ Pengaturan global/siteSettings di dashboard; jadwal publikasi
 - ⬜ Backup/restore terjadwal (tidak ada di kode; perlu Firebase scheduled export + Storage backup)
@@ -75,7 +78,7 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 ## 4. Yang harus dilengkapi pemilik (tidak boleh dikarang)
 Alamat kantor · NIB/SBU/NPWP · tahun berdiri · statistik · email resmi · logo & favicon · dokumentasi proyek asli ·
 daftar layanan sesuai KBLI/SBU · persetujuan publikasi proyek (NDA) · domain canonical resmi.
-Isi di `apps/web/lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/stats`, `projects`, `certifications`, dll.).
+Isi di `lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/stats`, `projects`, `certifications`, dll.).
 
 ## 5. Langkah menuju preview & cutover
 1. `npm install && npm run typecheck && npm test && npm run build`.
@@ -86,7 +89,7 @@ Isi di `apps/web/lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/sta
 6. Rencana rollback: domain dikembalikan ke deployment vanilla; Rules lama disimpan sebelum diganti.
 
 ## 6. Verifikasi yang sudah dilakukan
-- `npm test` (Node `--test`): **20/20 lulus** — izin, guard Superadmin terakhir, slug, validasi redirect, redirect legacy, normalisasi dokumen legacy, cek konten, klasifikasi media, JSON-LD.
+- `npm test` (Node `--test`): **31/31 lulus** — izin, guard Superadmin terakhir, slug, validasi redirect, redirect legacy, normalisasi dokumen legacy, cek konten, klasifikasi media, JSON-LD.
 - Typecheck (tsc) pada kode non-React dengan zod v4 dan tipe Node asli: tidak ada error logika.
   Error tersisa hanya karena paket `next`, `react`, `firebase*` tidak terpasang.
 - Perilaku skema zod (partial update tidak menambah field, field asing & URL non-HTTPS ditolak) diuji langsung.

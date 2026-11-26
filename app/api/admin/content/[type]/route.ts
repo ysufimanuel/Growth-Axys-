@@ -1,6 +1,7 @@
 import { requireActor } from "../../../../../lib/server/auth";
 import { createSchema, isContentType } from "../../../../../lib/server/content-schemas";
 import { createContent, listContent } from "../../../../../lib/server/content-service";
+import { parseListQuery } from "../../../../../lib/core/content-query";
 import { handle, HttpError, json, rateLimit, readBody } from "../../../../../lib/server/http";
 
 export const runtime = "nodejs";
@@ -15,7 +16,8 @@ async function typeOf(ctx: Ctx) {
 
 export const GET = handle(async (req: Request, ctx: Ctx) => {
   await requireActor(req, { permission: "dashboard.view" });
-  return json({ items: await listContent(await typeOf(ctx)) });
+  const params = new URL(req.url).searchParams;
+  return json(await listContent(await typeOf(ctx), parseListQuery(params)));
 });
 
 export const POST = handle(async (req: Request, ctx: Ctx) => {

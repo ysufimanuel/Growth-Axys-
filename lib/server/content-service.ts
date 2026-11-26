@@ -6,6 +6,7 @@ import { can, canEditRiskySeo } from "../core/permissions";
 import { validateRedirect, type RedirectRule } from "../core/redirects";
 import { isValidSlug, slugify } from "../core/slug";
 import { toMillis } from "../core/normalize";
+import { queryRows, type ListQuery, type ListResult, type ListRow } from "../core/content-query";
 import { writeAudit } from "./audit";
 import type { Actor } from "./auth";
 import { createDefaults, type ContentType } from "./content-schemas";
@@ -86,9 +87,27 @@ function prepare(input: Doc): Doc {
   return out;
 }
 
-export async function listContent(type: ContentType) {
+/** Ringkasan untuk daftar: tanpa isi panjang. Filter/cari/paginasi dilakukan di server. */
+export async function listContent(type: ContentType, query: Required<ListQuery>): Promise<ListResult> {
   const snap = await col(type).get();
-  return snap.docs.map((d) => ({ id: d.id, ...(serialize(d.data()) as Doc), publishStatus: statusOf(d.data()) }));
+  const rows: ListRow[] = snap.docs.map((d) => {
+    const data = d.data() as Doc;
+    const ms = toMillis(data.updatedAt) ?? toMillis(data.createdAt);
+    const extra =
+      type === "projects" ? [data.location, data.category, data.progress].filter(Boolean).join(" · ")
+      : type === "articles" ? String(data.authorName ?? "")
+      : type === "certifications" ? [data.issuer, data.number].filter(Boolean).join(" · ")
+      : String(data.summary ?? "").slice(0, 80);
+    return {
+      id: d.id,
+      title: String(data.title ?? data.name ?? "(tanpa judul)"),
+      slug: String(data.slug ?? d.id),
+      publishStatus: statusOf(data),
+      updatedAt: ms,
+      extra,
+    };
+  });
+  return queryRows(rows, query);
 }
 
 export async function getContent(type: ContentType, id: string) {
