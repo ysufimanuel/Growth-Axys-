@@ -20,8 +20,7 @@ export default async function EditContentPage({ params }: { params: Promise<{ ty
     throw e;
   }
   const l = labelOf(type);
-  // getContent returns a Firestore document whose fields depend on the selected content type.
-  // Treat it as a string-keyed record here so the shared title/name fallback type-checks.
+  // Content fields vary by type: projects/services/articles use title; certifications use name.
   const record = doc as Record<string, unknown>;
   const title = String(record.title ?? record.name ?? id);
   return (
