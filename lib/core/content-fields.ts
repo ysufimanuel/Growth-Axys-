@@ -194,6 +194,13 @@ export function buildPayload(type: ContentType, values: FormValues, initial: For
       bucket[b] = v;
     } else out[f.name] = v;
   }
+  // mediaSettings adalah objek strict: saat salah satu toggle berubah, kirim keduanya.
+  if (out.mediaSettings) {
+    out.mediaSettings = {
+      autoplay: values["mediaSettings.autoplay"] === true,
+      muted: values["mediaSettings.muted"] === true,
+    };
+  }
   // seo.noindex=false pada create tidak perlu dikirim
   const seo = out.seo as Record<string, unknown> | undefined;
   if (seo && initial === null && seo.noindex === false) delete seo.noindex;
