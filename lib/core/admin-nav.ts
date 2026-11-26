@@ -14,6 +14,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: readonly NavItem[] = [
   { id: "overview", label: "Ringkasan", href: "/admin/dashboard", permission: "dashboard.view", group: "main", available: true },
+  { id: "profile", label: "Akun saya", href: "/admin/profile", permission: "dashboard.view", group: "system", available: true },
   { id: "projects", label: "Proyek", href: "/admin/content/projects", permission: "content.edit", group: "content", available: true },
   { id: "services", label: "Layanan", href: "/admin/content/services", permission: "content.edit", group: "content", available: true },
   { id: "articles", label: "Artikel", href: "/admin/content/articles", permission: "content.edit", group: "content", available: true },
