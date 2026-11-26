@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Icon } from "./icons";
 
 export function LogoutButton() {
   const [busy, setBusy] = useState(false);
@@ -14,7 +15,8 @@ export function LogoutButton() {
   }
   return (
     <button type="button" className="adm-btn adm-btn-sm" onClick={logout} disabled={busy}>
-      {busy ? "Keluar…" : "Keluar"}
+      <Icon name="logout" size={16} />
+      <span>{busy ? "Keluar…" : "Keluar"}</span>
     </button>
   );
 }

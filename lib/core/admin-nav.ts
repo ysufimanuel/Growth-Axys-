@@ -2,8 +2,14 @@
 // UI hanya cermin izin; server SELALU memeriksa ulang di layout/halaman/endpoint.
 import { can, type Permission, type Role } from "./permissions.ts";
 
+/** Nama ikon garis (dipetakan ke SVG di components/admin/icons.tsx). Modul ini tetap murni tanpa React. */
+export type IconName =
+  | "overview" | "user" | "projects" | "services" | "articles" | "certifications" | "media" | "seo" | "seo-global"
+  | "redirects" | "users" | "audit" | "backup" | "plus" | "external" | "menu" | "close" | "chevron" | "logout" | "arrow" | "alert";
+
 export interface NavItem {
   id: string;
+  icon: IconName;
   label: string;
   href: string;
   permission: Permission;
@@ -13,19 +19,19 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { id: "overview", label: "Ringkasan", href: "/admin/dashboard", permission: "dashboard.view", group: "main", available: true },
-  { id: "profile", label: "Akun saya", href: "/admin/profile", permission: "dashboard.view", group: "system", available: true },
-  { id: "projects", label: "Proyek", href: "/admin/content/projects", permission: "content.edit", group: "content", available: true },
-  { id: "services", label: "Layanan", href: "/admin/content/services", permission: "content.edit", group: "content", available: true },
-  { id: "articles", label: "Artikel", href: "/admin/content/articles", permission: "content.edit", group: "content", available: true },
-  { id: "certifications", label: "Sertifikasi", href: "/admin/content/certifications", permission: "content.edit", group: "content", available: true },
-  { id: "media", label: "Media", href: "/admin/media", permission: "media.manage", group: "site", available: true },
-  { id: "seo", label: "SEO halaman", href: "/admin/seo", permission: "seo.page", group: "site", available: true },
-  { id: "seo-global", label: "SEO global", href: "/admin/settings/seo", permission: "seo.global", group: "site", available: true },
-  { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: true },
-  { id: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
-  { id: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: true },
-  { id: "backup", label: "Backup & Restore", href: "/admin/backup", permission: "backup.restore", group: "system", available: true },
+  { id: "overview", icon: "overview", label: "Ringkasan", href: "/admin/dashboard", permission: "dashboard.view", group: "main", available: true },
+  { id: "profile", icon: "user", label: "Akun saya", href: "/admin/profile", permission: "dashboard.view", group: "system", available: true },
+  { id: "projects", icon: "projects", label: "Proyek", href: "/admin/content/projects", permission: "content.edit", group: "content", available: true },
+  { id: "services", icon: "services", label: "Layanan", href: "/admin/content/services", permission: "content.edit", group: "content", available: true },
+  { id: "articles", icon: "articles", label: "Artikel", href: "/admin/content/articles", permission: "content.edit", group: "content", available: true },
+  { id: "certifications", icon: "certifications", label: "Sertifikasi", href: "/admin/content/certifications", permission: "content.edit", group: "content", available: true },
+  { id: "media", icon: "media", label: "Media", href: "/admin/media", permission: "media.manage", group: "site", available: true },
+  { id: "seo", icon: "seo", label: "SEO halaman", href: "/admin/seo", permission: "seo.page", group: "site", available: true },
+  { id: "seo-global", icon: "seo-global", label: "SEO global", href: "/admin/settings/seo", permission: "seo.global", group: "site", available: true },
+  { id: "redirects", icon: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: true },
+  { id: "users", icon: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
+  { id: "audit", icon: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: true },
+  { id: "backup", icon: "backup", label: "Backup & Restore", href: "/admin/backup", permission: "backup.restore", group: "system", available: true },
 ] as const;
 
 export const NAV_GROUP_LABEL: Record<NavItem["group"], string> = {
