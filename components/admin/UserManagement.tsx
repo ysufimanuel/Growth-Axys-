@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState, type FormEvent } from "react";
+import { useMemo, useState, useEffect, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { adminFetch } from "./api";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useToast } from "./Toast";
@@ -21,7 +22,9 @@ function dateLabel(value: string | null) {
 
 export function UserManagement({ initialAccounts, truncated, actorUid }: { initialAccounts: Account[]; truncated: boolean; actorUid: string }) {
   const toast = useToast();
+  const router = useRouter();
   const [accounts, setAccounts] = useState(initialAccounts);
+  useEffect(() => setAccounts(initialAccounts), [initialAccounts]);
   const [query, setQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -51,6 +54,7 @@ export function UserManagement({ initialAccounts, truncated, actorUid }: { initi
     setInviteLink(result.data.setupLink);
     setInviteNote(result.data.note);
     toast("ok", "Undangan dibuat. Salin tautan dan kirim hanya ke email yang diundang.");
+    router.refresh();
   }
 
   async function applyAction() {
