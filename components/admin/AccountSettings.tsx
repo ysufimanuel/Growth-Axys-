@@ -85,8 +85,8 @@ export function AccountSettings({ email }: Props) {
       const { auth, user } = await withRecentLogin(currentPassword);
       await updatePassword(user, newPassword);
       await signOut(auth);
-      setPasswordNotice("Password berhasil diubah. Sesi login perangkat ini ditutup; masuk kembali dengan password baru.");
-      form.reset();
+      await fetch("/api/auth/session", { method: "DELETE", credentials: "same-origin" });
+      window.location.assign("/admin/login?passwordChanged=1");
     } catch (error) {
       setPasswordError(messageOf(error));
     } finally { setPasswordBusy(false); }
