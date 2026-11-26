@@ -59,9 +59,12 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 - 🟡 **Dashboard admin Liquid Glass (Fase 1 `docs/ADMIN_DASHBOARD_SPEC.md`)**: AdminShell (sidebar desktop, drawer mobile, breadcrumb, logout), menu difilter izin, menu belum jadi tampil "Segera" (bukan tautan mati); ringkasan dari Firestore (error ≠ angka 0; aktivitas hanya untuk `audit.view`); daftar konten dengan cari/filter/paginasi di server; editor (create/edit parsial), pratinjau, terbitkan/tarik/arsip/pulihkan/hapus permanen dengan dialog konfirmasi; peringatan editorial
 - 🟡 Dashboard memakai session cookie + proteksi CSRF (same-origin + header `X-Admin-Request`) di `requireActor`; Bearer token tetap didukung. ✅ logika diuji (`tests/admin.test.ts`)
 - 🟡 Daftar akun (hanya baca, server-gated)
-- 🟡 User Management UI (undang Admin, tampilkan tautan setup sekali, cari/filter akun, ubah role, aktif/nonaktifkan dengan konfirmasi) dan Audit Log UI (read-only, filter/cari) sudah ditambahkan; perlu build + uji end-to-end di Preview sebelum dianggap terverifikasi
-- 🟡 UI Redirect Manager (lihat + tambah) sudah ditambahkan pada branch; perlu build dan uji role/validasi end-to-end. Endpoint update/nonaktifkan/hapus belum tersedia. ⬜ UI revisi/restore dan Backup/Restore
+- 🟡 User Management UI (undang Admin, tampilkan tautan setup sekali, cari/filter akun, ubah role, aktif/nonaktifkan dengan konfirmasi), Audit Log UI, dan halaman Akun Saya (ganti email via verifikasi Firebase + ganti password dengan autentikasi ulang) sudah ditambahkan; perlu build + uji end-to-end di Preview
+- 🟡 UI Redirect Manager (lihat + tambah) sudah ditambahkan pada branch; endpoint update/nonaktifkan/hapus belum tersedia
+- 🟡 Revision History: daftar snapshot per konten + restore Superadmin; restore membuat checkpoint kondisi saat ini dan menulis audit log. Perlu uji role dan restore di Preview
+- 🟡 Backup & Restore: ekspor JSON Firestore untuk proyek/layanan/artikel/sertifikasi/redirect/siteSettings/mediaAssets/revisions dan restore mode upsert. Batas 5 MB, 3.000 dokumen/koleksi, 10.000 total. Tidak menghapus dokumen yang tidak ada di backup; file Firebase Storage dan akun Auth tidak termasuk
 - ⬜ Editor belum bisa **mengosongkan** field URL opsional (gambar/sampul): skema server menolak string kosong
+- 🟡 Editor proyek membaca alias data legacy (`name/type/status/description`) dan string tahun; kontrol autoplay/mute sudah tersedia kembali. Update tetap parsial sehingga field legacy yang tidak disentuh tidak dihapus
 - 🟡 Media Library: upload gambar ke Firebase Storage via signed URL, validasi MIME/ukuran di server, daftar 100 aset terbaru, salin URL; perlu konfigurasi bucket + uji end-to-end. Hapus aset belum tersedia agar referensi konten tidak rusak
 - ⬜ Pengaturan global/siteSettings di dashboard; jadwal publikasi
 - ⬜ Backup/restore terjadwal (tidak ada di kode; perlu Firebase scheduled export + Storage backup)
@@ -91,6 +94,8 @@ Isi di `lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/stats`, `pro
 
 ## 6. Verifikasi yang sudah dilakukan
 - Media upload: implementasi API + UI ditambahkan; belum diuji dengan bucket Firebase Storage nyata dan belum menjalani `next build`.
+- Legacy project editor: alias baca + mediaSettings ditambahkan; dua regression test ditambahkan, tetapi belum dieksekusi pada branch setelah perubahan.
+- Akun Saya, Revision History, dan Backup & Restore telah ditambahkan; belum menjalani `next build` atau uji end-to-end. Backup hanya Firestore metadata/data yang tercantum; bukan backup biner Firebase Storage.
 - `npm test` (Node `--test`): **31/31 lulus** — izin, guard Superadmin terakhir, slug, validasi redirect, redirect legacy, normalisasi dokumen legacy, cek konten, klasifikasi media, JSON-LD.
 - Typecheck (tsc) pada kode non-React dengan zod v4 dan tipe Node asli: tidak ada error logika.
   Error tersisa hanya karena paket `next`, `react`, `firebase*` tidak terpasang.
