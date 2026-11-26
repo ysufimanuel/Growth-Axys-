@@ -63,21 +63,27 @@ export const GET = handle(async (req: Request) => {
     total += snap.size;
     collections[name] = snap.docs.map((doc) => ({ id: doc.id, data: encode(doc.data()) }));
   }
-  await writeAudit(actor, "backup.exported", "firestore", "admin-backup", `${total} dokumen diekspor.`);
-  return json({
+  const payload = {
     format: FORMAT,
     version: VERSION,
     projectId: process.env.FIREBASE_PROJECT_ID ?? "",
     exportedAt: new Date().toISOString(),
     documentCount: total,
-    storageIncluded: false,
+    storageIncluded: false as const,
     collections,
-  });
+  };
+  if (new TextEncoder().encode(JSON.stringify(payload)).byteLength > MAX_BYTES) {
+    throw new HttpError(413, "Ukuran backup melebihi 5 MB. Gunakan Firebase managed export untuk database besar.");
+  }
+  await writeAudit(actor, "backup.exported", "firestore", "admin-backup", `${total} dokumen diekspor.`);
+  return json(payload);
 });
 
 export const POST = handle(async (req: Request) => {
   const actor = await requireActor(req, { permission: "backup.restore" });
   rateLimit(`backup-restore:${actor.uid}`, 1, 60_000);
+  const declaredBytes = Number(req.headers.get("content-length") ?? 0);
+  if (declaredBytes > MAX_BYTES) throw new HttpError(413, "File backup maksimal 5 MB.");
   const raw = await req.text();
   if (new TextEncoder().encode(raw).byteLength > MAX_BYTES) throw new HttpError(413, "File backup maksimal 5 MB.");
   let parsed: unknown;
@@ -98,6 +104,7 @@ export const POST = handle(async (req: Request) => {
     total += docs.length;
   }
   if (total > MAX_TOTAL_DOCS) throw new HttpError(413, "Backup melebihi batas total dokumen.");
+  if (total !== backup.documentCount) throw new HttpError(400, "Jumlah dokumen tidak cocok dengan metadata backup.");
 
   const db = adminDb();
   let restored = 0;
