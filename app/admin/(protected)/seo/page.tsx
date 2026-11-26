@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { requirePageActor } from "../../../lib/server/admin-page";
-import { adminDb } from "../../../lib/server/firebase-admin";
-import { CONTENT_TYPES, type ContentType } from "../../../lib/server/content-schemas";
+import { requirePageActor } from "../../../../lib/server/admin-page";
+import { adminDb } from "../../../../lib/server/firebase-admin";
+import { CONTENT_TYPES, type ContentType } from "../../../../lib/server/content-schemas";
 
 export const dynamic = "force-dynamic";
 
