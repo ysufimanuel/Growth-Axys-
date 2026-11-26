@@ -312,3 +312,17 @@
 .adm-global-seo legend { padding: 0 6px; font-weight: 700; font-size: 13px; }
 .adm-global-seo .adm-check { display: flex; align-items: center; gap: 10px; font-size: 14px; }
 .adm-global-seo button { justify-self: start; }
+
+
+/* Media Library */
+.adm-media { display: grid; gap: 16px; }
+.adm-media-upload { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.adm-media-upload h2 { font-size: 18px; margin-bottom: 5px; }
+.adm-media-upload p, .adm-media-item small { color: var(--adm-muted); font-size: 13px; }
+.adm-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.adm-media-item { overflow: hidden; padding: 0; }
+.adm-media-item > a { display: block; background: #eeece6; aspect-ratio: 4 / 3; }
+.adm-media-item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.adm-media-item > div { display: grid; gap: 5px; padding: 12px; min-width: 0; }
+.adm-media-item b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-media-item .adm-btn { justify-self: start; margin-top: 5px; }
