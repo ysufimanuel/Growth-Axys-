@@ -238,3 +238,34 @@
 .login-card input { min-height: 44px; padding: 10px 12px; border: 1px solid rgba(15, 33, 25, .28); border-radius: 12px; font: inherit; }
 .login-card .btn { min-height: 46px; border-radius: 12px; border: 0; background: var(--adm-pine); color: #fff; font-weight: 700; cursor: pointer; }
 .login-card .btn:disabled { opacity: .6; cursor: not-allowed; }
+
+
+/* ---------- User management ---------- */
+.adm-users { display: grid; gap: 16px; min-width: 0; }
+.adm-users-toolbar { display: grid; grid-template-columns: 1fr; gap: 10px; align-items: end; padding: 14px; border: 1px solid var(--adm-line); border-radius: 18px; background: rgba(255,255,255,.66); }
+.adm-users-toolbar label, .adm-invite-form label { display: grid; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--adm-muted); }
+.adm-users-toolbar input, .adm-users-toolbar select, .adm-invite-form input { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid rgba(15,33,25,.24); border-radius: 12px; background: #fff; color: var(--adm-ink); font: inherit; }
+.adm-users-search { min-width: 0; }
+.adm-invite-form { display: grid; gap: 14px; }
+.adm-invite-form .adm-pagehead { margin: 0; }
+.adm-invite-form .adm-pagehead h2 { font-size: 18px; }
+.adm-invite-form .adm-alert { display: grid; gap: 8px; overflow-wrap: anywhere; }
+.adm-invite-form .adm-alert p { margin: 0; }
+.adm-invite-form .adm-alert input { margin-top: 4px; }
+.adm-users-name { display: block; color: var(--adm-muted); font-size: 12px; margin-top: 3px; overflow-wrap: anywhere; }
+.adm-users-actions { align-items: center; min-width: 190px; }
+.adm-users-actions select { width: auto; max-width: 130px; min-height: 36px; padding: 6px 8px; border: 1px solid var(--adm-line); border-radius: 10px; background: #fff; color: var(--adm-ink); font: inherit; font-size: 12px; }
+.adm-status { display: inline-flex; padding: 4px 9px; border: 1px solid var(--adm-line); border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+@media (min-width: 760px) {
+  .adm-users-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(130px, .4fr) minmax(130px, .4fr) auto; }
+}
+@media (max-width: 759px) {
+  .adm-users .adm-tablewrap { overflow: visible; border: 0; background: transparent; padding: 0; box-shadow: none; }
+  .adm-users .adm-table, .adm-users .adm-table tbody, .adm-users .adm-table tr, .adm-users .adm-table td { display: block; width: 100%; }
+  .adm-users .adm-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .adm-users .adm-table tbody { display: grid; gap: 10px; }
+  .adm-users .adm-table tbody tr { padding: 14px; border: 1px solid var(--adm-line); border-radius: 14px; background: #fff; }
+  .adm-users .adm-table td { border: 0; padding: 5px 0; }
+  .adm-users .adm-table td:last-child { padding-top: 10px; }
+  .adm-users-actions { min-width: 0; }
+}
