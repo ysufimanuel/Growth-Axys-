@@ -4,7 +4,7 @@ import { getStorage } from "firebase-admin/storage";
 import { FieldValue } from "firebase-admin/firestore";
 import { writeAudit } from "../../../../lib/server/audit";
 import { requireActor } from "../../../../lib/server/auth";
-import { adminDb, adminAuth } from "../../../../lib/server/firebase-admin";
+import { adminDb } from "../../../../lib/server/firebase-admin";
 import { handle, HttpError, json, readBody, rateLimit } from "../../../../lib/server/http";
 
 export const runtime = "nodejs";
