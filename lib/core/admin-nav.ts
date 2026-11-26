@@ -25,7 +25,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: true },
   { id: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
   { id: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: true },
-  { id: "backup", label: "Backup", href: "/admin/backup", permission: "backup.restore", group: "system", available: false },
+  { id: "backup", label: "Backup & Restore", href: "/admin/backup", permission: "backup.restore", group: "system", available: true },
 ] as const;
 
 export const NAV_GROUP_LABEL: Record<NavItem["group"], string> = {
