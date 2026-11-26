@@ -3,7 +3,7 @@ import { z } from "zod";
 import { writeAudit } from "../../../../lib/server/audit";
 import { requireActor } from "../../../../lib/server/auth";
 import { adminDb } from "../../../../lib/server/firebase-admin";
-import { clientIp, handle, HttpError, json, rateLimit } from "../../../../lib/server/http";
+import { handle, HttpError, json, rateLimit } from "../../../../lib/server/http";
 
 export const runtime = "nodejs";
 
