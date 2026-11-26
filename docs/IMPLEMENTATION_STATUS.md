@@ -60,7 +60,7 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 - 🟡 Dashboard memakai session cookie + proteksi CSRF (same-origin + header `X-Admin-Request`) di `requireActor`; Bearer token tetap didukung. ✅ logika diuji (`tests/admin.test.ts`)
 - 🟡 Daftar akun (hanya baca, server-gated)
 - 🟡 User Management UI (undang Admin, tampilkan tautan setup sekali, cari/filter akun, ubah role, aktif/nonaktifkan dengan konfirmasi) dan Audit Log UI (read-only, filter/cari) sudah ditambahkan; perlu build + uji end-to-end di Preview sebelum dianggap terverifikasi
-- ⬜ UI redirect, UI revisi/restore, halaman SEO/Media/Backup
+- 🟡 UI Redirect Manager (lihat + tambah) sudah ditambahkan pada branch; perlu build dan uji role/validasi end-to-end. Endpoint update/nonaktifkan/hapus belum tersedia. ⬜ UI revisi/restore, halaman SEO/Media/Backup
 - ⬜ Editor belum bisa **mengosongkan** field URL opsional (gambar/sampul): skema server menolak string kosong
 - ⬜ Media library (upload, validasi MIME, referensi). Saat ini media = URL HTTPS
 - ⬜ Pengaturan global/siteSettings di dashboard; jadwal publikasi
