@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Manrope, Playfair_Display } from "next/font/google";
 import "./styles/site.css";
 import "./globals.css";
-import { SITE_URL, site } from "../lib/site";
+import { getGlobalMetadata } from "../lib/server/site-seo";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap", variable: "--font-manrope" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], style: ["normal", "italic"], display: "swap", variable: "--font-playfair" });
