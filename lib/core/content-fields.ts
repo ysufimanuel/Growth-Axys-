@@ -100,7 +100,7 @@ export function toFormValues(type: ContentType, doc: Record<string, unknown> | n
       case "lines": out[f.name] = Array.isArray(v) ? v.map(String).join("\n") : ""; break;
       case "sources": out[f.name] = Array.isArray(v) ? v.map((s: { title?: string; url?: string }) => `${s.title ?? ""} | ${s.url ?? ""}`).join("\n") : ""; break;
       case "date": out[f.name] = toDate(v); break;
-      case "number": out[f.name] = typeof v === "number" || (typeof v === "string" && /^\\d{4}$/.test(v)) ? String(v) : ""; break;
+      case "number": out[f.name] = typeof v === "number" || (typeof v === "string" && /^\d{4}$/.test(v)) ? String(v) : ""; break;
       default: out[f.name] = typeof v === "string" ? v : "";
     }
   }
