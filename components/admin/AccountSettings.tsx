@@ -41,6 +41,7 @@ export function AccountSettings({ email }: Props) {
 
   async function changeEmail(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
     const currentPassword = String(data.get("currentPassword") ?? "");
     const newEmail = String(data.get("newEmail") ?? "").trim();
@@ -54,7 +55,7 @@ export function AccountSettings({ email }: Props) {
       await verifyBeforeUpdateEmail(user, newEmail);
       await signOut(auth);
       setEmailNotice("Link verifikasi telah dikirim ke email baru. Email akun berubah setelah tautan tersebut dikonfirmasi.");
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       setEmailError(messageOf(error));
     } finally { setEmailBusy(false); }
@@ -62,6 +63,7 @@ export function AccountSettings({ email }: Props) {
 
   async function changePassword(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
     const currentPassword = String(data.get("currentPassword") ?? "");
     const newPassword = String(data.get("newPassword") ?? "");
@@ -84,7 +86,7 @@ export function AccountSettings({ email }: Props) {
       await updatePassword(user, newPassword);
       await signOut(auth);
       setPasswordNotice("Password berhasil diubah. Sesi login perangkat ini ditutup; masuk kembali dengan password baru.");
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       setPasswordError(messageOf(error));
     } finally { setPasswordBusy(false); }
