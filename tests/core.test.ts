@@ -10,6 +10,7 @@ import { normalizeProject, readPublishStatus, toParagraphs, toMillis, normalizeA
 import { checkContent, isThinContent } from "../lib/core/content-checks.ts";
 import { mediaInfo } from "../lib/core/media.ts";
 import { organizationJsonLd, serializeJsonLd } from "../lib/core/jsonld.ts";
+import { toFormValues, buildPayload } from "../lib/core/content-fields.ts";
 
 // ---------- permissions (spec bagian 7 & 17: uji role minimum) ----------
 test("Admin tidak punya izin manajemen akun, role, audit, hapus permanen, SEO global, redirect, restore", () => {
@@ -179,4 +180,36 @@ test("organizationJsonLd membuang properti kosong dan tidak mengarang alamat", (
 test("serializeJsonLd mencegah injeksi </script>", () => {
   const s = serializeJsonLd({ name: "</script><script>alert(1)</script>" });
   assert.equal(s.includes("</script>"), false);
+});
+
+
+// ---------- admin editor legacy compatibility ----------
+test("editor proyek membaca field legacy dan mempertahankan media settings", () => {
+  const legacy = {
+    name: "Gedung Lama",
+    type: "Infrastruktur",
+    status: "Berjalan",
+    description: "Lingkup pekerjaan lama",
+    mediaSettings: { autoplay: true, muted: false },
+    gallery: ["https://example.com/a.jpg"],
+  };
+  const values = toFormValues("projects", legacy);
+  assert.equal(values.title, "Gedung Lama");
+  assert.equal(values.category, "Infrastruktur");
+  assert.equal(values.progress, "Berjalan");
+  assert.equal(values.scope, "Lingkup pekerjaan lama");
+  assert.equal(values["mediaSettings.autoplay"], true);
+  assert.equal(values["mediaSettings.muted"], false);
+  assert.deepEqual(buildPayload("projects", values, values, { isSuper: true }), {});
+});
+
+test("editor proyek mengirim hanya perubahan dan tidak menghapus field legacy", () => {
+  const legacy = { name: "Gedung Lama", type: "Gedung", status: "Selesai", description: "Lingkup lama" };
+  const initial = toFormValues("projects", legacy);
+  const changed = { ...initial, title: "Gedung Baru", "mediaSettings.autoplay": true };
+  const payload = buildPayload("projects", changed, initial, { isSuper: true });
+  assert.equal(payload.title, "Gedung Baru");
+  assert.deepEqual(payload.mediaSettings, { autoplay: true });
+  assert.equal("name" in payload, false);
+  assert.equal("description" in payload, false);
 });
