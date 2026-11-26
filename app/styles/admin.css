@@ -269,3 +269,16 @@
   .adm-users .adm-table td:last-child { padding-top: 10px; }
   .adm-users-actions { min-width: 0; }
 }
+
+/* ---------- Audit log ---------- */
+.adm-audit { display: grid; gap: 14px; min-width: 0; }
+.adm-audit-toolbar { display: grid; grid-template-columns: 1fr; gap: 10px; align-items: end; padding: 14px; border: 1px solid var(--adm-line); border-radius: 18px; background: rgba(255,255,255,.66); }
+.adm-audit-toolbar label { display: grid; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--adm-muted); }
+.adm-audit-toolbar input, .adm-audit-toolbar select { width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid rgba(15,33,25,.24); border-radius: 12px; background: #fff; color: var(--adm-ink); font: inherit; }
+@media (min-width: 760px) {
+  .adm-audit-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(180px, .5fr) auto; }
+}
+@media (max-width: 759px) {
+  .adm-audit .adm-tablewrap { overflow-x: auto; padding: 10px; }
+  .adm-audit .adm-table { min-width: 700px; }
+}
