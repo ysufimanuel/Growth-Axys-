@@ -16,7 +16,7 @@ interface Props {
 
 const SEGMENT_LABEL: Record<string, string> = {
   admin: "Admin", dashboard: "Ringkasan", profile: "Akun saya", content: "Konten", projects: "Proyek", services: "Layanan", articles: "Artikel",
-  certifications: "Sertifikasi", new: "Baru", users: "Akun", media: "Media", seo: "SEO", redirects: "Redirect", audit: "Audit log", backup: "Backup", settings: "Pengaturan",
+  certifications: "Sertifikasi", new: "Baru", users: "Akun", profile: "Akun saya", media: "Media", seo: "SEO", redirects: "Redirect", audit: "Audit log", backup: "Backup & Restore", settings: "Pengaturan",
 };
 
 function Breadcrumbs({ pathname }: { pathname: string }) {
