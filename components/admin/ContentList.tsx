@@ -15,10 +15,10 @@ const TABS: { id: Status; label: string }[] = [
   { id: "archived", label: "Arsip" },
 ];
 
-export function ContentList({ type, singular }: { type: string; singular: string }) {
+export function ContentList({ type, singular, initialStatus = "all" }: { type: string; singular: string; initialStatus?: Status }) {
   const [q, setQ] = useState("");
   const [debounced, setDebounced] = useState("");
-  const [status, setStatus] = useState<Status>("all");
+  const [status, setStatus] = useState<Status>(initialStatus);
   const [page, setPage] = useState(1);
   const [data, setData] = useState<ListResult | null>(null);
   const [error, setError] = useState<string | null>(null);

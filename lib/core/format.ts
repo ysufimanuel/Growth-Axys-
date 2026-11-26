@@ -1,6 +1,11 @@
 // Format tampilan (murni). Zona waktu eksplisit agar server & klien konsisten (tanpa hydration mismatch).
 const fmt = new Intl.DateTimeFormat("id-ID", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Jakarta" });
 
+const fmtLong = new Intl.DateTimeFormat("id-ID", { dateStyle: "full", timeZone: "Asia/Jakarta" });
+
+/** Tanggal panjang (mis. "Kamis, 26 November 2026") dalam zona waktu Jakarta. */
+export const formatDateLong = (ms: number) => fmtLong.format(new Date(ms));
+
 export function formatDateTime(ms: number | null | undefined): string {
   return ms ? fmt.format(new Date(ms)) : "—";
 }

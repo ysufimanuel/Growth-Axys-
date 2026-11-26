@@ -10,9 +10,14 @@ export async function generateMetadata({ params }: { params: Promise<{ type: str
   return { title: labelOf(contentTypeOr404(type)).plural };
 }
 
-export default async function ContentListPage({ params }: { params: Promise<{ type: string }> }) {
+const STATUSES = ["all", "draft", "published", "archived"] as const;
+
+export default async function ContentListPage({ params, searchParams }: { params: Promise<{ type: string }>; searchParams: Promise<{ status?: string | string[] }> }) {
   await requirePageActor("content.edit");
   const type = contentTypeOr404((await params).type);
+  // Tautan dari dashboard (?status=draft): hanya nilai yang dikenal yang dipakai.
+  const raw = (await searchParams).status;
+  const initialStatus = STATUSES.find((x) => x === raw) ?? "all";
   const l = labelOf(type);
   return (
     <>
@@ -23,7 +28,7 @@ export default async function ContentListPage({ params }: { params: Promise<{ ty
         </div>
         <Link className="adm-btn adm-btn-primary" href={`/admin/content/${type}/new`}>+ Baru</Link>
       </div>
-      <ContentList type={type} singular={l.singular} />
+      <ContentList type={type} singular={l.singular} initialStatus={initialStatus} />
     </>
   );
 }
