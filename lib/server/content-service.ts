@@ -275,7 +275,7 @@ export async function restoreRevision(actor: Actor, type: ContentType, id: strin
     });
   }
   const snapshot = revision.snapshot as Doc;
-  const restored = { ...snapshot, updatedAt: FieldValue.serverTimestamp(), updatedBy: actor.uid };
+  const restored: Doc = { ...snapshot, updatedAt: FieldValue.serverTimestamp(), updatedBy: actor.uid };
   await ref.set(restored, { merge: false });
   await writeAudit(actor, "content.revision_restored", type, id, `Revisi ${revisionId} dipulihkan.`);
   revalidateFor(type, String(restored.slug || id));
