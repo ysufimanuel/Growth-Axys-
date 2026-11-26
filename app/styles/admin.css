@@ -282,3 +282,13 @@
   .adm-audit .adm-tablewrap { overflow-x: auto; padding: 10px; }
   .adm-audit .adm-table { min-width: 700px; }
 }
+
+/* Redirect manager */
+.adm-redirect-form { display: grid; gap: 14px; margin-bottom: 18px; }
+.adm-redirect-form h2, .adm-tablewrap h2 { font-size: 18px; margin-bottom: 4px; }
+.adm-redirect-form > p { color: var(--adm-muted); font-size: 13px; }
+.adm-redirect-form label { display: grid; gap: 6px; font-size: 13px; font-weight: 650; }
+.adm-redirect-form input, .adm-redirect-form select { width: 100%; min-height: 44px; border: 1px solid var(--adm-line); border-radius: 12px; background: #fff; color: var(--adm-ink); padding: 10px 12px; font: inherit; }
+.adm-redirect-form button { justify-self: start; }
+.adm-redirect-form + .adm-alert, .adm-redirect-form ~ .adm-alert { margin-bottom: 14px; }
+@media (min-width: 760px) { .adm-redirect-form { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; } .adm-redirect-form h2, .adm-redirect-form > p { grid-column: 1 / -1; } }
