@@ -675,3 +675,6 @@ a.adm-type-card:hover { border-color: var(--adm-brass); box-shadow: 0 8px 24px r
     background: #f8fbff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
   }
 }
+
+
+/* Vercel deploy trigger: Liquid Glass admin styling refresh. */
