@@ -42,6 +42,8 @@ const backupSchema = z.strictObject({
   version: z.literal(VERSION),
   projectId: z.string().min(1).max(128),
   exportedAt: z.iso.datetime({ offset: true }),
+  documentCount: z.number().int().min(0).max(MAX_TOTAL_DOCS),
+  storageIncluded: z.literal(false),
   collections: z.record(z.string(), z.array(z.strictObject({
     id: z.string().min(1).max(1500).refine((id) => !id.includes("/"), "ID dokumen tidak boleh mengandung garis miring."),
     data: z.record(z.string(), z.unknown()),
