@@ -39,6 +39,8 @@ export const FIELDS: Record<ContentType, FieldDef[]> = {
     { name: "scope", label: "Lingkup pekerjaan", kind: "textarea", max: 50000, group: "main", span: true, hint: "Teks polos. Pisahkan paragraf dengan baris kosong. HTML tidak dirender." },
     { name: "cover", label: "Gambar sampul (URL HTTPS)", kind: "url", group: "media" },
     { name: "gallery", label: "Galeri (satu URL HTTPS per baris)", kind: "lines", group: "media", span: true },
+    { name: "mediaSettings.autoplay", label: "Autoplay media", kind: "checkbox", group: "media", hint: "Putar media otomatis saat detail proyek dibuka. Browser dapat membatasi autoplay." },
+    { name: "mediaSettings.muted", label: "Mute media", kind: "checkbox", group: "media", hint: "Matikan suara agar autoplay lebih kompatibel di HP." },
     ...seoFields,
   ],
   services: [
@@ -86,7 +88,13 @@ const toDate = (ms: unknown) => (typeof ms === "number" ? new Date(ms + WIB).toI
 export function toFormValues(type: ContentType, doc: Record<string, unknown> | null): FormValues {
   const out: FormValues = {};
   for (const f of FIELDS[type]) {
-    const v = doc ? get(doc, f.name) : undefined;
+    let v = doc ? get(doc, f.name) : undefined;
+    // Adapter baca untuk dokumen proyek dari dashboard HTML lama. Field sumber tetap dipertahankan.
+    if (type === "projects" && doc && (v === undefined || v === null || v === "")) {
+      const legacy: Record<string, string> = { title: "name", category: "type", progress: "status", scope: "description" };
+      const alias = legacy[f.name];
+      if (alias) v = doc[alias];
+    }
     switch (f.kind) {
       case "checkbox": out[f.name] = v === true; break;
       case "lines": out[f.name] = Array.isArray(v) ? v.map(String).join("\n") : ""; break;
