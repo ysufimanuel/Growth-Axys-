@@ -21,7 +21,7 @@ export const NAV_ITEMS: readonly NavItem[] = [
   { id: "media", label: "Media", href: "/admin/media", permission: "media.manage", group: "site", available: false },
   { id: "seo", label: "SEO halaman", href: "/admin/seo", permission: "seo.page", group: "site", available: false },
   { id: "seo-global", label: "SEO global", href: "/admin/settings/seo", permission: "seo.global", group: "site", available: false },
-  { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: false },
+  { id: "redirects", label: "Redirect", href: "/admin/redirects", permission: "redirects.manage", group: "site", available: true },
   { id: "users", label: "Akun", href: "/admin/users", permission: "users.manage", group: "system", available: true },
   { id: "audit", label: "Audit log", href: "/admin/audit", permission: "audit.view", group: "system", available: true },
   { id: "backup", label: "Backup", href: "/admin/backup", permission: "backup.restore", group: "system", available: false },
