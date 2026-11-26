@@ -187,6 +187,7 @@ test("serializeJsonLd mencegah injeksi </script>", () => {
 test("editor proyek membaca field legacy dan mempertahankan media settings", () => {
   const legacy = {
     name: "Gedung Lama",
+    year: "2024",
     type: "Infrastruktur",
     status: "Berjalan",
     description: "Lingkup pekerjaan lama",
@@ -195,6 +196,7 @@ test("editor proyek membaca field legacy dan mempertahankan media settings", () 
   };
   const values = toFormValues("projects", legacy);
   assert.equal(values.title, "Gedung Lama");
+  assert.equal(values.year, "2024");
   assert.equal(values.category, "Infrastruktur");
   assert.equal(values.progress, "Berjalan");
   assert.equal(values.scope, "Lingkup pekerjaan lama");
