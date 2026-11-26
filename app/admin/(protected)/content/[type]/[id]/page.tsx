@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ContentEditor } from "../../../../../../components/admin/ContentEditor";
+import { RevisionHistory } from "../../../../../../components/admin/RevisionHistory";
 import { capsFor, contentTypeOr404, labelOf, requirePageActor } from "../../../../../../lib/server/admin-page";
 import { getContent } from "../../../../../../lib/server/content-service";
 import { HttpError } from "../../../../../../lib/server/http";
@@ -27,6 +28,7 @@ export default async function EditContentPage({ params }: { params: Promise<{ ty
     <>
       <div className="adm-pagehead"><div><h1>{title}</h1><p>Edit {l.singular}</p></div></div>
       <ContentEditor type={type} singular={l.singular} doc={doc as never} caps={capsFor(actor.role)} />
+      <RevisionHistory type={type} contentId={id} />
     </>
   );
 }
