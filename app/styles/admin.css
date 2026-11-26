@@ -300,3 +300,15 @@
 .adm-seo-missing { color: var(--adm-warn); font-weight: 650; }
 .adm-seo-group .adm-table td { max-width: 340px; overflow-wrap: anywhere; }
 .adm-seo-group .adm-table td small { display: block; margin-top: 4px; color: var(--adm-muted); }
+
+
+/* Global SEO settings */
+.adm-global-seo { display: grid; gap: 16px; max-width: 820px; }
+.adm-global-seo h2 { font-size: 18px; margin-bottom: 4px; }
+.adm-global-seo > div > p, .adm-global-seo .adm-hint { color: var(--adm-muted); font-size: 13px; }
+.adm-global-seo > label { display: grid; gap: 6px; font-size: 13px; font-weight: 650; }
+.adm-global-seo input:not([type="checkbox"]), .adm-global-seo textarea { width: 100%; border: 1px solid var(--adm-line); border-radius: 12px; padding: 11px 12px; color: var(--adm-ink); background: #fff; font: inherit; }
+.adm-global-seo fieldset { border: 1px solid var(--adm-line); border-radius: 12px; padding: 14px; display: grid; gap: 12px; }
+.adm-global-seo legend { padding: 0 6px; font-weight: 700; font-size: 13px; }
+.adm-global-seo .adm-check { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+.adm-global-seo button { justify-self: start; }
