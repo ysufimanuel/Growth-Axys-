@@ -209,7 +209,7 @@ test("editor proyek mengirim hanya perubahan dan tidak menghapus field legacy", 
   const changed = { ...initial, title: "Gedung Baru", "mediaSettings.autoplay": true };
   const payload = buildPayload("projects", changed, initial, { isSuper: true });
   assert.equal(payload.title, "Gedung Baru");
-  assert.deepEqual(payload.mediaSettings, { autoplay: true });
+  assert.deepEqual(payload.mediaSettings, { autoplay: true, muted: false });
   assert.equal("name" in payload, false);
   assert.equal("description" in payload, false);
 });
