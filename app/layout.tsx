@@ -7,7 +7,11 @@ import { getGlobalMetadata } from "../lib/server/site-seo";
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "500", "600", "700", "800"], display: "swap", variable: "--font-manrope" });
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["600", "700"], style: ["normal", "italic"], display: "swap", variable: "--font-playfair" });
 
-export async function generateMetadata(): Promise<Metadata> {\n  return getGlobalMetadata();\n}\n\nexport const viewport: Viewport = { themeColor: "#0F2119", width: "device-width", initialScale: 1 };
+export async function generateMetadata(): Promise<Metadata> {
+  return getGlobalMetadata();
+}
+
+export const viewport: Viewport = { themeColor: "#0F2119", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
