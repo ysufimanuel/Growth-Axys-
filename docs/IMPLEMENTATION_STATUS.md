@@ -59,7 +59,8 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 - 🟡 **Dashboard admin Liquid Glass (Fase 1 `docs/ADMIN_DASHBOARD_SPEC.md`)**: AdminShell (sidebar desktop, drawer mobile, breadcrumb, logout), menu difilter izin, menu belum jadi tampil "Segera" (bukan tautan mati); ringkasan dari Firestore (error ≠ angka 0; aktivitas hanya untuk `audit.view`); daftar konten dengan cari/filter/paginasi di server; editor (create/edit parsial), pratinjau, terbitkan/tarik/arsip/pulihkan/hapus permanen dengan dialog konfirmasi; peringatan editorial
 - 🟡 Dashboard memakai session cookie + proteksi CSRF (same-origin + header `X-Admin-Request`) di `requireActor`; Bearer token tetap didukung. ✅ logika diuji (`tests/admin.test.ts`)
 - 🟡 Daftar akun (hanya baca, server-gated)
-- ⬜ UI undangan/role/nonaktif, UI redirect, UI revisi/restore, UI audit log (endpoint audit belum dipakai UI), halaman SEO/Media/Backup
+- 🟡 User Management UI (undang Admin, tampilkan tautan setup sekali, cari/filter akun, ubah role, aktif/nonaktifkan dengan konfirmasi) dan Audit Log UI (read-only, filter/cari) sudah ditambahkan; perlu build + uji end-to-end di Preview sebelum dianggap terverifikasi
+- ⬜ UI redirect, UI revisi/restore, halaman SEO/Media/Backup
 - ⬜ Editor belum bisa **mengosongkan** field URL opsional (gambar/sampul): skema server menolak string kosong
 - ⬜ Media library (upload, validasi MIME, referensi). Saat ini media = URL HTTPS
 - ⬜ Pengaturan global/siteSettings di dashboard; jadwal publikasi
