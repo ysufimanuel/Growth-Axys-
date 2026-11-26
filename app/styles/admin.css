@@ -292,3 +292,11 @@
 .adm-redirect-form button { justify-self: start; }
 .adm-redirect-form + .adm-alert, .adm-redirect-form ~ .adm-alert { margin-bottom: 14px; }
 @media (min-width: 760px) { .adm-redirect-form { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; } .adm-redirect-form h2, .adm-redirect-form > p { grid-column: 1 / -1; } }
+
+
+/* Page SEO overview */
+.adm-seo-group { margin-top: 18px; }
+.adm-seo-group h2 { font-size: 18px; margin-bottom: 12px; }
+.adm-seo-missing { color: var(--adm-warn); font-weight: 650; }
+.adm-seo-group .adm-table td { max-width: 340px; overflow-wrap: anywhere; }
+.adm-seo-group .adm-table td small { display: block; margin-top: 4px; color: var(--adm-muted); }
