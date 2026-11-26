@@ -60,9 +60,9 @@ Legenda: ✅ ada dan diuji logikanya · 🟡 ditulis, belum bisa dibuild/dijalan
 - 🟡 Dashboard memakai session cookie + proteksi CSRF (same-origin + header `X-Admin-Request`) di `requireActor`; Bearer token tetap didukung. ✅ logika diuji (`tests/admin.test.ts`)
 - 🟡 Daftar akun (hanya baca, server-gated)
 - 🟡 User Management UI (undang Admin, tampilkan tautan setup sekali, cari/filter akun, ubah role, aktif/nonaktifkan dengan konfirmasi) dan Audit Log UI (read-only, filter/cari) sudah ditambahkan; perlu build + uji end-to-end di Preview sebelum dianggap terverifikasi
-- 🟡 UI Redirect Manager (lihat + tambah) sudah ditambahkan pada branch; perlu build dan uji role/validasi end-to-end. Endpoint update/nonaktifkan/hapus belum tersedia. ⬜ UI revisi/restore, halaman SEO/Media/Backup
+- 🟡 UI Redirect Manager (lihat + tambah) sudah ditambahkan pada branch; perlu build dan uji role/validasi end-to-end. Endpoint update/nonaktifkan/hapus belum tersedia. ⬜ UI revisi/restore dan Backup/Restore
 - ⬜ Editor belum bisa **mengosongkan** field URL opsional (gambar/sampul): skema server menolak string kosong
-- ⬜ Media library (upload, validasi MIME, referensi). Saat ini media = URL HTTPS
+- 🟡 Media Library: upload gambar ke Firebase Storage via signed URL, validasi MIME/ukuran di server, daftar 100 aset terbaru, salin URL; perlu konfigurasi bucket + uji end-to-end. Hapus aset belum tersedia agar referensi konten tidak rusak
 - ⬜ Pengaturan global/siteSettings di dashboard; jadwal publikasi
 - ⬜ Backup/restore terjadwal (tidak ada di kode; perlu Firebase scheduled export + Storage backup)
 
@@ -90,6 +90,7 @@ Isi di `lib/site.ts` (kontak/legalitas) dan Firestore (`siteContent/stats`, `pro
 6. Rencana rollback: domain dikembalikan ke deployment vanilla; Rules lama disimpan sebelum diganti.
 
 ## 6. Verifikasi yang sudah dilakukan
+- Media upload: implementasi API + UI ditambahkan; belum diuji dengan bucket Firebase Storage nyata dan belum menjalani `next build`.
 - `npm test` (Node `--test`): **31/31 lulus** — izin, guard Superadmin terakhir, slug, validasi redirect, redirect legacy, normalisasi dokumen legacy, cek konten, klasifikasi media, JSON-LD.
 - Typecheck (tsc) pada kode non-React dengan zod v4 dan tipe Node asli: tidak ada error logika.
   Error tersisa hanya karena paket `next`, `react`, `firebase*` tidak terpasang.
