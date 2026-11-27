@@ -33,5 +33,6 @@ export function DashboardMotion({ children }: { children: ReactNode }) {
     return () => context.revert();
   }, []);
 
-  return <div ref={root}>{children}</div>;
+  // data-motion: dikecualikan dari entrance CSS halaman (layout.css) agar tidak dianimasikan dua kali.
+  return <div ref={root} data-motion="gsap">{children}</div>;
 }
