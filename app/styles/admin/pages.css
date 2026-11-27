@@ -1,0 +1,145 @@
+/* Gaya khusus halaman admin: dashboard, akun, audit, redirect, SEO, media, login. */
+
+/* ---------- Dashboard: hero (komponen LiquidGlassHeroCard) ---------- */
+.adm-hero { margin-top: 4px; --lg-tint: var(--adm-hero-tint); --lg-drop: 0 20px 54px -18px rgba(66, 112, 165, .32); }
+.adm-hero__content { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; min-height: 174px; padding: clamp(20px, 3vw, 32px); }
+.adm-hero-main { flex: 1 1 320px; min-width: 0; }
+.adm-hero h1 { margin-top: 4px; font-size: clamp(30px, 4vw, 42px); letter-spacing: -.045em; }
+.adm-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #2f6db3; }
+.adm-hero-sub { max-width: 60ch; margin-top: 8px; font-size: 15px; line-height: 1.65; color: var(--adm-ink-soft); }
+.adm-hero-meta { margin-top: 6px; font-size: 12px; color: var(--adm-muted); }
+@media (max-width: 759px) { .adm-hero__content { min-height: 0; padding: 20px; } }
+
+/* ---------- Dashboard: KPI ---------- */
+.adm-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.adm-kpi { display: grid; align-content: start; gap: 6px; min-width: 0; min-height: 142px; padding: 19px; color: inherit; }
+.adm-kpi-label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--adm-muted); }
+.adm-kpi-value { font-size: clamp(32px, 4vw, 43px); font-weight: 800; line-height: 1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: #244b78; }
+.adm-kpi-sub { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 12px; color: var(--adm-muted); }
+.adm-kpi-ok .adm-kpi-value { color: var(--adm-ok); }
+.adm-kpi-warn { border-color: rgba(226, 164, 73, .58); background: linear-gradient(145deg, rgba(255, 249, 235, .9), rgba(255, 255, 255, .52)); }
+.adm-kpi-warn .adm-kpi-value, .adm-kpi-warn .adm-kpi-label { color: var(--adm-warn-ink); }
+.adm-kpi-link:hover, a.adm-type-card:hover, .adm-chip:hover { transform: translateY(-3px); box-shadow: var(--adm-shadow-2); }
+.adm-kpi-link:active, a.adm-type-card:active, .adm-chip:active, .adm-qa-tile:active { transform: scale(.975); }
+@media (min-width: 900px) { .adm-kpi-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 759px) { .adm-kpi { min-height: 126px; padding: 15px; } }
+@media (max-width: 359px) { .adm-kpi-grid { grid-template-columns: 1fr; } }
+
+.adm-stat { display: grid; gap: 6px; }
+.adm-stat-label { font-size: 13px; font-weight: 600; color: var(--adm-muted); }
+.adm-stat-value { font-size: 32px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+
+/* ---------- Dashboard: aksi cepat ---------- */
+.adm-qa { display: grid; gap: 12px; padding: 16px; }
+.adm-qa-primary { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 560px) { .adm-qa-primary { grid-template-columns: 1fr 1fr; } }
+.adm-qa-tile { display: flex; align-items: center; gap: 12px; min-height: 72px; padding: 12px 14px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 19px; background: var(--adm-primary-bg); color: #fff; box-shadow: var(--adm-primary-shadow); transition: transform .3s var(--adm-ease), background .2s ease, box-shadow .25s ease; }
+.adm-qa-tile:hover { background: var(--adm-primary-bg-hover); transform: translateY(-1px); }
+.adm-qa-tile small { display: block; font-size: 12px; color: rgba(255, 255, 255, .92); }
+.adm-qa-text { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.adm-qa-icon { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 14px; background: rgba(255, 255, 255, .22); color: #fff; }
+.adm-qa-go { opacity: .85; }
+.adm-qa-secondary { display: flex; flex-wrap: wrap; gap: 8px; max-width: 100%; margin: 0; padding: 0; list-style: none; }
+.adm-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; background: rgba(255, 255, 255, .7); color: #315778; font-size: 13.5px; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9); transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), background .2s ease; }
+.adm-chip:hover { background: #fff; }
+
+/* ---------- Dashboard: rincian per jenis, aktivitas ---------- */
+.adm-type-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media (min-width: 480px) { .adm-type-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .adm-type-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.adm-type-card { display: grid; gap: 12px; min-width: 0; padding: 18px; color: inherit; border-radius: 20px; background: linear-gradient(145deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .64)); transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), border-color .2s ease; }
+a.adm-type-card:hover { border-color: rgba(91, 153, 220, .6); }
+.adm-type-head { display: flex; align-items: center; gap: 10px; }
+.adm-type-name { flex: 1; font-weight: 700; }
+.adm-type-total { font-size: 27px; font-weight: 800; font-variant-numeric: tabular-nums; color: #244b78; }
+.adm-type-split { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--adm-muted); }
+.adm-type-split b { color: var(--adm-ink); font-variant-numeric: tabular-nums; }
+.adm-type-card .adm-qa-icon { background: rgba(115, 174, 239, .18); color: #2f6db3; }
+
+.adm-tl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-width: 0; }
+.adm-tl-row .adm-rowtitle { overflow-wrap: anywhere; }
+.adm-tl-summary { font-size: 13px; color: var(--adm-muted); overflow-wrap: anywhere; }
+.adm-attn { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.adm-attn :is(a, li > span) { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 8px 12px; border: 1px solid rgba(232, 190, 117, .4); border-radius: 14px; background: linear-gradient(120deg, rgba(255, 247, 229, .92), rgba(255, 255, 255, .72)); color: #79531c; font-size: 14px; }
+.adm-attn a:hover { background: #f6e9c8; }
+.adm-more { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; margin-top: 12px; font-size: 13.5px; font-weight: 700; color: #1d56b2; }
+.adm-more:hover { text-decoration: underline; }
+
+/* ---------- Akun, audit, redirect, SEO, media ---------- */
+.adm-users, .adm-audit { display: grid; gap: 16px; min-width: 0; }
+.adm-users-toolbar, .adm-audit-toolbar { display: grid; grid-template-columns: 1fr; align-items: end; gap: 10px; padding: 15px; border: 1px solid var(--adm-frost-border); border-radius: 20px; background: rgba(255, 255, 255, .58); box-shadow: inset 0 1px 0 #fff; }
+.adm-users-toolbar label, .adm-audit-toolbar label, .adm-invite-form label, .adm-redirect-form label, .adm-global-seo > label { display: grid; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--adm-muted); }
+.adm-users-search { min-width: 0; }
+.adm-invite-form { display: grid; gap: 14px; }
+.adm-invite-form .adm-pagehead { margin: 0; }
+.adm-invite-form .adm-pagehead h2 { font-size: 18px; }
+.adm-invite-form .adm-alert { display: grid; gap: 8px; overflow-wrap: anywhere; }
+.adm-invite-form .adm-alert input { margin-top: 4px; }
+.adm-users-name { display: block; margin-top: 3px; font-size: 12px; color: var(--adm-muted); overflow-wrap: anywhere; }
+.adm-users-actions { align-items: center; min-width: 190px; }
+.adm-users-actions select { width: auto; max-width: 130px; min-height: 36px; padding: 6px 8px; border-radius: 10px; font-size: 12px; }
+@media (min-width: 760px) {
+  .adm-users-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(130px, .4fr) minmax(130px, .4fr) auto; }
+  .adm-audit-toolbar { grid-template-columns: minmax(220px, 1fr) minmax(180px, .5fr) auto; }
+}
+@media (max-width: 759px) {
+  /* Tabel akun menjadi kartu bertumpuk. */
+  .adm-users .adm-tablewrap { overflow: visible; padding: 0; border: 0; background: transparent; box-shadow: none; }
+  .adm-users .adm-table, .adm-users .adm-table tbody, .adm-users .adm-table tr, .adm-users .adm-table td { display: block; width: 100%; }
+  .adm-users .adm-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .adm-users .adm-table tbody { display: grid; gap: 10px; }
+  .adm-users .adm-table tbody tr { padding: 14px; border: 1px solid var(--adm-frost-border); border-radius: 18px; background: rgba(255, 255, 255, .8); }
+  .adm-users .adm-table td { padding: 5px 0; border: 0; }
+  .adm-users .adm-table td:last-child { padding-top: 10px; }
+  .adm-users-actions { min-width: 0; }
+  .adm-audit .adm-table { min-width: 700px; }
+}
+
+.adm-redirect-form { display: grid; gap: 14px; margin-bottom: 18px; padding: 20px; }
+.adm-redirect-form h2, .adm-tablewrap h2 { margin-bottom: 4px; font-size: 18px; }
+.adm-redirect-form > p { font-size: 13px; color: var(--adm-muted); }
+.adm-redirect-form button { justify-self: start; }
+@media (min-width: 760px) {
+  .adm-redirect-form { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: end; }
+  .adm-redirect-form > h2, .adm-redirect-form > p { grid-column: 1 / -1; }
+}
+
+.adm-seo-group { margin-top: 18px; }
+.adm-seo-group h2 { margin-bottom: 12px; font-size: 18px; }
+.adm-seo-missing { font-weight: 700; color: var(--adm-warn-ink); }
+.adm-seo-group .adm-table td { max-width: 340px; overflow-wrap: anywhere; }
+.adm-seo-group .adm-table td small { display: block; margin-top: 4px; color: var(--adm-muted); }
+
+.adm-global-seo { display: grid; gap: 16px; max-width: 900px; }
+.adm-global-seo h2 { margin-bottom: 4px; font-size: 18px; }
+.adm-global-seo > div > p, .adm-global-seo .adm-hint { font-size: 13px; color: var(--adm-muted); }
+.adm-global-seo fieldset { display: grid; gap: 12px; padding: 14px; border: 1px solid var(--adm-line); border-radius: 14px; }
+.adm-global-seo legend { padding: 0 6px; font-size: 13px; font-weight: 700; }
+.adm-global-seo .adm-check { font-size: 14px; }
+.adm-global-seo button { justify-self: start; }
+
+.adm-media { display: grid; gap: 16px; }
+.adm-media-upload { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.adm-media-upload h2 { margin-bottom: 5px; font-size: 18px; }
+.adm-media-upload p, .adm-media-item small { font-size: 13px; color: var(--adm-muted); }
+.adm-media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.adm-media-item { overflow: hidden; padding: 0; }
+.adm-media-item > a { display: block; aspect-ratio: 4 / 3; background: rgba(216, 231, 247, .8); }
+.adm-media-item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.adm-media-item > div { display: grid; gap: 5px; min-width: 0; padding: 15px; }
+.adm-media-item b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #29445f; }
+.adm-media-item .adm-btn { justify-self: start; margin-top: 5px; }
+
+/* ---------- Login ---------- */
+.adm-auth {
+  display: grid; place-items: center; padding: 20px;
+  background-image: repeating-linear-gradient(-30deg, rgba(36, 104, 203, .10) 0 18px, transparent 18px 42px); /* garis kontras: tepi kaca terlihat membias */
+}
+.adm-auth-card { width: min(420px, 100%); --lg-drop: 0 30px 70px -20px rgba(30, 60, 100, .4); }
+.adm-auth-card__body { display: grid; gap: 14px; padding: 28px; }
+.adm-auth-card__body h1 { font-size: 24px; }
+.adm-auth-card__body p { font-size: 14px; color: var(--adm-muted); }
+.adm-auth-card__body label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; }
+.adm-auth-error { min-height: 1.5em; color: #a8261c !important; font-weight: 600; }
+
+@media (prefers-reduced-transparency: reduce) { .adm-kpi-warn { background: #fff8e8; } .adm-type-card { background: #fff; } }
