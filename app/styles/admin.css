@@ -856,3 +856,122 @@ a.adm-type-card:hover { border-color: var(--adm-brass); box-shadow: 0 8px 24px r
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .adm-glass { backdrop-filter: blur(24px) saturate(175%); -webkit-backdrop-filter: blur(24px) saturate(175%); }
 }
+
+/* ---------- Dashboard redesign: content surfaces, not just navigation ---------- */
+.adm .adm-main .adm-hero,
+.adm .adm-main .adm-kpi,
+.adm .adm-main .adm-qa,
+.adm .adm-main .adm-type-card,
+.adm .adm-main .adm-grid-2 > .adm-card,
+.adm .adm-main .adm-stack > .adm-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.84);
+  box-shadow: 0 18px 44px rgba(42,76,112,.09), inset 0 1px 0 rgba(255,255,255,.96);
+}
+.adm .adm-main .adm-hero {
+  min-height: 220px;
+  align-items: center;
+  padding: clamp(24px, 4vw, 42px);
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse at 92% 8%, rgba(132,190,250,.32), transparent 42%),
+    linear-gradient(128deg, rgba(255,255,255,.94), rgba(231,242,253,.62));
+}
+.adm .adm-main .adm-hero::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  right: -70px;
+  bottom: -170px;
+  border: 1px solid rgba(255,255,255,.82);
+  border-radius: 50%;
+  box-shadow: 0 0 0 22px rgba(255,255,255,.13), 0 0 0 48px rgba(255,255,255,.09);
+  pointer-events: none;
+}
+.adm .adm-main .adm-hero::after {
+  width: 220px;
+  height: 220px;
+  right: -55px;
+  top: -90px;
+  background: radial-gradient(circle, rgba(107,173,244,.26), transparent 70%);
+}
+.adm .adm-main .adm-hero-main,
+.adm .adm-main .adm-hero .adm-actions { position: relative; z-index: 1; }
+.adm .adm-main .adm-hero h1 { color: #183653; }
+.adm .adm-main .adm-hero-sub { color: #3f5871; max-width: 52ch; }
+.adm .adm-main .adm-hero-meta { color: #71869b; }
+.adm .adm-main .adm-section { margin-top: 32px; }
+.adm .adm-main .adm-section-title {
+  margin-bottom: 14px;
+  color: #6b8198;
+  font-size: 11px;
+  letter-spacing: .14em;
+}
+.adm .adm-main .adm-kpi-grid { gap: 16px; }
+.adm .adm-main .adm-kpi {
+  min-height: 158px;
+  padding: 22px;
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(146,197,248,.18), transparent 55%),
+    linear-gradient(145deg, rgba(255,255,255,.92), rgba(239,246,253,.68));
+  transition: transform .24s var(--adm-ease), box-shadow .24s var(--adm-ease), border-color .24s var(--adm-ease);
+}
+.adm .adm-main .adm-kpi-label { color: #657d95; }
+.adm .adm-main .adm-kpi-value { color: #214c78; }
+.adm .adm-main .adm-kpi-sub { color: #71869b; }
+.adm .adm-main .adm-kpi-ok { background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(229,246,237,.72)); }
+.adm .adm-main .adm-kpi-warn { background: linear-gradient(145deg, rgba(255,252,244,.96), rgba(255,240,211,.72)); }
+.adm .adm-main .adm-kpi-link:hover,
+.adm .adm-main a.adm-type-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(104,166,226,.55);
+  box-shadow: 0 24px 48px rgba(42,91,145,.16), inset 0 1px 0 #fff;
+}
+.adm .adm-main .adm-qa {
+  padding: 18px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, rgba(255,255,255,.76), rgba(225,239,253,.52));
+}
+.adm .adm-main .adm-qa-tile {
+  min-height: 82px;
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 20px;
+  background: linear-gradient(135deg, #5c9eea, #3678c8);
+  box-shadow: 0 10px 24px rgba(54,120,200,.22), inset 0 1px 0 rgba(255,255,255,.35);
+}
+.adm .adm-main .adm-qa-tile:hover {
+  background: linear-gradient(135deg, #70aff5, #4388d7);
+  box-shadow: 0 16px 32px rgba(54,120,200,.28), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.adm .adm-main .adm-chip {
+  min-height: 46px;
+  border-radius: 15px;
+  background: rgba(255,255,255,.72);
+  color: #365b80;
+}
+.adm .adm-main .adm-type-card {
+  min-height: 132px;
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(232,242,252,.68));
+}
+.adm .adm-main .adm-type-card .adm-type-total { color: #285b8d; }
+.adm .adm-main .adm-grid-2 > .adm-card,
+.adm .adm-main .adm-stack > .adm-card {
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255,255,255,.91), rgba(237,245,253,.68));
+}
+.adm .adm-main .adm-timeline li { padding-bottom: 15px; }
+.adm .adm-main .adm-timeline li:last-child { padding-bottom: 0; }
+.adm .adm-main .adm-attn a,
+.adm .adm-main .adm-attn li > span { border-radius: 15px; }
+@media (max-width: 759px) {
+  .adm .adm-main .adm-hero { min-height: 0; padding: 22px; border-radius: 24px; }
+  .adm .adm-main .adm-kpi { min-height: 132px; padding: 16px; border-radius: 19px; }
+  .adm .adm-main .adm-qa { padding: 12px; border-radius: 21px; }
+  .adm .adm-main .adm-type-card { min-height: 116px; padding: 16px; }
+}
