@@ -3,6 +3,7 @@
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
+import { LiquidGlass, LiquidGlassButton } from "../../../components/admin/liquid-glass";
 import { clientAuth } from "../../../lib/firebase-client";
 
 function LoginForm() {
@@ -46,25 +47,27 @@ function LoginForm() {
   }
 
   return (
-    <main className="login-page">
-      <form className="login-card" onSubmit={onSubmit}>
-        <h1>Admin Pillarians</h1>
-        {passwordChanged ? <p role="status">Password berhasil diubah. Silakan masuk dengan password baru.</p> : invited ? <p>Password sudah disetel? Masuk di bawah untuk mengaktifkan akun Anda.</p> : <p>Masuk untuk mengelola konten website.</p> }
-        <label>
-          Email
-          <input name="email" type="email" autoComplete="username" required />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" autoComplete="current-password" required />
-        </label>
-        <button className="btn btn-orange" type="submit" disabled={busy}>
-          {busy ? "Memproses…" : "Masuk"}
-        </button>
-        <p role="alert" aria-live="assertive" style={{ color: "#b3261e", minHeight: "1.5em" }}>
-          {error}
-        </p>
-      </form>
+    <main className="adm adm-auth">
+      <LiquidGlass className="adm-auth-card" radius={28} bevel={26} strength={40} blur={10} aberration>
+        <form className="adm-auth-card__body" onSubmit={onSubmit}>
+          <h1>Admin Pillarians</h1>
+          {passwordChanged ? <p role="status">Password berhasil diubah. Silakan masuk dengan password baru.</p> : invited ? <p>Password sudah disetel? Masuk di bawah untuk mengaktifkan akun Anda.</p> : <p>Masuk untuk mengelola konten website.</p> }
+          <label>
+            Email
+            <input name="email" type="email" autoComplete="username" required />
+          </label>
+          <label>
+            Password
+            <input name="password" type="password" autoComplete="current-password" required />
+          </label>
+          <LiquidGlassButton type="submit" variant="primary" block disabled={busy}>
+            {busy ? "Memproses…" : "Masuk"}
+          </LiquidGlassButton>
+          <p className="adm-auth-error" role="alert" aria-live="assertive">
+            {error}
+          </p>
+        </form>
+      </LiquidGlass>
     </main>
   );
 }
