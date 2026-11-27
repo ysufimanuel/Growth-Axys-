@@ -1,0 +1,151 @@
+/* =====================================================================
+   Admin · Liquid Glass — TOKEN (satu-satunya sumber nilai desain).
+   Urutan impor (app/admin/layout.tsx): tokens → glass → layout → components → pages.
+   Aturan agar tidak tumpang tindih:
+   - Semua selector diawali .adm / .adm-* / .lg-*  → tidak ada yang bocor ke website utama.
+   - Website utama (site.css) tidak dipakai admin: tidak ada kelas situs (.btn, .admin-shell, dst.) di markup admin.
+   - Satu aturan per properti: variasi lewat token/atribut, bukan menimpa aturan sebelumnya.
+   ===================================================================== */
+
+.adm {
+  /* Teks & permukaan */
+  --adm-bg: #f4f8fd;
+  --adm-ink: #17283d;
+  --adm-ink-soft: #344b65;
+  --adm-muted: #566a80;          /* ≥4.5:1 di atas latar & kaca terang */
+  --adm-line: rgba(100, 139, 183, .20);
+  --adm-line-strong: rgba(112, 145, 180, .38);
+  --adm-surface: rgba(255, 255, 255, .82);   /* tabel, form, kartu data: hampir solid */
+  --adm-surface-solid: #fff;
+
+  /* Aksen & status */
+  --adm-blue: #2468cb;
+  --adm-blue-ink: #1d56b2;
+  --adm-blue-soft: rgba(75, 145, 237, .14);
+  --adm-focus: #2f7be0;
+  --adm-ok: #1f7a54;
+  --adm-warn: #a86b19;
+  --adm-warn-ink: #7a4f12;
+  --adm-danger: #b8424d;
+
+  /* Bentuk & bayangan */
+  --adm-radius: 22px;
+  --adm-radius-sm: 14px;
+  --adm-shadow-1: 0 12px 34px rgba(50, 83, 121, .08), inset 0 1px 0 rgba(255, 255, 255, .96);
+  --adm-shadow-2: 0 20px 48px rgba(54, 101, 157, .14), inset 0 1px 0 #fff;
+
+  /* Tombol (dipakai bersama oleh .adm-btn dan LiquidGlassButton) */
+  --adm-btn-bg: rgba(255, 255, 255, .8);
+  --adm-btn-ink: #29445f;
+  --adm-btn-border: rgba(126, 164, 205, .34);
+  --adm-btn-shadow: inset 0 1px 0 #fff, 0 3px 10px rgba(55, 91, 130, .06);
+  --adm-primary-bg: linear-gradient(180deg, rgba(255, 255, 255, .18), transparent 52%), linear-gradient(160deg, #3b82e3 0%, #2468cb 55%, #1d56b2 100%);
+  --adm-primary-bg-hover: linear-gradient(180deg, rgba(255, 255, 255, .22), transparent 52%), linear-gradient(160deg, #4a8fec 0%, #2c72d6 55%, #2160bd 100%);
+  --adm-primary-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 8px 20px rgba(36, 104, 203, .26);
+  --adm-danger-bg: linear-gradient(160deg, #c9505b 0%, #a9363f 100%);
+
+  /* Gerak */
+  --adm-ease: cubic-bezier(.22, 1.15, .36, 1);
+
+  /* Tata letak */
+  --adm-sidebar-w: 264px;
+  --adm-topbar-h: 64px;
+  --adm-gutter: 12px;
+  --adm-dock-size: 64px;
+  --adm-dock-offset: max(12px, env(safe-area-inset-bottom));
+  --adm-dock-h: 0px;            /* tinggi ruang yang dipakai dock; >0 hanya di layar sempit */
+
+  /* Skala z-index: satu tempat, tidak ada angka acak di file lain.
+     <dialog> modal memakai top layer browser, otomatis di atas semua ini. */
+  --adm-z-topbar: 20;
+  --adm-z-sidebar: 30;
+  --adm-z-dock: 40;
+  --adm-z-toast: 200;
+
+  /* Kaca. Nilai fallback (tanpa backdrop-filter) hampir solid agar tetap terbaca. */
+  --adm-frost-bg: rgba(255, 255, 255, .80);
+  --adm-frost-blur: none;
+  --adm-frost-border: rgba(255, 255, 255, .86);
+  --adm-chrome-tint: rgba(255, 255, 255, .76);
+  --adm-hero-tint: linear-gradient(135deg, rgba(255, 255, 255, .8), rgba(255, 255, 255, .6));
+
+  /* Primitif .lg (lihat glass.css) */
+  --lg-tint: var(--adm-chrome-tint);
+  --lg-rim: rgba(255, 255, 255, .72);
+  --lg-hi: rgba(255, 255, 255, .95);
+  --lg-lo: rgba(70, 110, 160, .14);
+  --lg-side: rgba(255, 255, 255, .55);
+  --lg-drop: 0 16px 38px -12px rgba(40, 80, 130, .28);
+  --lg-glint: rgba(255, 255, 255, .7);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .adm {
+    --adm-frost-bg: rgba(255, 255, 255, .46);
+    --adm-frost-blur: blur(20px) saturate(165%);
+    --adm-chrome-tint: rgba(255, 255, 255, .42);
+    --adm-hero-tint: linear-gradient(135deg, rgba(255, 255, 255, .64), rgba(255, 255, 255, .32));
+  }
+}
+
+/* Pengguna meminta transparansi dikurangi: semua kaca menjadi permukaan solid. */
+@media (prefers-reduced-transparency: reduce) {
+  .adm {
+    --adm-frost-bg: #fff;
+    --adm-frost-blur: none;
+    --adm-chrome-tint: #f8fbff;
+    --adm-hero-tint: #fff;
+    --adm-surface: #fff;
+  }
+}
+
+/* Layar sempit: dock bawah memakai ruang; konten, sticky bar, dan toast menyisihkan tempatnya. */
+@media (max-width: 1023px) {
+  .adm { --adm-dock-h: calc(var(--adm-dock-size) + var(--adm-dock-offset) + 12px); }
+}
+
+/* ---------- Dasar ---------- */
+.adm {
+  min-height: 100vh;
+  isolation: isolate;            /* latar tetap di bawah (z -1) tanpa tenggelam di belakang <body> */
+  font-family: var(--font-manrope, "Manrope"), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--adm-ink);
+  background-color: var(--adm-bg);
+}
+/* Latar berwarna lembut: memberi kaca sesuatu untuk dibiaskan. Tetap (fixed) agar konten bergeser di atasnya. */
+.adm::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 58% 46% at 0% 0%, rgba(139, 194, 255, .46), transparent 72%),
+    radial-gradient(ellipse 50% 48% at 100% 100%, rgba(154, 226, 190, .38), transparent 72%),
+    radial-gradient(ellipse 40% 34% at 82% 8%, rgba(255, 214, 170, .30), transparent 70%),
+    linear-gradient(135deg, #f7faff 0%, #f2f7fc 52%, #f6fbf8 100%);
+}
+.adm *, .adm *::before, .adm *::after { box-sizing: border-box; }
+.adm :where(a) { color: inherit; text-decoration: none; }
+.adm :where(h1, h2, h3) { margin: 0; font-family: inherit; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; color: var(--adm-ink); }
+.adm :where(p) { margin: 0; }
+.adm button:disabled { cursor: not-allowed; opacity: .55; }
+
+/* Fokus terlihat (WCAG 2.4.7 / 2.4.11). Menimpa :focus-visible global milik situs. */
+.adm :focus-visible { outline: 3px solid var(--adm-focus); outline-offset: 2px; border-radius: 8px; }
+
+.adm-skip { position: absolute; left: 12px; top: -60px; z-index: 100; padding: 10px 14px; background: var(--adm-ink); color: #fff; border-radius: 12px; }
+.adm-skip:focus { top: 12px; }
+.adm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.adm-icon { flex: none; }
+
+@keyframes adm-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes adm-slide { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes adm-sheet-in { from { opacity: 0; transform: translateY(36px) scale(.97); } 72% { opacity: 1; transform: translateY(-5px) scale(1.005); } to { opacity: 1; transform: none; } }
+@keyframes adm-shimmer { to { background-position: -220% 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .adm *, .adm *::before, .adm *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
