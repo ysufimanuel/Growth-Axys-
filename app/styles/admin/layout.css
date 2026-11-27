@@ -1,0 +1,144 @@
+/* Layout shell admin: sidebar, topbar, drawer, area konten. Kaca = komponen LiquidGlass (glass.css). */
+
+/* ---------- Sidebar (≥1024px) ---------- */
+.adm-sidebar {
+  position: fixed;
+  top: var(--adm-gutter);
+  bottom: var(--adm-gutter);
+  left: var(--adm-gutter);
+  width: var(--adm-sidebar-w);
+  z-index: var(--adm-z-sidebar);
+  display: none;
+  --lg-drop: 0 24px 60px -16px rgba(50, 87, 127, .30);
+}
+.adm-sidebar__scroll { height: 100%; overflow-y: auto; overscroll-behavior: contain; padding: 18px 12px; }
+@media (min-width: 1024px) { .adm-sidebar { display: block; } }
+
+.adm-brand { display: flex; align-items: center; gap: 10px; padding: 4px 10px 16px; font-weight: 800; }
+.adm-brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 13px; color: #fff; font-weight: 800; background: linear-gradient(145deg, #2468cb, #5aa2f5); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .7), 0 5px 12px rgba(36, 104, 203, .24); }
+.adm-brand small { display: block; font-size: 12px; font-weight: 500; color: var(--adm-muted); }
+
+/* Navigasi */
+.adm-nav ul { list-style: none; margin: 0; padding: 0; }
+.adm-nav-group { margin: 10px 0 0; }
+.adm-nav-group h2 { padding: 0; font-size: 11px; }
+.adm-nav-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 36px; padding: 8px 12px 4px; border: 0; border-radius: 10px; background: transparent; color: var(--adm-muted); font: inherit; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.adm-nav-toggle:hover:not(:disabled) { color: var(--adm-ink); }
+.adm-nav-toggle:disabled { cursor: default; opacity: 1; }
+.adm-nav-toggle-static { cursor: default; }
+.adm-nav-chevron { transition: transform .2s var(--adm-ease); }
+.adm-nav-toggle[aria-expanded="false"] .adm-nav-chevron { transform: rotate(-90deg); }
+.adm-nav ul[hidden] { display: none; }
+
+.adm-nav-label { display: inline-flex; align-items: center; gap: 12px; min-width: 0; }
+.adm-nav-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; padding: 10px 12px; border-radius: 15px; font-size: 14.5px; font-weight: 600; transition: background .28s var(--adm-ease), transform .38s var(--adm-ease), color .2s ease; }
+.adm-nav-link:hover:not([aria-disabled="true"]) { background: var(--adm-blue-soft); transform: translateX(4px); }
+.adm-nav-link:active:not([aria-disabled="true"]) { transform: scale(.975); }
+.adm-nav-link[aria-current="page"] { color: var(--adm-blue-ink); background: rgba(116, 178, 255, .24); box-shadow: inset 3px 0 0 var(--adm-blue), inset 0 1px 0 rgba(255, 255, 255, .9); } /* penanda aktif bukan hanya warna */
+.adm-nav-link[aria-current="page"] .adm-icon { color: var(--adm-blue); }
+.adm-nav-link[aria-disabled="true"] { color: var(--adm-muted); cursor: not-allowed; }
+.adm-soon { padding: 2px 8px; border: 1px solid rgba(255, 255, 255, .8); border-radius: 999px; background: linear-gradient(145deg, rgba(255, 202, 133, .42), rgba(255, 164, 74, .22)); color: #8a4a0e; font-size: 10.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+
+/* Akun */
+.adm-account-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.adm-account-text { display: grid; min-width: 0; font-size: 13px; line-height: 1.3; text-align: left; }
+.adm-account-text b { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.adm-account-text span { color: var(--adm-muted); }
+.adm-avatar { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border: 2px solid #fff; border-radius: 50%; background: linear-gradient(145deg, #2468cb, #5aa2f5); color: #fff; font-size: 14px; font-weight: 800; box-shadow: 0 0 0 1px rgba(96, 151, 218, .22), 0 4px 12px rgba(38, 72, 111, .14); }
+
+/* ---------- Topbar (komponen LiquidGlass, sticky) ---------- */
+.adm-topbar {
+  position: sticky;
+  top: var(--adm-gutter);
+  z-index: var(--adm-z-topbar);
+  margin: var(--adm-gutter) max(var(--adm-gutter), env(safe-area-inset-right)) 0 max(var(--adm-gutter), env(safe-area-inset-left));
+  --lg-drop: 0 14px 34px -14px rgba(50, 83, 121, .28);
+}
+.adm-topbar__inner { min-height: var(--adm-topbar-h); display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 12px 8px 18px; }
+.adm-topbar-left { flex: 1 1 auto; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.adm-topbar-right { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.adm-account, .adm-logout-desktop { display: none; }
+.adm-avatar-mobile { display: grid; }
+.adm-btn-label { display: none; }
+.adm-site-link { min-width: 44px; padding: 0; }
+@media (min-width: 760px) { .adm-btn-label { display: inline; } .adm-site-link { min-width: 0; min-height: 36px; padding: 0 12px; } }
+@media (min-width: 1024px) {
+  .adm-account { display: block; text-align: right; }
+  .adm-logout-desktop { display: inline-flex; }
+  .adm-avatar-mobile { display: none; }
+}
+
+.adm-crumbs { min-width: 0; font-size: 13px; color: var(--adm-muted); }
+.adm-crumbs ol { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.adm-crumbs li + li::before { content: "/"; margin-right: 4px; opacity: .6; }
+.adm-crumbs a:hover { text-decoration: underline; }
+.adm-crumbs [aria-current="page"] { color: var(--adm-ink); font-weight: 700; }
+@media (max-width: 1023px) {
+  /* Layar sempit: hanya halaman saat ini, bukan seluruh jejak. */
+  .adm-crumbs li:not(:last-child) { display: none; }
+  .adm-crumbs li + li::before { content: none; }
+  .adm-crumbs [aria-current="page"] { font-size: 15px; }
+}
+
+/* ---------- Drawer menu (mobile). <dialog> native: fokus terkunci, Esc bawaan. Frost CSS (top layer). ---------- */
+.adm-drawer {
+  inset: 8px auto 8px 8px;
+  width: min(320px, calc(100vw - 16px));
+  height: calc(100dvh - 16px);
+  max-height: none;
+  margin: 0;
+  padding: 18px 12px;
+  overflow-y: auto;
+  border: 1px solid var(--adm-frost-border);
+  border-radius: 26px;
+  color: var(--adm-ink);
+  background: var(--adm-frost-bg);
+  box-shadow: 0 20px 60px rgba(25, 48, 78, .30), inset 0 1px 0 #fff;
+  -webkit-backdrop-filter: var(--adm-frost-blur);
+  backdrop-filter: var(--adm-frost-blur);
+}
+.adm-drawer::backdrop { background: rgba(22, 38, 58, .38); }
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .adm-drawer { background: rgba(255, 255, 255, .66); }
+  .adm-drawer::backdrop { -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+}
+.adm-drawer[open] { animation: adm-slide .28s var(--adm-ease); }
+.adm-drawer-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.adm-drawer-account { display: grid; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--adm-line); }
+.adm-drawer-account .adm-btn { width: 100%; }
+.adm-drawer-account .adm-account-text b { max-width: 220px; }
+
+/* ---------- Area konten ---------- */
+.adm-main-wrap { min-width: 0; }
+@media (min-width: 1024px) { .adm-main-wrap { margin-left: calc(var(--adm-sidebar-w) + 2 * var(--adm-gutter)); } }
+
+.adm-main { width: 100%; max-width: 1440px; margin: 0 auto; padding: 16px 13px calc(64px + var(--adm-dock-h)); overflow-x: clip; }
+@media (min-width: 760px) { .adm-main { padding: clamp(18px, 2.2vw, 30px) 16px calc(72px + var(--adm-dock-h)); } }
+@media (min-width: 1024px) { .adm-main { padding-left: clamp(24px, 2.4vw, 42px); padding-right: clamp(24px, 2.4vw, 42px); } }
+
+/* Entrance halaman: hanya opacity + translate, fill "backwards" → setelah selesai tidak ada opacity/filter yang tersisa
+   (opacity<1 atau filter menjadikan elemen "backdrop root" sehingga kaca di dalamnya tidak melihat latar halaman).
+   Dashboard dianimasikan GSAP (DashboardMotion, ditandai data-motion), jadi dikecualikan agar tidak dobel. */
+.adm-main > :not([data-motion]) { animation: adm-rise .45s var(--adm-ease) backwards; }
+.adm-main > :not([data-motion]):nth-child(2) { animation-delay: .05s; }
+.adm-main > :not([data-motion]):nth-child(3) { animation-delay: .10s; }
+.adm-main > :not([data-motion]):nth-child(4) { animation-delay: .15s; }
+.adm-main > :not([data-motion]):nth-child(n+5) { animation-delay: .18s; }
+
+/* Judul halaman */
+.adm-pagehead { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; margin: 8px 0 22px; }
+.adm-pagehead h1 { font-size: clamp(26px, 3.2vw, 36px); font-weight: 800; letter-spacing: -.025em; }
+.adm-pagehead p { max-width: 60ch; margin-top: 7px; font-size: 14px; line-height: 1.65; color: var(--adm-muted); }
+.adm-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Grid umum */
+.adm-grid { display: grid; gap: 14px; }
+.adm-grid-kpi { grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.adm-grid-2 { grid-template-columns: 1fr; }
+.adm-stack { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.adm-section { margin-top: 28px; }
+.adm-section-title { margin: 0 0 12px 4px; font-size: 11px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: var(--adm-muted); }
+@media (min-width: 760px) { .adm-grid-2 { grid-template-columns: 1.4fr 1fr; } }
+
+/* Toast: di atas dock agar tidak saling menutup */
+.adm-toasts { position: fixed; z-index: var(--adm-z-toast); right: var(--adm-gutter); left: var(--adm-gutter); bottom: calc(var(--adm-dock-h) + max(var(--adm-gutter), env(safe-area-inset-bottom))); display: grid; justify-items: end; gap: 8px; pointer-events: none; }
