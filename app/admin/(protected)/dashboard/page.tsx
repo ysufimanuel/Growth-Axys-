@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { DashboardMotion } from "../../../../components/admin/DashboardMotion";
 import { Icon } from "../../../../components/admin/icons";
+import { LiquidGlassButton, LiquidGlassHeroCard } from "../../../../components/admin/liquid-glass";
 import { StatusBadge } from "../../../../components/admin/StatusBadge";
 import { CONTENT_LABEL } from "../../../../lib/core/admin-nav";
 import { actionLabel, formatDateLong, formatDateTime } from "../../../../lib/core/format";
@@ -54,25 +55,26 @@ export default async function DashboardPage() {
   return (
     <DashboardMotion>
       {/* 1. Header / hero */}
-      <header className="adm-hero adm-glass-card" data-reveal>
-        <div className="adm-hero-main">
-          <p className="adm-eyebrow">{formatDateLong(loadedAt)} · {ROLE_LABEL[actor.role ?? ""] ?? "Admin"}</p>
-          <h1>Selamat datang</h1>
-          <p className="adm-hero-sub">
-            {sum
-              ? sum.draft > 0
-                ? `${sum.draft} draft menunggu ditinjau dari total ${sum.total} konten.`
-                : `Semua dari ${sum.total} konten sudah ditangani. Tidak ada draft tertunda.`
-              : "Ringkasan kondisi konten website Anda."}
-          </p>
-          <p className="adm-hero-meta">Data dimuat {formatDateTime(loadedAt)} WIB, langsung dari database.</p>
-        </div>
-        {canEdit ? (
-          <div className="adm-actions">
-            <Link className="adm-btn adm-btn-primary" href="/admin/content/articles/new"><Icon name="plus" size={16} />Artikel baru</Link>
-          </div>
-        ) : null}
-      </header>
+      <LiquidGlassHeroCard
+        data-reveal
+        eyebrow={<>{formatDateLong(loadedAt)} · {ROLE_LABEL[actor.role ?? ""] ?? "Admin"}</>}
+        title="Selamat datang"
+        description={
+          sum
+            ? sum.draft > 0
+              ? `${sum.draft} draft menunggu ditinjau dari total ${sum.total} konten.`
+              : `Semua dari ${sum.total} konten sudah ditangani. Tidak ada draft tertunda.`
+            : "Ringkasan kondisi konten website Anda."
+        }
+        meta={<>Data dimuat {formatDateTime(loadedAt)} WIB, langsung dari database.</>}
+        actions={
+          canEdit ? (
+            <LiquidGlassButton href="/admin/content/articles/new" variant="primary" icon={<Icon name="plus" size={16} />}>
+              Artikel baru
+            </LiquidGlassButton>
+          ) : null
+        }
+      />
 
       {/* 2. KPI */}
       <section aria-labelledby="kpi-h" className="adm-section">
