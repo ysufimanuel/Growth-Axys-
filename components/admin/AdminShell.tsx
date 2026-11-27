@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { activeNavId, NAV_GROUP_LABEL, type NavItem } from "../../lib/core/admin-nav";
 import { Icon } from "./icons";
+import { LiquidGlass, LiquidGlassDock, type DockItem } from "./liquid-glass";
 import { LogoutButton } from "./LogoutButton";
 import { ToastProvider } from "./Toast";
 
@@ -143,17 +144,30 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
     return () => el.removeEventListener("close", restore);
   }, []);
 
+  // Dock bawah (layar sempit): pintasan ke halaman yang paling sering dipakai + tombol Menu. Hanya item yang diizinkan role.
+  const overview = nav.find((i) => i.id === "overview");
+  const content = nav.find((i) => i.group === "content");
+  const media = nav.find((i) => i.id === "media");
+  const activeGroup = nav.find((i) => i.id === activeId)?.group;
+  const dockItems: DockItem[] = [
+    ...(overview ? [{ id: "overview", label: overview.label, href: overview.href, icon: <Icon name="overview" size={20} />, active: activeId === "overview" }] : []),
+    ...(content ? [{ id: "content", label: "Konten", href: content.href, icon: <Icon name="articles" size={20} />, active: activeGroup === "content" }] : []),
+    ...(media ? [{ id: "media", label: media.label, href: media.href, icon: <Icon name="media" size={20} />, active: activeId === "media" }] : []),
+    { id: "menu", label: "Menu", icon: <Icon name="menu" size={20} />, onClick: () => drawer.current?.showModal(), buttonRef: menuBtn },
+  ];
+
   return (
     <ToastProvider>
       <div className="adm">
         <a className="adm-skip" href="#adm-content">Lewati ke konten</a>
 
-        <aside className="adm-sidebar adm-glass" aria-label="Sidebar">
+        {/* Sidebar: latarnya statis (tidak ada konten bergeser di bawahnya) jadi cukup blur; pembiasan SVG tidak terlihat dan mahal. */}
+        <LiquidGlass as="aside" className="adm-sidebar" contentClassName="adm-sidebar__scroll" radius={24} refraction="off" blur={18} aria-label="Sidebar">
           <Brand />
           <NavList nav={nav} activeId={activeId} />
-        </aside>
+        </LiquidGlass>
 
-        <dialog ref={drawer} className="adm-drawer adm-glass" aria-label="Menu navigasi" onClick={(e) => { if (e.target === drawer.current) drawer.current?.close(); }}>
+        <dialog ref={drawer} className="adm-drawer" aria-label="Menu navigasi" onClick={(e) => { if (e.target === drawer.current) drawer.current?.close(); }}>
           <div className="adm-drawer-head">
             <Brand />
             <button type="button" className="adm-iconbtn" aria-label="Tutup menu" onClick={() => drawer.current?.close()}><Icon name="close" /></button>
@@ -166,9 +180,8 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
         </dialog>
 
         <div className="adm-main-wrap">
-          <header className="adm-topbar adm-glass">
+          <LiquidGlass as="header" className="adm-topbar" contentClassName="adm-topbar__inner" radius={22} bevel={20} strength={30} blur={10}>
             <div className="adm-topbar-left">
-              <button ref={menuBtn} type="button" className="adm-iconbtn adm-menu-btn" aria-label="Buka menu" onClick={() => drawer.current?.showModal()}><Icon name="menu" /></button>
               <Breadcrumbs pathname={pathname} />
             </div>
             <div className="adm-topbar-right">
@@ -181,9 +194,11 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
               <span className="adm-avatar adm-avatar-mobile" role="img" aria-label={`${email}, ${roleLabel}`} title={email}>{email.trim().charAt(0).toUpperCase() || "?"}</span>
               <span className="adm-logout-desktop"><LogoutButton /></span>
             </div>
-          </header>
+          </LiquidGlass>
           <main id="adm-content" className="adm-main" tabIndex={-1}>{children}</main>
         </div>
+
+        <LiquidGlassDock items={dockItems} label="Navigasi cepat" />
       </div>
     </ToastProvider>
   );
