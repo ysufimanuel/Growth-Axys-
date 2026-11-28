@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import {
   EmailAuthProvider,
   reauthenticateWithCredential,
@@ -39,7 +39,7 @@ export function AccountSettings({ email }: Props) {
     return { auth, user };
   }
 
-  async function changeEmail(event: FormEvent<HTMLFormElement>) {
+  async function changeEmail(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
@@ -61,7 +61,7 @@ export function AccountSettings({ email }: Props) {
     } finally { setEmailBusy(false); }
   }
 
-  async function changePassword(event: FormEvent<HTMLFormElement>) {
+  async function changePassword(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(event.currentTarget);
