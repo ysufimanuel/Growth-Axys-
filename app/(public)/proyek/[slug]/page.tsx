@@ -65,9 +65,9 @@ export default async function ProjectDetailPage({ params }: Props) {
         <div className="container">
           <div className="detail-layout">
             <div>
-              {p.cover ? (
+              {p.instagramUrl || p.cover ? (
                 <div className="detail-cover media-frame">
-                  <Media url={p.cover} alt={`Foto utama proyek ${p.title}`} className="detail-media-element" priority ratio="16 / 10" autoplay={p.mediaSettings.autoplay} muted={p.mediaSettings.muted} sizes="(max-width: 900px) 100vw, 65vw" />
+                  <Media url={p.instagramUrl || p.cover} alt={`Media proyek ${p.title}`} className="detail-media-element" priority ratio={p.mediaRatio || "16 / 10"} autoplay={p.mediaSettings.autoplay} muted={p.mediaSettings.muted} sizes="(max-width: 900px) 100vw, 65vw" />
                 </div>
               ) : null}
               <div className="detail-description prose">
