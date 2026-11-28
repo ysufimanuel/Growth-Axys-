@@ -6,6 +6,7 @@ export type MediaInfo =
   | { kind: "video"; src: string }
   | { kind: "youtube"; embedUrl: string; previewUrl: string }
   | { kind: "embed"; embedUrl: string; label: string }
+  | { kind: "instagram"; embedUrl: string }
   | { kind: "link"; href: string; label: string }
   | { kind: "invalid" };
 
@@ -31,6 +32,11 @@ export function mediaInfo(rawUrl: string): MediaInfo {
   }
   if (url.protocol !== "https:") return { kind: "invalid" };
   const host = url.hostname.toLowerCase().replace(/^www\./, "");
+
+  if (host === "instagram.com" || host === "instagr.am") {
+    const match = url.pathname.match(/^\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)\/?/);
+    if (match) return { kind: "instagram", embedUrl: `https://www.instagram.com/${url.pathname.split("/").filter(Boolean).slice(0, 2).join("/")}/embed/` };
+  }
 
   const yt = youtubeId(url);
   if (yt && /^[a-zA-Z0-9_-]{6,}$/.test(yt)) {
