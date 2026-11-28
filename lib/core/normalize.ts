@@ -85,7 +85,7 @@ export function normalizeService(id: string, raw: Raw): Service {
     image: str(raw.image),
     instagramUrl: str(raw.instagramUrl),
     mediaRatio: str(raw.mediaRatio) || "4 / 5",
-    imageAlt:
+    imageAlt: str(raw.imageAlt),
     publishStatus: readPublishStatus(raw),
     seo: readSeo(raw),
     updatedAt: toMillis(raw.updatedAt),
