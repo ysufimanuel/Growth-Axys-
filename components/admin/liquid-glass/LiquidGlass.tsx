@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useId, useRef, useState, type CSSProperties, type ElementType, type HTMLAttributes, type PointerEvent, type ReactNode } from "react";
 import { computeBevelMap } from "./bevel-map";
 import { useRefractionSupport } from "./support";
@@ -46,7 +47,7 @@ export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "chi
  * stacking context akar) dan memakai pointer-events: none, jadi teks/anak tidak pernah tertutup.
  */
 export function LiquidGlass({
-  as: Root = "div",
+  as,
   children,
   className,
   style,
@@ -65,6 +66,8 @@ export function LiquidGlass({
   ...rest
 }: LiquidGlassProps) {
   // useId() dapat memuat karakter yang tidak valid di url(#...) (":" di React 18, "«»" di React 19.1+).
+  // Server component tidak boleh mengirim komponen (Link) lewat `as`; cukup beri `href`, Link dipilih di sini (sisi client).
+  const Root: ElementType = as ?? (typeof rest.href === "string" && rest.href.startsWith("/") ? Link : "div");
   const filterId = `lg-${useId().replace(/[^a-zA-Z0-9_-]/g, "")}`;
   const ref = useRef<HTMLElement>(null);
   const supported = useRefractionSupport();

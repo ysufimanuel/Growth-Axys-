@@ -89,7 +89,7 @@ function NavList({ nav, activeId, onNavigate }: { nav: NavItem[]; activeId: stri
                 <li key={i.id}>
                   {i.available ? (
                     activeId === i.id ? (
-                      <LiquidGlass as={Link} href={i.href} className="adm-nav-link" aria-current="page" onClick={onNavigate} radius={16} bevel={18} strength={34} glint>
+                      <LiquidGlass href={i.href} className="adm-nav-link" aria-current="page" onClick={onNavigate} radius={16} bevel={18} strength={34} glint>
                         <span className="adm-nav-label"><Icon name={i.icon} />{i.label}</span>
                       </LiquidGlass>
                     ) : (

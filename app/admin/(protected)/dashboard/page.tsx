@@ -92,7 +92,7 @@ export default async function DashboardPage() {
               <span className="adm-kpi-sub">Tampil di website publik</span>
             </LiquidGlass>
             {sum.draft > 0 && topDraft && canEdit ? (
-              <LiquidGlass as={Link} className="adm-kpi adm-glass-card adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
+              <LiquidGlass className="adm-kpi adm-glass-card adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
                 <span className="adm-kpi-label"><Icon name="alert" size={14} />Draft perlu perhatian</span>
                 <span className="adm-kpi-value">{sum.draft}</span>
                 <span className="adm-kpi-sub">
@@ -178,7 +178,7 @@ export default async function DashboardPage() {
                 </>
               );
               return canEdit ? (
-                <LiquidGlass as={Link} key={c.type} className="adm-card adm-type-card" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
+                <LiquidGlass key={c.type} className="adm-card adm-type-card" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
                   {body}
                 </LiquidGlass>
               ) : (
