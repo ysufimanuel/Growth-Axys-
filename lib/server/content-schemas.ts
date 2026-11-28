@@ -57,6 +57,8 @@ export const schemas = {
     excerpt: text(400),
     content: body,
     image: httpsUrl.optional(),
+    instagramUrl: httpsUrl.optional(),
+    mediaRatio: z.enum(["1 / 1", "4 / 5", "3 / 4", "2 / 3", "3 / 2", "9 / 16", "16 / 9", "1.91 / 1", "1 / 2.1", "3 / 1"]).optional(),
     imageAlt: text(200),
     authorName: text(120),
     reviewerName: text(120),
