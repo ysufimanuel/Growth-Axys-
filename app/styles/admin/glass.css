@@ -128,3 +128,20 @@
   -webkit-backdrop-filter: url(#adm-glass-pill) blur(1px) saturate(1.2);
   backdrop-filter: url(#adm-glass-pill) blur(1px) saturate(1.2);
 }
+
+/* ---------- Sapuan specular (skill glassmorphism) ----------
+   Gradien miring bergeser lewat background-position (bukan transform) agar tepi tetap terpotong radius kartu.
+   Hanya untuk kartu ikhtisar; tidak menyentuh blur, jadi murah. */
+.adm-sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: var(--adm-sweep) no-repeat;
+  background-size: 260% 100%;
+  background-position: 140% 0;
+  transition: background-position .9s var(--adm-ease);
+}
+@media (hover: hover) { .adm-sweep:hover::after { background-position: -40% 0; } }
+@media (prefers-reduced-motion: reduce), (prefers-reduced-transparency: reduce) { .adm-sweep::after { display: none; } }

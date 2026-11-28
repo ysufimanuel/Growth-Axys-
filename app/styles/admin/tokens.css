@@ -46,6 +46,10 @@
 
   /* Gerak */
   --adm-ease: cubic-bezier(.22, 1.15, .36, 1);
+  --adm-sweep: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, .5) 50%, transparent 62%); /* sapuan specular saat hover */
+  --adm-seg-pub: #1f9d6b;
+  --adm-seg-draft: #e0962b;
+  --adm-seg-arch: #7c8da3;
 
   /* Tata letak */
   --adm-sidebar-w: 264px;
@@ -84,9 +88,9 @@
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   .adm {
     --adm-frost-bg: rgba(255, 255, 255, .46);
-    --adm-frost-blur: blur(14px) saturate(150%);
+    --adm-frost-blur: blur(18px) saturate(165%);
     --lg-tint-frost: rgba(255, 255, 255, .58);
-    --lg-fb-blur: 16px;
+    --lg-fb-blur: 18px;
   }
 }
 
@@ -125,6 +129,28 @@
   pointer-events: none;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23c3deff'/%3E%3Cstop offset='.55' stop-color='%23e2f3ff'/%3E%3Cstop offset='1' stop-color='%23cdf1e2'/%3E%3C/linearGradient%3E%3Cpattern id='a' width='74' height='74' patternUnits='userSpaceOnUse' patternTransform='rotate(-28)'%3E%3Crect width='74' height='30' fill='%233f8ae8' opacity='.22'/%3E%3Crect y='38' width='74' height='6' fill='%23fff' opacity='.36'/%3E%3C/pattern%3E%3Cpattern id='b' width='190' height='190' patternUnits='userSpaceOnUse' patternTransform='rotate(37)'%3E%3Crect width='190' height='52' fill='%2325b3a3' opacity='.15'/%3E%3C/pattern%3E%3Cfilter id='w' x='-20%' y='-20%' width='140%' height='140%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0032 .0058' numOctaves='1' seed='11' result='t'/%3E%3CfeGaussianBlur in='t' stdDeviation='2.5' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='380' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeGaussianBlur in='d' stdDeviation='1.6'/%3E%3C/filter%3E%3Cfilter id='s' x='-150%' y='-150%' width='400%' height='400%'%3E%3CfeGaussianBlur stdDeviation='70'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='1330' cy='140' r='170' fill='%23ffb877' opacity='.5' filter='url(%23s)'/%3E%3Ccircle cx='180' cy='900' r='210' fill='%237ee0b4' opacity='.42' filter='url(%23s)'/%3E%3Cg filter='url(%23w)'%3E%3Crect x='-500' y='-500' width='2600' height='2000' fill='url(%23a)'/%3E%3Crect x='-500' y='-500' width='2600' height='2000' fill='url(%23b)'/%3E%3C/g%3E%3C/svg%3E") center / cover no-repeat, #d9ecff;
 }
+/* Aurora (skill glassmorphism: kaca butuh latar kaya warna). Orb statis, TIDAK dianimasikan: latar yang bergerak di belakang
+   banyak backdrop-filter memaksa blur dihitung ulang tiap frame. */
+.adm-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(46% 42% at 12% 8%, rgba(98, 150, 255, .34), transparent 70%),
+    radial-gradient(40% 38% at 88% 12%, rgba(255, 176, 112, .30), transparent 70%),
+    radial-gradient(44% 40% at 82% 92%, rgba(124, 92, 255, .20), transparent 70%),
+    radial-gradient(42% 40% at 10% 88%, rgba(54, 206, 170, .26), transparent 70%);
+}
+/* Grain: derau halus meredam banding akibat blur besar (opacity <= .06). Disembunyikan saat transparansi dikurangi. */
+.adm-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: .05;
+  mix-blend-mode: multiply;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@media (prefers-reduced-transparency: reduce) { .adm-backdrop::before, .adm-backdrop::after { display: none; } }
 .adm *, .adm *::before, .adm *::after { box-sizing: border-box; }
 .adm :where(a) { color: inherit; text-decoration: none; }
 .adm :where(h1, h2, h3) { margin: 0; font-family: inherit; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; color: var(--adm-ink); }

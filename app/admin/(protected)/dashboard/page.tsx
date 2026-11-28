@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { DashboardMotion } from "../../../../components/admin/DashboardMotion";
@@ -17,6 +18,11 @@ export const metadata: Metadata = { title: "Ringkasan" };
 
 const TYPES = ["projects", "articles", "services", "certifications"] as const;
 const ROLE_LABEL: Record<string, string> = { superadmin: "Superadmin", admin: "Admin" };
+const MIX = [
+  { key: "published", label: "Terbit", color: "var(--adm-seg-pub)" },
+  { key: "draft", label: "Draft", color: "var(--adm-seg-draft)" },
+  { key: "archived", label: "Arsip", color: "var(--adm-seg-arch)" },
+] as const;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 function ErrorBox({ what }: { what: string }) {
@@ -81,32 +87,37 @@ export default async function DashboardPage() {
         <h2 id="kpi-h" className="adm-section-title">Ikhtisar konten</h2>
         {counts.ok && sum ? (
           <div className="adm-kpi-grid">
-            <LiquidGlass className="adm-kpi adm-glass-card" data-reveal>
+            <LiquidGlass refraction="off" className="adm-kpi adm-glass-card adm-sweep" data-reveal>
+              <span className="adm-kpi-ico" aria-hidden="true"><Icon name="overview" size={16} /></span>
               <span className="adm-kpi-label">Total konten</span>
               <span className="adm-kpi-value">{sum.total}</span>
               <span className="adm-kpi-sub">Proyek, layanan, artikel, sertifikasi</span>
             </LiquidGlass>
-            <LiquidGlass className="adm-kpi adm-glass-card adm-kpi-ok" data-reveal>
+            <LiquidGlass refraction="off" className="adm-kpi adm-glass-card adm-sweep adm-kpi-ok" data-reveal>
+              <span className="adm-kpi-ico" aria-hidden="true"><Icon name="external" size={16} /></span>
               <span className="adm-kpi-label">Terbit</span>
               <span className="adm-kpi-value">{sum.published}</span>
               <span className="adm-kpi-sub">Tampil di website publik</span>
             </LiquidGlass>
             {sum.draft > 0 && topDraft && canEdit ? (
-              <LiquidGlass className="adm-kpi adm-glass-card adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
-                <span className="adm-kpi-label"><Icon name="alert" size={14} />Draft perlu perhatian</span>
+              <LiquidGlass refraction="off" className="adm-kpi adm-glass-card adm-sweep adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
+                <span className="adm-kpi-ico" aria-hidden="true"><Icon name="alert" size={16} /></span>
+                <span className="adm-kpi-label">Draft perlu perhatian</span>
                 <span className="adm-kpi-value">{sum.draft}</span>
                 <span className="adm-kpi-sub">
                   Terbanyak di {CONTENT_LABEL[topDraft.type].plural} ({topDraft.draft}) <Icon name="arrow" size={14} />
                 </span>
               </LiquidGlass>
             ) : (
-              <LiquidGlass className={`adm-kpi adm-glass-card${sum.draft > 0 ? " adm-kpi-warn" : ""}`} data-reveal>
+              <LiquidGlass refraction="off" className={`adm-kpi adm-glass-card adm-sweep${sum.draft > 0 ? " adm-kpi-warn" : ""}`} data-reveal>
+                <span className="adm-kpi-ico" aria-hidden="true"><Icon name="alert" size={16} /></span>
                 <span className="adm-kpi-label">Draft perlu perhatian</span>
                 <span className="adm-kpi-value">{sum.draft}</span>
                 <span className="adm-kpi-sub">{sum.draft > 0 ? "Belum diterbitkan" : "Tidak ada draft tertunda"}</span>
               </LiquidGlass>
             )}
-            <LiquidGlass className="adm-kpi adm-glass-card" data-reveal>
+            <LiquidGlass refraction="off" className="adm-kpi adm-glass-card adm-sweep adm-kpi-arch" data-reveal>
+              <span className="adm-kpi-ico" aria-hidden="true"><Icon name="backup" size={16} /></span>
               <span className="adm-kpi-label">Diarsipkan</span>
               <span className="adm-kpi-value">{sum.archived}</span>
               <span className="adm-kpi-sub">Disembunyikan dari publik</span>
@@ -115,13 +126,33 @@ export default async function DashboardPage() {
         ) : (
           <ErrorBox what="Jumlah konten" />
         )}
+        {sum && sum.total > 0 ? (
+          <LiquidGlass refraction="off" className="adm-mix adm-glass-card adm-sweep" data-reveal style={{ marginTop: 14 }}>
+            <div className="adm-mix-head">
+              <h2>Komposisi status</h2>
+              <small>Dari {sum.total} konten</small>
+            </div>
+            <div className="adm-mix-bar" aria-hidden="true">
+              {MIX.filter((m) => sum[m.key] > 0).map((m) => (
+                <span key={m.key} className="adm-mix-seg" style={{ flexGrow: sum[m.key], "--seg": m.color } as CSSProperties} />
+              ))}
+            </div>
+            <ul className="adm-mix-legend">
+              {MIX.map((m) => (
+                <li key={m.key} style={{ "--seg": m.color } as CSSProperties}>
+                  {m.label} <b>{sum[m.key]}</b> ({Math.round((sum[m.key] / sum.total) * 100)}%)
+                </li>
+              ))}
+            </ul>
+          </LiquidGlass>
+        ) : null}
       </section>
 
       {/* 3. Aksi cepat (sesuai izin: tidak ada pintasan ke alur terlarang) */}
       {canEdit || canMedia ? (
         <section aria-labelledby="qa-h" className="adm-section">
           <h2 id="qa-h" className="adm-section-title">Aksi cepat</h2>
-          <LiquidGlass className="adm-qa adm-glass-card" data-reveal>
+          <LiquidGlass refraction="off" className="adm-qa adm-glass-card" data-reveal>
             {canEdit ? (
               <div className="adm-qa-primary">
                 {(["projects", "articles"] as const).map((t) => (
@@ -178,11 +209,11 @@ export default async function DashboardPage() {
                 </>
               );
               return canEdit ? (
-                <LiquidGlass key={c.type} className="adm-card adm-type-card" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
+                <LiquidGlass key={c.type} refraction="off" className="adm-card adm-type-card adm-sweep" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
                   {body}
                 </LiquidGlass>
               ) : (
-                <LiquidGlass key={c.type} className="adm-card adm-type-card" data-reveal>{body}</LiquidGlass>
+                <LiquidGlass key={c.type} refraction="off" className="adm-card adm-type-card adm-sweep" data-reveal>{body}</LiquidGlass>
               );
             })}
           </div>
@@ -193,7 +224,7 @@ export default async function DashboardPage() {
 
       <div className="adm-grid adm-grid-2 adm-section">
         {/* 5. Perubahan terbaru */}
-        <LiquidGlass as="section" className="adm-card" aria-labelledby="recent-h" data-reveal>
+        <LiquidGlass as="section" refraction="off" className="adm-card" aria-labelledby="recent-h" data-reveal>
           <h2 id="recent-h">Terakhir diubah</h2>
           {!recent.ok ? (
             <ErrorBox what="Konten terbaru" />
@@ -221,7 +252,7 @@ export default async function DashboardPage() {
         <div className="adm-stack">
           {/* 7. Perhatian: hanya dari data nyata */}
           {counts.ok ? (
-            <LiquidGlass as="section" className="adm-card" aria-labelledby="att-h" data-reveal>
+            <LiquidGlass as="section" refraction="off" className="adm-card" aria-labelledby="att-h" data-reveal>
               <h2 id="att-h">Perlu perhatian</h2>
               {draftTypes.length === 0 ? (
                 <p className="adm-hint">Tidak ada draft yang menunggu. Semua konten sudah terbit atau diarsipkan.</p>
@@ -246,7 +277,7 @@ export default async function DashboardPage() {
 
           {/* 6. Aktivitas: hanya untuk izin audit.view */}
           {activity ? (
-            <LiquidGlass as="section" className="adm-card" aria-labelledby="act-h" data-reveal>
+            <LiquidGlass as="section" refraction="off" className="adm-card" aria-labelledby="act-h" data-reveal>
               <h2 id="act-h">Aktivitas terbaru</h2>
               {!activity.ok ? (
                 <ErrorBox what="Aktivitas" />
