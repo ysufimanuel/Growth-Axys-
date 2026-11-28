@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { JsonLd } from "../../../../components/JsonLd";
+import { Media } from "../../../../components/Media";
 import { PageHero } from "../../../../components/PageHero";
 import { isThinContent } from "../../../../lib/core/content-checks";
 import { serviceJsonLd } from "../../../../lib/core/jsonld";
@@ -60,8 +61,8 @@ export default async function ServiceDetailPage({ params }: Props) {
       <section className="section">
         <div className="container detail-layout">
           <div className="prose">
-            {s.image ? (
-              <div style={{ position: "relative", aspectRatio: "16 / 9", marginBottom: "1.5rem", overflow: "hidden" }}>
+            {s.instagramUrl ? <div style={{ maxWidth: 560, marginBottom: "1.5rem", aspectRatio: s.mediaRatio || "4 / 5", overflow: "hidden" }}><Media url={s.instagramUrl} alt={s.title} ratio={s.mediaRatio || "4 / 5"} /></div> : s.image ? (
+              <div style={{ position: "relative", aspectRatio: s.mediaRatio || "16 / 9", marginBottom: "1.5rem", overflow: "hidden" }}>
                 <Image src={s.image} alt={s.imageAlt || s.title} fill sizes="(max-width: 900px) 100vw, 60vw" style={{ objectFit: "cover" }} priority />
               </div>
             ) : null}
