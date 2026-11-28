@@ -105,6 +105,8 @@ export function normalizeArticle(id: string, raw: Raw): Article {
     excerpt: str(raw.excerpt),
     content: str(raw.content),
     image: str(raw.image),
+    instagramUrl: str(raw.instagramUrl),
+    mediaRatio: str(raw.mediaRatio) || "4 / 5",
     imageAlt: str(raw.imageAlt),
     authorName: str(raw.authorName),
     reviewerName: str(raw.reviewerName),
