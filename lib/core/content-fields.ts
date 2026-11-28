@@ -63,6 +63,8 @@ export const FIELDS: Record<ContentType, FieldDef[]> = {
     { name: "excerpt", label: "Ringkasan", kind: "textarea", max: 400, group: "main", span: true },
     { name: "content", label: "Isi artikel", kind: "textarea", max: 50000, group: "main", span: true, hint: "Teks polos; paragraf dipisah baris kosong." },
     { name: "image", label: "Gambar (URL HTTPS)", kind: "url", group: "media" },
+    { name: "instagramUrl", label: "URL postingan Instagram", kind: "url", group: "media", hint: "Diisi otomatis saat mengimpor postingan." },
+    { name: "mediaRatio", label: "Rasio tampilan media", kind: "select", options: ["1 / 1", "4 / 5", "3 / 4", "2 / 3", "3 / 2", "9 / 16", "16 / 9", "1.91 / 1", "1 / 2.1", "3 / 1"], group: "media" },
     { name: "imageAlt", label: "Teks alternatif gambar", kind: "text", max: 200, group: "media" },
     { name: "authorName", label: "Penulis", kind: "text", max: 120, group: "geo" },
     { name: "reviewerName", label: "Peninjau", kind: "text", max: 120, group: "geo" },
