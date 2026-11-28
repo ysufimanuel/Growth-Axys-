@@ -9,6 +9,10 @@ const BLOCK_TAGS = new Set(["div", "header", "aside", "nav", "section", "article
 export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /** Elemen/komponen akar (default "div"). Dipakai agar semantik HTML benar: header, aside, nav, form, a, button, Link. */
   as?: ElementType;
+  /** Anchor attributes used when rendering a link component. */
+  href?: string;
+  target?: string;
+  rel?: string;
   children?: ReactNode;
   /** Radius sudut (px). */
   radius?: number;
