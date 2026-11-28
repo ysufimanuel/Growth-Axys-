@@ -66,6 +66,9 @@ export function ContentEditor({ type, singular, doc, caps }: Props) {
   const [formError, setFormError] = useState<string | null>(null);
   const [warnings, setWarnings] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
+  const [instagramUrl, setInstagramUrl] = useState(String(initial.instagramUrl || ""));
+  const [importingInstagram, setImportingInstagram] = useState(false);
+  const [instagramError, setInstagramError] = useState("");
   const [confirm, setConfirm] = useState<null | { kind: "slug" | Status | "delete" }>(null);
 
   const status = doc?.publishStatus ?? "draft";
@@ -73,6 +76,20 @@ export function ContentEditor({ type, singular, doc, caps }: Props) {
   const dirty = JSON.stringify(values) !== JSON.stringify(initial);
   const fields = FIELDS[type].filter((f) => !f.superOnly || caps.isSuper);
   const groups = (Object.keys(GROUPS) as FieldDef["group"][]).map((g) => ({ g, fields: fields.filter((f) => f.group === g) })).filter((x) => x.fields.length);
+
+  async function importInstagram() {
+    setInstagramError(""); setImportingInstagram(true);
+    try {
+      const result = await adminFetch<{ url: string; caption: string; thumbnailUrl?: string }>("/api/admin/instagram/import", { method: "POST", body: { url: instagramUrl.trim() } });
+      if (!result.ok || !result.data) throw new Error(result.error || "Postingan Instagram gagal diimpor.");
+      const caption = result.data.caption || "";
+      setValues((current) => ({ ...current, instagramUrl: result.data!.url, mediaRatio: current.mediaRatio || "4 / 5",
+        ...(type === "projects" ? { scope: caption || current.scope, cover: result.data!.thumbnailUrl || current.cover } : type === "articles" ? { content: caption || current.content, excerpt: caption.slice(0, 400) || current.excerpt, image: result.data!.thumbnailUrl || current.image } : { content: caption || current.content, image: result.data!.thumbnailUrl || current.image }) }));
+      setInstagramUrl(result.data.url);
+      toast("ok", caption ? "Link diimpor dan caption dimasukkan ke deskripsi." : "Link diimpor. Caption tidak tersedia dari Meta, isi deskripsi manual.");
+    } catch (error) { setInstagramError(error instanceof Error ? error.message : "Impor Instagram gagal."); }
+    finally { setImportingInstagram(false); }
+  }
 
   async function save(redirectConfirmed = false) {
     const errs = validateForm(type, values, { isSuper: caps.isSuper });
@@ -138,6 +155,11 @@ export function ContentEditor({ type, singular, doc, caps }: Props) {
         </div>
       ) : null}
 
+      {type !== "certifications" ? <section className="adm-card" style={{ padding: "1rem", marginBottom: "1rem" }}>
+        <h2>Impor dari Instagram</h2><p className="adm-hint">Tempel link postingan, Reel, atau video Instagram untuk mengisi URL media dan deskripsi.</p>
+        <div className="adm-actions" style={{ alignItems: "end", gap: ".75rem" }}><div className="adm-field" style={{ flex: 1 }}><label htmlFor="instagram-import-url">Link postingan Instagram</label><input id="instagram-import-url" type="url" value={instagramUrl} onChange={(e) => setInstagramUrl(e.target.value)} placeholder="https://www.instagram.com/p/.../" /></div><button type="button" className="adm-btn adm-btn-primary" disabled={importingInstagram || !instagramUrl.trim() || readOnly} onClick={() => void importInstagram()}>{importingInstagram ? "Mengambil…" : "Ambil postingan"}</button></div>
+        {instagramError ? <p className="adm-field-error" role="alert">{instagramError}</p> : null}<p className="adm-hint">Caption hanya dapat diisi otomatis jika Meta mengembalikannya melalui oEmbed.</p>
+      </section> : null}
       <form className="adm-form" onSubmit={onSubmit} noValidate>
         {groups.map(({ g, fields: fs }) => (
           <fieldset key={g} className="adm-fieldset" disabled={readOnly}>

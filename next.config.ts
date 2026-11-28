@@ -14,7 +14,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "script-src 'self' 'unsafe-inline' https://apis.google.com https://www.gstatic.com",
   "connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com",
-  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://drive.google.com https://assets.pinterest.com https://*.firebaseapp.com https://accounts.google.com",
+  "frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://drive.google.com https://assets.pinterest.com https://www.instagram.com https://*.firebaseapp.com https://accounts.google.com",
 ].join("; ");
 
 const securityHeaders = [

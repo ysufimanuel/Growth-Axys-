@@ -13,6 +13,12 @@ npm run build
 ```
 Tanpa kredensial Firebase Admin, situs tetap berjalan: daftar proyek/artikel kosong (empty state + `noindex`).
 
+## Impor Instagram di CMS
+- Admin dapat menempel URL postingan, Reel, atau video (`/p/`, `/reel/`, `/tv/`) pada editor proyek, layanan, atau artikel.
+- Endpoint server memakai Meta Instagram oEmbed. Isi `INSTAGRAM_OEMBED_TOKEN` di Vercel Project Settings → Environment Variables (Production/Preview sesuai kebutuhan). Token hanya dibaca server dan tidak boleh memakai prefix `NEXT_PUBLIC_`.
+- Caption diisi dari field `title` yang dikembalikan Meta oEmbed jika tersedia; Meta tidak selalu mengembalikan caption. Dalam kondisi itu, URL dan embed tetap disimpan dan deskripsi dapat diisi manual.
+- Thumbnail disimpan sebagai URL gambar untuk kartu/metadata; halaman detail menampilkan embed Instagram. Rasio media dapat dipilih di editor, tetapi rasio asli konten di dalam embed tetap dikendalikan Instagram.
+
 ## Struktur singkat
 - `app/(public)` halaman publik · `app/admin` login + area terproteksi · `app/api` endpoint server
 - `lib/core` logika murni yang diuji (izin, slug, redirect, normalisasi, JSON-LD, cek konten)

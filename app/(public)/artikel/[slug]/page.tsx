@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 import { JsonLd } from "../../../../components/JsonLd";
+import { Media } from "../../../../components/Media";
 import { PageHero } from "../../../../components/PageHero";
 import { isThinContent } from "../../../../lib/core/content-checks";
 import { articleJsonLd } from "../../../../lib/core/jsonld";
@@ -78,8 +79,8 @@ export default async function ArticlePage({ params }: Props) {
             {a.updatedAt && a.updatedAt !== a.publishedAt ? ` · Diperbarui ${fmt(a.updatedAt)}` : ""}
             {a.reviewerName ? ` · Ditinjau oleh ${a.reviewerName}${a.reviewedAt ? ` (${fmt(a.reviewedAt)})` : ""}` : ""}
           </p>
-          {a.image ? (
-            <div style={{ position: "relative", aspectRatio: "16 / 9", marginBottom: "1.5rem", overflow: "hidden" }}>
+          {a.instagramUrl ? <div style={{ maxWidth: 560, margin: "0 auto 1.5rem", aspectRatio: a.mediaRatio || "4 / 5", overflow: "hidden" }}><Media url={a.instagramUrl} alt={a.title} ratio={a.mediaRatio || "4 / 5"} /></div> : a.image ? (
+            <div style={{ position: "relative", aspectRatio: a.mediaRatio || "16 / 9", marginBottom: "1.5rem", overflow: "hidden" }}>
               <Image src={a.image} alt={a.imageAlt || a.title} fill sizes="(max-width: 900px) 100vw, 780px" style={{ objectFit: "cover" }} priority />
             </div>
           ) : null}
