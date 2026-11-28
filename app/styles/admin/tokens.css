@@ -39,21 +39,20 @@
   --adm-btn-ink: #29445f;
   --adm-btn-border: rgba(255, 255, 255, .7);
   --adm-btn-shadow: 0 0 0 1px rgba(18, 52, 98, .22), inset 0 1px 1px rgba(255, 255, 255, .95), inset 0 -2px 4px rgba(40, 80, 140, .14), 0 6px 14px -6px rgba(20, 50, 100, .3);
-  --adm-primary-bg: linear-gradient(180deg, #2AA1FF, #0A84FF);
-  --adm-primary-bg-hover: linear-gradient(180deg, #3CAAFF, #1790FF);
-  --adm-primary-shadow: 0 4px 16px rgba(10, 132, 255, .3), inset 0 1px 0 rgba(255, 255, 255, .4);
+  --adm-primary-bg: linear-gradient(180deg, rgba(255, 255, 255, .18), transparent 52%), linear-gradient(160deg, rgba(48, 118, 224, .9) 0%, rgba(30, 90, 190, .9) 55%, rgba(22, 70, 160, .92) 100%);
+  --adm-primary-bg-hover: linear-gradient(180deg, rgba(255, 255, 255, .22), transparent 52%), linear-gradient(160deg, rgba(62, 132, 234, .92) 0%, rgba(40, 104, 208, .92) 55%, rgba(28, 82, 176, .94) 100%);
+  --adm-primary-shadow: inset 0 1px 0 rgba(255, 255, 255, .55), 0 8px 20px rgba(36, 104, 203, .26);
   --adm-danger-bg: linear-gradient(160deg, #c9505b 0%, #a9363f 100%);
 
   /* Gerak */
-  --ios-ease: cubic-bezier(.25, 1, .5, 1);
-  --adm-ease: var(--ios-ease);
+  --adm-ease: cubic-bezier(.22, 1.15, .36, 1);
 
   /* Tata letak */
   --adm-sidebar-w: 264px;
   --adm-topbar-h: 64px;
   --adm-gutter: 12px;
   --adm-dock-size: 64px;
-  --adm-dock-offset: calc(env(safe-area-inset-bottom, 0px) + 16px);
+  --adm-dock-offset: max(12px, env(safe-area-inset-bottom));
   --adm-dock-h: 0px;            /* tinggi ruang yang dipakai dock; >0 hanya di layar sempit */
 
   /* Skala z-index: satu tempat, tidak ada angka acak di file lain.
@@ -68,17 +67,17 @@
   --adm-frost-bg: rgba(255, 255, 255, .80);
   --adm-frost-blur: none;
   --adm-frost-border: rgba(255, 255, 255, .86);
-  --lg-tint: linear-gradient(135deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .55));
+  --lg-tint: rgba(255, 255, 255, .22);
   --lg-tint-frost: rgba(255, 255, 255, .90);
   --lg-fb-blur: 0px;
 
   /* Primitif .lg (lihat glass.css) */
   --lg-rim: rgba(255, 255, 255, .55);
-  --lg-edge: rgba(255, 255, 255, .9);     /* tepi kaca: putih (bukan garis abu-abu datar); bentuk ditegaskan highlight atas + bayangan */
+  --lg-edge: rgba(18, 52, 98, .30);       /* garis luar tipis yang menegaskan bentuk kaca di atas latar terang */
   --lg-hi: rgba(255, 255, 255, .9);
   --lg-lo: rgba(40, 80, 140, .16);
   --lg-side: rgba(255, 255, 255, .5);
-  --lg-drop: 0 8px 32px rgba(0, 0, 0, .06);
+  --lg-drop: 0 18px 40px -14px rgba(20, 50, 100, .34);
   --lg-glint: rgba(255, 255, 255, .7);
 }
 
@@ -104,7 +103,7 @@
 
 /* Layar sempit: dock bawah memakai ruang; konten, sticky bar, dan toast menyisihkan tempatnya. */
 @media (max-width: 1023px) {
-  .adm { --adm-dock-h: calc(var(--adm-dock-size) + var(--adm-dock-offset) + 24px); }
+  .adm { --adm-dock-h: calc(var(--adm-dock-size) + var(--adm-dock-offset) + 12px); }
 }
 
 /* ---------- Dasar ---------- */
@@ -124,10 +123,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(600px at 0% 0%, rgba(59, 130, 246, .12), transparent),
-    radial-gradient(800px at 100% 100%, rgba(16, 185, 129, .10), transparent),
-    linear-gradient(180deg, #F8FAFC 0%, #EEF2F7 100%);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23c3deff'/%3E%3Cstop offset='.55' stop-color='%23e2f3ff'/%3E%3Cstop offset='1' stop-color='%23cdf1e2'/%3E%3C/linearGradient%3E%3Cpattern id='a' width='74' height='74' patternUnits='userSpaceOnUse' patternTransform='rotate(-28)'%3E%3Crect width='74' height='30' fill='%233f8ae8' opacity='.22'/%3E%3Crect y='38' width='74' height='6' fill='%23fff' opacity='.36'/%3E%3C/pattern%3E%3Cpattern id='b' width='190' height='190' patternUnits='userSpaceOnUse' patternTransform='rotate(37)'%3E%3Crect width='190' height='52' fill='%2325b3a3' opacity='.15'/%3E%3C/pattern%3E%3Cfilter id='w' x='-20%' y='-20%' width='140%' height='140%'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.0032 .0058' numOctaves='1' seed='11' result='t'/%3E%3CfeGaussianBlur in='t' stdDeviation='2.5' result='n'/%3E%3CfeDisplacementMap in='SourceGraphic' in2='n' scale='380' xChannelSelector='R' yChannelSelector='G' result='d'/%3E%3CfeGaussianBlur in='d' stdDeviation='1.6'/%3E%3C/filter%3E%3Cfilter id='s' x='-150%' y='-150%' width='400%' height='400%'%3E%3CfeGaussianBlur stdDeviation='70'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='1000' fill='url(%23g)'/%3E%3Ccircle cx='1330' cy='140' r='170' fill='%23ffb877' opacity='.5' filter='url(%23s)'/%3E%3Ccircle cx='180' cy='900' r='210' fill='%237ee0b4' opacity='.42' filter='url(%23s)'/%3E%3Cg filter='url(%23w)'%3E%3Crect x='-500' y='-500' width='2600' height='2000' fill='url(%23a)'/%3E%3Crect x='-500' y='-500' width='2600' height='2000' fill='url(%23b)'/%3E%3C/g%3E%3C/svg%3E") center / cover no-repeat, #d9ecff;
 }
 .adm *, .adm *::before, .adm *::after { box-sizing: border-box; }
 .adm :where(a) { color: inherit; text-decoration: none; }

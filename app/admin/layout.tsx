@@ -4,7 +4,6 @@ import "../styles/admin/glass.css";
 import "../styles/admin/layout.css";
 import "../styles/admin/components.css";
 import "../styles/admin/pages.css";
-import "../styles/admin/ios.css";
 
 // Area internal: noindex. Perlindungan sebenarnya ada di server (layout (protected) + endpoint API).
 export const metadata: Metadata = {
