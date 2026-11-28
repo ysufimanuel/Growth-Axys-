@@ -1,55 +1,67 @@
 /* =====================================================================
    Primitif Liquid Glass (.lg) — dipakai komponen components/admin/liquid-glass/*.
-   Struktur DOM: root.lg > [svg.lg__defs] [.lg__refract] [.lg__rim] [.lg__glint] [.lg__content]
+   Struktur DOM: root.lg > [svg.lg__defs] [.lg__refract] [.lg__rim] [.lg__glint] + anak langsung
    - Posisi/tampilan dasar memakai :where() (spesifisitas 0) supaya kelas pemakai
      (.adm-sidebar → fixed, .adm-topbar → sticky, .adm-btn → inline-flex) selalu menang, bukan bertabrakan.
    - Pembiasan SVG (Chromium) dipasang inline oleh komponen; di sini hanya fallback blur untuk browser lain.
    ===================================================================== */
 
 :where(.lg) { position: relative; z-index: 0; background: var(--lg-tint); }
+/* Tanpa pembiasan (non-Chromium / transparansi dikurangi / sebelum hidrasi): kaca beku agar teks tetap terbaca.
+   Mengubah token, bukan properti background, supaya kelas pemakai (mis. tombol gradien) tidak ikut tertimpa. */
+.lg[data-refract="off"] { --lg-tint: var(--lg-tint-frost); }
 .lg__defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
 
 .lg__refract, .lg__rim, .lg__glint { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
 
-/* Latar yang dibiaskan. Fallback (Safari/Firefox, atau pembiasan dimatikan): blur + saturate. */
-.lg__refract { z-index: 0; }
+/* Layer dekoratif ada di belakang konten (z -1 di dalam stacking context akar .lg). Urutan DOM: refract → rim → glint. */
+.lg__refract, .lg__rim, .lg__glint { z-index: -1; }
+
+/* Latar yang dibiaskan. Saat pembiasan aktif, komponen memasang url(#filter) + blur kecil secara inline. */
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .lg__refract {
-    -webkit-backdrop-filter: blur(var(--lg-blur, 12px)) saturate(165%);
-    backdrop-filter: blur(var(--lg-blur, 12px)) saturate(165%);
+  .lg[data-refract="off"] > .lg__refract {
+    -webkit-backdrop-filter: blur(var(--lg-fb-blur)) saturate(160%);
+    backdrop-filter: blur(var(--lg-fb-blur)) saturate(160%);
   }
 }
 @media (prefers-reduced-transparency: reduce) { .lg__refract { display: none; } }
 
-/* Tepi specular + bayangan bevel dalam. */
+/* Tepi kaca: garis luar tipis gelap (menegaskan bentuk), bevel dalam, dan sorotan spekular bergradien
+   (terang di sisi atas-kiri & bawah-kanan, redup di tengah) seperti kaca sungguhan. */
 .lg__rim {
-  z-index: 1;
-  border: 1px solid var(--lg-rim);
   box-shadow:
+    0 0 0 1px var(--lg-edge),
     inset 0 1.5px 1px var(--lg-hi),
     inset 0 -2px 5px var(--lg-lo),
     inset 1.5px 0 3px var(--lg-side),
     inset -1.5px 0 3px var(--lg-side),
     var(--lg-drop);
 }
+.lg__rim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: linear-gradient(145deg, rgba(255, 255, 255, .95) 0%, rgba(255, 255, 255, .08) 36%, rgba(255, 255, 255, 0) 64%, rgba(255, 255, 255, .75) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
 
 /* Kilau mengikuti kursor (diatur komponen lewat --lg-gx / --lg-gy). */
 .lg__glint {
-  z-index: 1;
   opacity: 0;
   transition: opacity .25s ease;
   background: radial-gradient(circle 90px at var(--lg-gx, 50%) var(--lg-gy, 50%), var(--lg-glint), transparent 72%);
 }
 .lg[data-glint="on"] > .lg__glint { opacity: 1; }
 
-:where(.lg__content) { position: relative; z-index: 2; display: block; border-radius: inherit; }
-
 /* ---------- Tombol kaca: pelengkap .adm-btn (tampilan dasar ada di components.css) ---------- */
 .lg-btn { transition: transform .3s var(--adm-ease), background .22s ease, box-shadow .25s ease, border-color .22s ease; }
 .lg-btn:hover { transform: translateY(-1px) scale(1.02); }
 .lg-btn:active { transform: scale(.97); }
-.lg-btn > .lg__content { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.lg-btn .lg__rim { --lg-drop: 0 0 0 transparent; }
+.lg-btn .lg__rim { --lg-drop: 0 6px 14px -6px rgba(20, 50, 100, .3); }
 .lg-btn.adm-btn-primary { --lg-glint: rgba(255, 255, 255, .5); }
 
 /* ---------- Dock mengambang (layar sempit) ---------- */
@@ -65,7 +77,7 @@
   pointer-events: none;       /* area kosong di kiri/kanan dock tidak menghalangi sentuhan */
 }
 @media (max-width: 1023px) { .lg-dock { display: flex; } }
-.lg-dock__glass { width: 100%; max-width: 420px; pointer-events: auto; --lg-drop: 0 18px 38px -10px rgba(30, 60, 100, .36); }
+.lg-dock__glass { width: 100%; max-width: 420px; pointer-events: auto; --lg-tint: rgba(255, 255, 255, .5); --lg-drop: 0 22px 44px -12px rgba(20, 45, 90, .45); }
 .lg-dock__list { list-style: none; margin: 0; padding: 6px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
 .lg-dock__item {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -81,4 +93,11 @@
 @media (forced-colors: active) {
   .lg__rim { border-color: CanvasText; }
   .lg-dock__item[aria-current="page"] { outline: 2px solid CanvasText; }
+}
+
+/* ---------- Tombol & chip biasa: kaca bening via filter bersama (SharedGlassDefs) ----------
+   Hanya saat pembiasan didukung. Elemen .lg (LiquidGlassButton) punya filter sendiri, jadi dikecualikan. */
+.adm[data-glass="on"] :is(.adm-btn, .adm-iconbtn, .adm-chip):not(.lg) {
+  -webkit-backdrop-filter: url(#adm-glass-pill) blur(1px) saturate(1.2);
+  backdrop-filter: url(#adm-glass-pill) blur(1px) saturate(1.2);
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requirePageActor } from "../../../../lib/server/admin-page";
 import { adminDb } from "../../../../lib/server/firebase-admin";
 import { CONTENT_TYPES, type ContentType } from "../../../../lib/server/content-schemas";
+import { LiquidGlass } from "../../../../components/admin/liquid-glass";
 
 export const dynamic = "force-dynamic";
 
@@ -22,11 +23,11 @@ export default async function PageSeoPage() {
   return <>
     <div className="adm-pagehead"><div><h1>SEO halaman</h1><p>Tinjau metadata konten dan buka editor untuk mengubah judul, deskripsi, serta gambar Open Graph. Canonical/noindex hanya untuk Superadmin.</p></div></div>
     <div className="adm-grid adm-grid-kpi">
-      <article className="adm-card adm-stat"><span className="adm-stat-label">Total konten</span><strong className="adm-stat-value">{total}</strong></article>
-      <article className="adm-card adm-stat"><span className="adm-stat-label">Metadata lengkap</span><strong className="adm-stat-value">{complete}</strong></article>
-      <article className="adm-card adm-stat"><span className="adm-stat-label">Perlu dilengkapi</span><strong className="adm-stat-value">{total - complete}</strong></article>
+      <LiquidGlass as="article" className="adm-card adm-stat"><span className="adm-stat-label">Total konten</span><strong className="adm-stat-value">{total}</strong></LiquidGlass>
+      <LiquidGlass as="article" className="adm-card adm-stat"><span className="adm-stat-label">Metadata lengkap</span><strong className="adm-stat-value">{complete}</strong></LiquidGlass>
+      <LiquidGlass as="article" className="adm-card adm-stat"><span className="adm-stat-label">Perlu dilengkapi</span><strong className="adm-stat-value">{total - complete}</strong></LiquidGlass>
     </div>
-    {groups.map(({ type, rows }) => <section className="adm-card adm-seo-group" key={type}>
+    {groups.map(({ type, rows }) => <LiquidGlass as="section" className="adm-card adm-seo-group" key={type}>
       <h2>{labels[type]}</h2>
       {rows.length === 0 ? <p className="adm-hint">Belum ada konten.</p> : <div className="adm-tablewrap"><table className="adm-table">
         <thead><tr><th>Konten</th><th>Judul SEO</th><th>Deskripsi</th><th>Open Graph</th><th>Aksi</th></tr></thead>
@@ -38,7 +39,7 @@ export default async function PageSeoPage() {
           <td><Link className="adm-btn adm-btn-sm" href={type === "certifications" ? `/admin/content/certifications/${row.id}` : `/admin/content/${type}/${row.id}`}>Edit SEO</Link></td>
         </tr>)}</tbody>
       </table></div>}
-    </section>)}
+    </LiquidGlass>)}
     <p className="adm-hint">Angka dihitung dari dokumen Firestore saat halaman dimuat. Ini adalah audit metadata tersimpan, bukan laporan peringkat atau indeks Google.</p>
   </>;
 }

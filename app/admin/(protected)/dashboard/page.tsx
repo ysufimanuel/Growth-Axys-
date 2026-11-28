@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { DashboardMotion } from "../../../../components/admin/DashboardMotion";
 import { Icon } from "../../../../components/admin/icons";
-import { LiquidGlassButton, LiquidGlassHeroCard } from "../../../../components/admin/liquid-glass";
+import { LiquidGlass, LiquidGlassButton, LiquidGlassHeroCard } from "../../../../components/admin/liquid-glass";
 import { StatusBadge } from "../../../../components/admin/StatusBadge";
 import { CONTENT_LABEL } from "../../../../lib/core/admin-nav";
 import { actionLabel, formatDateLong, formatDateTime } from "../../../../lib/core/format";
@@ -81,36 +81,36 @@ export default async function DashboardPage() {
         <h2 id="kpi-h" className="adm-section-title">Ikhtisar konten</h2>
         {counts.ok && sum ? (
           <div className="adm-kpi-grid">
-            <div className="adm-kpi adm-glass-card" data-reveal>
+            <LiquidGlass className="adm-kpi adm-glass-card" data-reveal>
               <span className="adm-kpi-label">Total konten</span>
               <span className="adm-kpi-value">{sum.total}</span>
               <span className="adm-kpi-sub">Proyek, layanan, artikel, sertifikasi</span>
-            </div>
-            <div className="adm-kpi adm-glass-card adm-kpi-ok" data-reveal>
+            </LiquidGlass>
+            <LiquidGlass className="adm-kpi adm-glass-card adm-kpi-ok" data-reveal>
               <span className="adm-kpi-label">Terbit</span>
               <span className="adm-kpi-value">{sum.published}</span>
               <span className="adm-kpi-sub">Tampil di website publik</span>
-            </div>
+            </LiquidGlass>
             {sum.draft > 0 && topDraft && canEdit ? (
-              <Link className="adm-kpi adm-glass-card adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
+              <LiquidGlass as={Link} className="adm-kpi adm-glass-card adm-kpi-warn adm-kpi-link" data-reveal href={`/admin/content/${topDraft.type}?status=draft`}>
                 <span className="adm-kpi-label"><Icon name="alert" size={14} />Draft perlu perhatian</span>
                 <span className="adm-kpi-value">{sum.draft}</span>
                 <span className="adm-kpi-sub">
                   Terbanyak di {CONTENT_LABEL[topDraft.type].plural} ({topDraft.draft}) <Icon name="arrow" size={14} />
                 </span>
-              </Link>
+              </LiquidGlass>
             ) : (
-              <div className={`adm-kpi adm-glass-card${sum.draft > 0 ? " adm-kpi-warn" : ""}`} data-reveal>
+              <LiquidGlass className={`adm-kpi adm-glass-card${sum.draft > 0 ? " adm-kpi-warn" : ""}`} data-reveal>
                 <span className="adm-kpi-label">Draft perlu perhatian</span>
                 <span className="adm-kpi-value">{sum.draft}</span>
                 <span className="adm-kpi-sub">{sum.draft > 0 ? "Belum diterbitkan" : "Tidak ada draft tertunda"}</span>
-              </div>
+              </LiquidGlass>
             )}
-            <div className="adm-kpi adm-glass-card" data-reveal>
+            <LiquidGlass className="adm-kpi adm-glass-card" data-reveal>
               <span className="adm-kpi-label">Diarsipkan</span>
               <span className="adm-kpi-value">{sum.archived}</span>
               <span className="adm-kpi-sub">Disembunyikan dari publik</span>
-            </div>
+            </LiquidGlass>
           </div>
         ) : (
           <ErrorBox what="Jumlah konten" />
@@ -121,7 +121,7 @@ export default async function DashboardPage() {
       {canEdit || canMedia ? (
         <section aria-labelledby="qa-h" className="adm-section">
           <h2 id="qa-h" className="adm-section-title">Aksi cepat</h2>
-          <div className="adm-qa adm-glass-card" data-reveal>
+          <LiquidGlass className="adm-qa adm-glass-card" data-reveal>
             {canEdit ? (
               <div className="adm-qa-primary">
                 {(["projects", "articles"] as const).map((t) => (
@@ -153,7 +153,7 @@ export default async function DashboardPage() {
                 </a>
               </li>
             </ul>
-          </div>
+          </LiquidGlass>
         </section>
       ) : null}
 
@@ -178,11 +178,11 @@ export default async function DashboardPage() {
                 </>
               );
               return canEdit ? (
-                <Link key={c.type} className="adm-card adm-type-card" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
+                <LiquidGlass as={Link} key={c.type} className="adm-card adm-type-card" data-reveal href={`/admin/content/${c.type}`} aria-label={`${CONTENT_LABEL[c.type].plural}: ${c.total} total, buka daftar`}>
                   {body}
-                </Link>
+                </LiquidGlass>
               ) : (
-                <div key={c.type} className="adm-card adm-type-card" data-reveal>{body}</div>
+                <LiquidGlass key={c.type} className="adm-card adm-type-card" data-reveal>{body}</LiquidGlass>
               );
             })}
           </div>
@@ -193,7 +193,7 @@ export default async function DashboardPage() {
 
       <div className="adm-grid adm-grid-2 adm-section">
         {/* 5. Perubahan terbaru */}
-        <section className="adm-card" aria-labelledby="recent-h" data-reveal>
+        <LiquidGlass as="section" className="adm-card" aria-labelledby="recent-h" data-reveal>
           <h2 id="recent-h">Terakhir diubah</h2>
           {!recent.ok ? (
             <ErrorBox what="Konten terbaru" />
@@ -216,12 +216,12 @@ export default async function DashboardPage() {
               ))}
             </ul>
           )}
-        </section>
+        </LiquidGlass>
 
         <div className="adm-stack">
           {/* 7. Perhatian: hanya dari data nyata */}
           {counts.ok ? (
-            <section className="adm-card" aria-labelledby="att-h" data-reveal>
+            <LiquidGlass as="section" className="adm-card" aria-labelledby="att-h" data-reveal>
               <h2 id="att-h">Perlu perhatian</h2>
               {draftTypes.length === 0 ? (
                 <p className="adm-hint">Tidak ada draft yang menunggu. Semua konten sudah terbit atau diarsipkan.</p>
@@ -241,12 +241,12 @@ export default async function DashboardPage() {
                   ))}
                 </ul>
               )}
-            </section>
+            </LiquidGlass>
           ) : null}
 
           {/* 6. Aktivitas: hanya untuk izin audit.view */}
           {activity ? (
-            <section className="adm-card" aria-labelledby="act-h" data-reveal>
+            <LiquidGlass as="section" className="adm-card" aria-labelledby="act-h" data-reveal>
               <h2 id="act-h">Aktivitas terbaru</h2>
               {!activity.ok ? (
                 <ErrorBox what="Aktivitas" />
@@ -266,7 +266,7 @@ export default async function DashboardPage() {
                 </ul>
               )}
               <Link className="adm-more" href="/admin/audit">Lihat semua aktivitas <Icon name="arrow" size={14} /></Link>
-            </section>
+            </LiquidGlass>
           ) : null}
         </div>
       </div>

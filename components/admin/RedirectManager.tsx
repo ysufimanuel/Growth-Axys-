@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 type RedirectItem = { id: string; from: string; to: string; statusCode: 301 | 308; active: boolean };
 
@@ -38,7 +39,7 @@ export function RedirectManager() {
   }
 
   return <section className="adm-audit">
-    <form className="adm-card adm-redirect-form" onSubmit={create}>
+    <LiquidGlass as="form" className="adm-card adm-redirect-form" onSubmit={create}>
       <h2>Tambah redirect</h2>
       <p>Gunakan path relatif seperti <code>/layanan-lama</code> atau tujuan HTTPS. Server akan menolak sumber duplikat dan loop.</p>
       <label>Path asal
@@ -54,16 +55,16 @@ export function RedirectManager() {
         </select>
       </label>
       <button className="adm-btn adm-btn-primary" type="submit" disabled={saving}>{saving ? "Menyimpan…" : "Tambah redirect"}</button>
-    </form>
+    </LiquidGlass>
     {error ? <div className="adm-alert adm-alert-error" role="alert">{error}</div> : null}
     {notice ? <div className="adm-alert" role="status">{notice}</div> : null}
-    <div className="adm-card adm-tablewrap">
+    <LiquidGlass className="adm-card"><div className="adm-tablewrap">
       <h2>Daftar redirect</h2>
       {loading ? <p role="status">Memuat redirect…</p> : items.length === 0 ? <p>Belum ada redirect tersimpan.</p> : <table className="adm-table">
         <thead><tr><th>Path asal</th><th>Tujuan</th><th>Kode</th><th>Status</th></tr></thead>
         <tbody>{items.map((item) => <tr key={item.id}><td><code>{item.from}</code></td><td><code>{item.to}</code></td><td>{item.statusCode}</td><td>{item.active ? "Aktif" : "Nonaktif"}</td></tr>)}</tbody>
       </table>}
-    </div>
+    </div></LiquidGlass>
     <p className="adm-hint">Saat ini tersedia tambah dan lihat. Pengubahan status/penghapusan belum disediakan karena endpoint server belum ada.</p>
   </section>;
 }

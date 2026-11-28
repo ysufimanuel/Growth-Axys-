@@ -10,6 +10,7 @@ import {
   verifyBeforeUpdateEmail,
 } from "firebase/auth";
 import { clientAuth } from "../../lib/firebase-client";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 interface Props { email: string }
 
@@ -94,7 +95,7 @@ export function AccountSettings({ email }: Props) {
 
   return (
     <div className="adm-grid adm-grid-2">
-      <form className="adm-card" onSubmit={changeEmail}>
+      <LiquidGlass as="form" className="adm-card" onSubmit={changeEmail}>
         <h2>Ganti email</h2>
         <p>Email saat ini: <b>{email}</b></p>
         <label>Password saat ini<input name="currentPassword" type="password" autoComplete="current-password" required /></label>
@@ -102,8 +103,8 @@ export function AccountSettings({ email }: Props) {
         {emailError ? <p className="adm-alert adm-alert-error" role="alert">{emailError}</p> : null}
         {emailNotice ? <p className="adm-alert" role="status">{emailNotice}</p> : null}
         <button className="adm-btn adm-btn-primary" type="submit" disabled={emailBusy}>{emailBusy ? "Mengirim…" : "Kirim verifikasi email"}</button>
-      </form>
-      <form className="adm-card" onSubmit={changePassword}>
+      </LiquidGlass>
+      <LiquidGlass as="form" className="adm-card" onSubmit={changePassword}>
         <h2>Ganti password</h2>
         <p>Masukkan password saat ini untuk mengonfirmasi perubahan.</p>
         <label>Password saat ini<input name="currentPassword" type="password" autoComplete="current-password" required /></label>
@@ -112,7 +113,7 @@ export function AccountSettings({ email }: Props) {
         {passwordError ? <p className="adm-alert adm-alert-error" role="alert">{passwordError}</p> : null}
         {passwordNotice ? <p className="adm-alert" role="status">{passwordNotice}</p> : null}
         <button className="adm-btn adm-btn-primary" type="submit" disabled={passwordBusy}>{passwordBusy ? "Menyimpan…" : "Simpan password baru"}</button>
-      </form>
+      </LiquidGlass>
     </div>
   );
 }

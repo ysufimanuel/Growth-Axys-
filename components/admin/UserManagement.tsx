@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { adminFetch } from "./api";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useToast } from "./Toast";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 type Role = "admin" | "superadmin";
 type Status = "invited" | "active" | "disabled";
@@ -91,7 +92,7 @@ export function UserManagement({ initialAccounts, truncated, actorUid }: { initi
       </div>
 
       {inviteOpen ? (
-        <form className="adm-card adm-invite-form" onSubmit={invite}>
+        <LiquidGlass as="form" className="adm-card adm-invite-form" onSubmit={invite}>
           <div className="adm-pagehead"><div><h2>Undang Admin</h2><p>Akun baru dibuat dengan status diundang. Undangan berlaku 72 jam.</p></div></div>
           <div className="adm-formgrid">
             <label>Nama lengkap<input required minLength={2} maxLength={80} value={displayName} onChange={(e) => setDisplayName(e.target.value)} /></label>
@@ -106,10 +107,10 @@ export function UserManagement({ initialAccounts, truncated, actorUid }: { initi
             <label>Salin tautan ini dan kirim hanya ke email undangan<input readOnly value={inviteLink} onFocus={(e) => e.currentTarget.select()} /></label>
             <button className="adm-btn" type="button" onClick={() => { if (!navigator.clipboard) { toast("error", "Salin tautan secara manual."); return; } void navigator.clipboard.writeText(inviteLink).then(() => toast("ok", "Tautan disalin.")).catch(() => toast("error", "Salin tautan secara manual.")); }}>Salin tautan</button>
           </div> : null}
-        </form>
+        </LiquidGlass>
       ) : null}
 
-      <div className="adm-card adm-tablewrap">
+      <LiquidGlass className="adm-card"><div className="adm-tablewrap">
         <table className="adm-table">
           <caption className="adm-sr">Daftar akun admin</caption>
           <thead><tr><th>Email / Nama</th><th>Role</th><th>Status</th><th>Login terakhir</th><th>Aksi</th></tr></thead>
@@ -135,7 +136,7 @@ export function UserManagement({ initialAccounts, truncated, actorUid }: { initi
             {visible.length === 0 ? <tr><td colSpan={5}><p className="adm-hint">Tidak ada akun yang cocok dengan filter.</p></td></tr> : null}
           </tbody>
         </table>
-      </div>
+      </div></LiquidGlass>
       {truncated ? <p className="adm-hint">Daftar dipotong pada 1000 akun pertama.</p> : null}
       <p className="adm-hint">Perubahan role/status mencabut sesi lama. Pengguna perlu login kembali. Superadmin utama dan akun sendiri dilindungi oleh server.</p>
 

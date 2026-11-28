@@ -6,6 +6,7 @@ import type { ListResult } from "../../lib/core/content-query";
 import { formatDateTime } from "../../lib/core/format";
 import { adminFetch } from "./api";
 import { StatusBadge } from "./StatusBadge";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 type Status = "all" | "draft" | "published" | "archived";
 const TABS: { id: Status; label: string }[] = [
@@ -46,7 +47,7 @@ export function ContentList({ type, singular, initialStatus = "all" }: { type: s
   const filtered = status !== "all" || debounced !== "";
 
   return (
-    <div className="adm-card">
+    <LiquidGlass className="adm-card">
       <div className="adm-filterbar">
         <div className="adm-search adm-field">
           <label htmlFor="adm-q" className="adm-sr">Cari {singular}</label>
@@ -113,6 +114,6 @@ export function ContentList({ type, singular, initialStatus = "all" }: { type: s
           </>
         )}
       </div>
-    </div>
+    </LiquidGlass>
   );
 }

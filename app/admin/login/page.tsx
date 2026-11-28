@@ -48,7 +48,7 @@ function LoginForm() {
 
   return (
     <main className="adm adm-auth">
-      <LiquidGlass className="adm-auth-card" radius={28} bevel={26} strength={40} blur={10} aberration>
+      <LiquidGlass className="adm-auth-card" radius={30} bevel={42} strength={76} aberration>
         <form className="adm-auth-card__body" onSubmit={onSubmit}>
           <h1>Admin Pillarians</h1>
           {passwordChanged ? <p role="status">Password berhasil diubah. Silakan masuk dengan password baru.</p> : invited ? <p>Password sudah disetel? Masuk di bawah untuk mengaktifkan akun Anda.</p> : <p>Masuk untuk mengelola konten website.</p> }

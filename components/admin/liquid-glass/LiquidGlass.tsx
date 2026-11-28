@@ -16,7 +16,7 @@ export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "chi
   bevel?: number;
   /** Kekuatan pembiasan (skala feDisplacementMap, px). */
   strength?: number;
-  /** Blur latar (px). Menjaga teks di belakang kaca tetap tidak terbaca mengganggu. */
+  /** Blur latar saat pembiasan aktif (px). Kecil = kaca bening seperti kaca sungguhan; fallback non-Chromium memakai blur beku sendiri (glass.css). */
   blur?: number;
   /** Override warna/gradien tint kaca. Tanpa ini, tint berasal dari token CSS (--lg-tint). */
   tint?: string;
@@ -28,14 +28,16 @@ export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "chi
   refraction?: "auto" | "off";
   /** Kilau specular mengikuti kursor. */
   glint?: boolean;
-  /** Kelas untuk lapisan konten (mis. layout flex/scroll). */
+  /** Opsional: bungkus anak dalam satu elemen dengan kelas ini (mis. area scroll). Tanpa ini anak dirender langsung di akar,
+   *  sehingga display/grid/flex pada kelas akar tetap bekerja untuk anak-anaknya. */
   contentClassName?: string;
 }
 
 /**
  * Kaca dengan pembiasan nyata di tepi bevel (SDF -> feDisplacementMap lewat backdrop-filter, Chromium).
  * Di browser lain / saat transparansi dikurangi: fallback blur + saturate (lihat glass.css).
- * Struktur: [svg filter] [refract] [rim] [glint?] [content]. Semua layer dekoratif memakai pointer-events: none.
+ * Struktur: [svg filter] [refract] [rim] [glint?] lalu anak. Layer dekoratif berada DI BELAKANG anak (z-index -1 di dalam
+ * stacking context akar) dan memakai pointer-events: none, jadi teks/anak tidak pernah tertutup.
  */
 export function LiquidGlass({
   as: Root = "div",
@@ -43,10 +45,10 @@ export function LiquidGlass({
   className,
   style,
   radius = 24,
-  bevel = 28,
-  strength = 36,
-  blur = 10,
-  saturate = 1.6,
+  bevel = 36,
+  strength = 64,
+  blur = 2,
+  saturate = 1.25,
   tint,
   aberration = false,
   refraction = "auto",
@@ -153,7 +155,7 @@ export function LiquidGlass({
       <span aria-hidden="true" className="lg__refract" style={backdrop ? { backdropFilter: backdrop, WebkitBackdropFilter: backdrop } : undefined} />
       <span aria-hidden="true" className="lg__rim" />
       {glint ? <span aria-hidden="true" className="lg__glint" /> : null}
-      <Inner className={contentClassName ? `lg__content ${contentClassName}` : "lg__content"}>{children}</Inner>
+      {contentClassName ? <Inner className={contentClassName}>{children}</Inner> : children}
     </Root>
   );
 }

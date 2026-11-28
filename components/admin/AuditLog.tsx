@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 interface AuditItem {
   id: string;
@@ -65,12 +66,12 @@ export function AuditLog() {
       </div>
 
       {error ? <div className="adm-alert adm-alert-error" role="alert">{error} <button type="button" className="adm-btn adm-btn-sm" onClick={() => void load()}>Coba lagi</button></div> : null}
-      {loading ? <div className="adm-card" role="status">Memuat audit log…</div> : !error && visible.length === 0 ? (
-        <div className="adm-card adm-empty"><h2>Belum ada aktivitas</h2><p>Aktivitas yang dicatat server akan muncul di sini.</p></div>
+      {loading ? <LiquidGlass className="adm-card" role="status">Memuat audit log…</LiquidGlass> : !error && visible.length === 0 ? (
+        <LiquidGlass className="adm-card adm-empty"><h2>Belum ada aktivitas</h2><p>Aktivitas yang dicatat server akan muncul di sini.</p></LiquidGlass>
       ) : null}
 
       {!loading && !error && visible.length > 0 ? (
-        <div className="adm-card adm-tablewrap">
+        <LiquidGlass className="adm-card"><div className="adm-tablewrap">
           <table className="adm-table">
             <caption className="adm-sr">Riwayat audit, maksimal 100 aktivitas terbaru</caption>
             <thead><tr><th>Waktu</th><th>Aktor</th><th>Aksi</th><th>Resource</th><th>Ringkasan</th></tr></thead>
@@ -84,7 +85,7 @@ export function AuditLog() {
               </tr>)}
             </tbody>
           </table>
-        </div>
+        </div></LiquidGlass>
       ) : null}
       <p className="adm-hint">Menampilkan maksimal 100 aktivitas terbaru. Log bersifat hanya-baca; perubahan dan penghapusan tidak tersedia.</p>
     </section>

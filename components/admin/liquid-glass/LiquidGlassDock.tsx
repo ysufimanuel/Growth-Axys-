@@ -25,7 +25,7 @@ interface Props {
 export function LiquidGlassDock({ items, label, className }: Props) {
   return (
     <div className={className ? `lg-dock ${className}` : "lg-dock"}>
-      <LiquidGlass as="nav" aria-label={label} radius={999} bevel={22} strength={36} blur={8} aberration glint className="lg-dock__glass" contentClassName="lg-dock__list-wrap">
+      <LiquidGlass as="nav" aria-label={label} radius={999} bevel={30} strength={60} aberration glint className="lg-dock__glass">
         <ul className="lg-dock__list">
           {items.map((item) => {
             const inner = (

@@ -6,6 +6,7 @@ import { FIELDS } from "../../../../../../../lib/core/content-fields";
 import { contentTypeOr404, requirePageActor } from "../../../../../../../lib/server/admin-page";
 import { getContent } from "../../../../../../../lib/server/content-service";
 import { HttpError } from "../../../../../../../lib/server/http";
+import { LiquidGlass } from "../../../../../../../components/admin/liquid-glass";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Pratinjau" };
@@ -27,7 +28,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ type: 
         <div><h1>Pratinjau</h1><p>Tampilan data apa adanya. Halaman publik hanya menampilkan konten berstatus terbit.</p></div>
         <Link className="adm-btn" href={`/admin/content/${type}/${id}`}>← Kembali ke editor</Link>
       </div>
-      <article className="adm-card" style={{ display: "grid", gap: 14 }}>
+      <LiquidGlass as="article" className="adm-card" style={{ display: "grid", gap: 14 }}>
         <StatusBadge status={status} />
         {FIELDS[type].filter((f) => f.kind !== "checkbox" || get(doc, f.name) === true).map((f) => {
           const v = get(doc, f.name);
@@ -40,7 +41,7 @@ export default async function PreviewPage({ params }: { params: Promise<{ type: 
             </section>
           );
         })}
-      </article>
+      </LiquidGlass>
     </>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 type Asset = { id: string; name: string; url: string; contentType: string; size: number; createdAt?: { _seconds?: number } | null };
 
@@ -58,17 +59,17 @@ export function MediaLibrary() {
   }
 
   return <section className="adm-media">
-    <div className="adm-card adm-media-upload">
+    <LiquidGlass className="adm-card adm-media-upload">
       <div><h2>Unggah media</h2><p>JPG, PNG, WebP, AVIF, atau GIF. Maksimal 10 MB per file.</p></div>
       <label className="adm-btn adm-btn-primary">{uploading ? "Mengunggah…" : "Pilih file"}<input type="file" accept="image/jpeg,image/png,image/webp,image/avif,image/gif" disabled={uploading} onChange={upload} hidden /></label>
-    </div>
+    </LiquidGlass>
     {error ? <div className="adm-alert adm-alert-error" role="alert">{error}</div> : null}
     {notice ? <div className="adm-alert" role="status">{notice}</div> : null}
     <div className="adm-media-grid">
-      {loading ? <p role="status">Memuat media…</p> : items.length === 0 ? <div className="adm-card"><h2>Belum ada media</h2><p>File yang diunggah akan muncul di sini.</p></div> : items.map((item) => <article className="adm-card adm-media-item" key={item.id}>
+      {loading ? <p role="status">Memuat media…</p> : items.length === 0 ? <LiquidGlass className="adm-card"><h2>Belum ada media</h2><p>File yang diunggah akan muncul di sini.</p></LiquidGlass> : items.map((item) => <LiquidGlass as="article" className="adm-card adm-media-item" key={item.id}>
         <a href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Buka ${item.name}`}><img src={item.url} alt={item.name} loading="lazy" /></a>
         <div><b title={item.name}>{item.name}</b><small>{item.contentType} · {formatBytes(item.size)}</small><button type="button" className="adm-btn adm-btn-sm" onClick={() => void navigator.clipboard.writeText(item.url)}>Salin URL</button></div>
-      </article>)}
+      </LiquidGlass>)}
     </div>
     <p className="adm-hint">Daftar menampilkan 100 unggahan terbaru. Penghapusan media belum disediakan agar file yang mungkin masih dipakai konten tidak terhapus tanpa pemeriksaan referensi.</p>
   </section>;

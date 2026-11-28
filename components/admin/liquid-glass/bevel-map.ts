@@ -6,7 +6,7 @@ export interface BevelMapOptions {
   height: number;
   /** Radius sudut (px). Dibatasi otomatis ke setengah sisi terpendek. */
   radius: number;
-  /** Ketebalan lengkungan di tepi (px). Dibatasi ke radius. */
+  /** Ketebalan lengkungan di tepi (px). Dibatasi ke setengah sisi terpendek. */
   bevel: number;
 }
 
@@ -25,7 +25,7 @@ export function computeBevelMap({ width, height, radius, bevel }: BevelMapOption
   const halfW = w / 2;
   const halfH = h / 2;
   const r = Math.min(radius * s, halfW, halfH);
-  const bw = Math.max(0.0001, Math.min(bevel * s, r));
+  const bw = Math.max(0.0001, Math.min(bevel * s, Math.min(halfW, halfH)));
   const data = new Uint8ClampedArray(w * h * 4);
 
   for (let y = 0; y < h; y++) {

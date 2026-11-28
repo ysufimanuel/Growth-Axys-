@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from "react";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 type Settings = { title: string; description: string; ogImage: string; index: boolean; follow: boolean };
 const empty: Settings = { title: "", description: "", ogImage: "", index: true, follow: true };
@@ -33,7 +34,7 @@ export function GlobalSeoSettings() {
   }
 
   if (loading) return <p role="status">Memuat pengaturan SEO…</p>;
-  return <form className="adm-card adm-global-seo" onSubmit={save}>
+  return <LiquidGlass as="form" className="adm-card adm-global-seo" onSubmit={save}>
     <div><h2>Metadata situs</h2><p>Nilai kosong memakai default dari konfigurasi situs. Pengaturan ini berlaku sebagai metadata dasar, bukan pengganti SEO tiap halaman.</p></div>
     <label>Judul situs<input maxLength={120} value={value.title} onChange={(e) => setValue({ ...value, title: e.target.value })} placeholder="PT Pillarians Group" /></label>
     <label>Deskripsi situs<textarea rows={4} maxLength={300} value={value.description} onChange={(e) => setValue({ ...value, description: e.target.value })} placeholder="Deskripsi singkat perusahaan" /></label>
@@ -46,5 +47,5 @@ export function GlobalSeoSettings() {
     {error ? <p className="adm-alert adm-alert-error" role="alert">{error}</p> : null}
     {notice ? <p className="adm-alert" role="status">{notice}</p> : null}
     <button className="adm-btn adm-btn-primary" disabled={saving} type="submit">{saving ? "Menyimpan…" : "Simpan pengaturan"}</button>
-  </form>;
+  </LiquidGlass>;
 }

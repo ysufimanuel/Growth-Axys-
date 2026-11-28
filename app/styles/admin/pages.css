@@ -1,14 +1,13 @@
 /* Gaya khusus halaman admin: dashboard, akun, audit, redirect, SEO, media, login. */
 
 /* ---------- Dashboard: hero (komponen LiquidGlassHeroCard) ---------- */
-.adm-hero { margin-top: 4px; --lg-tint: var(--adm-hero-tint); --lg-drop: 0 20px 54px -18px rgba(66, 112, 165, .32); }
-.adm-hero__content { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; min-height: 174px; padding: clamp(20px, 3vw, 32px); }
+.adm-hero { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: 4px; min-height: 174px; padding: clamp(20px, 3vw, 32px); --lg-drop: 0 26px 58px -18px rgba(20, 50, 100, .42); }
 .adm-hero-main { flex: 1 1 320px; min-width: 0; }
 .adm-hero h1 { margin-top: 4px; font-size: clamp(30px, 4vw, 42px); letter-spacing: -.045em; }
-.adm-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #2f6db3; }
+.adm-eyebrow { font-size: 11px; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; color: #1f55a0; }
 .adm-hero-sub { max-width: 60ch; margin-top: 8px; font-size: 15px; line-height: 1.65; color: var(--adm-ink-soft); }
 .adm-hero-meta { margin-top: 6px; font-size: 12px; color: var(--adm-muted); }
-@media (max-width: 759px) { .adm-hero__content { min-height: 0; padding: 20px; } }
+@media (max-width: 759px) { .adm-hero { min-height: 0; padding: 20px; } }
 
 /* ---------- Dashboard: KPI ---------- */
 .adm-kpi-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
@@ -17,7 +16,7 @@
 .adm-kpi-value { font-size: clamp(32px, 4vw, 43px); font-weight: 800; line-height: 1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; color: #244b78; }
 .adm-kpi-sub { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; font-size: 12px; color: var(--adm-muted); }
 .adm-kpi-ok .adm-kpi-value { color: var(--adm-ok); }
-.adm-kpi-warn { border-color: rgba(226, 164, 73, .58); background: linear-gradient(145deg, rgba(255, 249, 235, .9), rgba(255, 255, 255, .52)); }
+.adm-kpi-warn { --lg-tint: rgba(255, 214, 140, .30); --lg-edge: rgba(150, 90, 10, .34); }
 .adm-kpi-warn .adm-kpi-value, .adm-kpi-warn .adm-kpi-label { color: var(--adm-warn-ink); }
 .adm-kpi-link:hover, a.adm-type-card:hover, .adm-chip:hover { transform: translateY(-3px); box-shadow: var(--adm-shadow-2); }
 .adm-kpi-link:active, a.adm-type-card:active, .adm-chip:active, .adm-qa-tile:active { transform: scale(.975); }
@@ -40,21 +39,20 @@
 .adm-qa-icon { width: 36px; height: 36px; flex: none; display: grid; place-items: center; border-radius: 14px; background: rgba(255, 255, 255, .22); color: #fff; }
 .adm-qa-go { opacity: .85; }
 .adm-qa-secondary { display: flex; flex-wrap: wrap; gap: 8px; max-width: 100%; margin: 0; padding: 0; list-style: none; }
-.adm-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid rgba(255, 255, 255, .9); border-radius: 999px; background: rgba(255, 255, 255, .7); color: #315778; font-size: 13.5px; font-weight: 600; box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9); transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), background .2s ease; }
-.adm-chip:hover { background: #fff; }
+.adm-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px; background: rgba(255, 255, 255, .3); color: #264a6c; font-size: 13.5px; font-weight: 600; box-shadow: var(--adm-btn-shadow); transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), background .2s ease; }
+.adm-chip:hover { background: rgba(255, 255, 255, .55); }
 
 /* ---------- Dashboard: rincian per jenis, aktivitas ---------- */
 .adm-type-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 @media (min-width: 480px) { .adm-type-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 1100px) { .adm-type-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-.adm-type-card { display: grid; gap: 12px; min-width: 0; padding: 18px; color: inherit; border-radius: 20px; background: linear-gradient(145deg, rgba(255, 255, 255, .88), rgba(255, 255, 255, .64)); transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), border-color .2s ease; }
-a.adm-type-card:hover { border-color: rgba(91, 153, 220, .6); }
+.adm-type-card { display: grid; gap: 12px; min-width: 0; padding: 18px; color: inherit; transition: transform .3s var(--adm-ease), box-shadow .3s var(--adm-ease), border-color .2s ease; }
 .adm-type-head { display: flex; align-items: center; gap: 10px; }
 .adm-type-name { flex: 1; font-weight: 700; }
 .adm-type-total { font-size: 27px; font-weight: 800; font-variant-numeric: tabular-nums; color: #244b78; }
 .adm-type-split { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 12.5px; color: var(--adm-muted); }
 .adm-type-split b { color: var(--adm-ink); font-variant-numeric: tabular-nums; }
-.adm-type-card .adm-qa-icon { background: rgba(115, 174, 239, .18); color: #2f6db3; }
+.adm-type-card .adm-qa-icon { background: rgba(115, 174, 239, .18); color: #1f55a0; }
 
 .adm-tl-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-width: 0; }
 .adm-tl-row .adm-rowtitle { overflow-wrap: anywhere; }
@@ -67,7 +65,7 @@ a.adm-type-card:hover { border-color: rgba(91, 153, 220, .6); }
 
 /* ---------- Akun, audit, redirect, SEO, media ---------- */
 .adm-users, .adm-audit { display: grid; gap: 16px; min-width: 0; }
-.adm-users-toolbar, .adm-audit-toolbar { display: grid; grid-template-columns: 1fr; align-items: end; gap: 10px; padding: 15px; border: 1px solid var(--adm-frost-border); border-radius: 20px; background: rgba(255, 255, 255, .58); box-shadow: inset 0 1px 0 #fff; }
+.adm-users-toolbar, .adm-audit-toolbar { display: grid; grid-template-columns: 1fr; align-items: end; gap: 10px; padding: 15px; border: 1px solid rgba(255, 255, 255, .7); border-radius: 20px; background: rgba(255, 255, 255, .4); box-shadow: 0 0 0 1px var(--lg-edge), inset 0 1.5px 1px var(--lg-hi); }
 .adm-users-toolbar label, .adm-audit-toolbar label, .adm-invite-form label, .adm-redirect-form label, .adm-global-seo > label { display: grid; gap: 6px; font-size: 12.5px; font-weight: 700; color: var(--adm-muted); }
 .adm-users-search { min-width: 0; }
 .adm-invite-form { display: grid; gap: 14px; }
@@ -142,4 +140,4 @@ a.adm-type-card:hover { border-color: rgba(91, 153, 220, .6); }
 .adm-auth-card__body label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; }
 .adm-auth-error { min-height: 1.5em; color: #a8261c !important; font-weight: 600; }
 
-@media (prefers-reduced-transparency: reduce) { .adm-kpi-warn { background: #fff8e8; } .adm-type-card { background: #fff; } }
+

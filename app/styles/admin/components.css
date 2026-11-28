@@ -12,7 +12,7 @@
   transition: transform .3s var(--adm-ease), background .22s ease, box-shadow .25s ease, border-color .22s ease;
 }
 .adm-iconbtn { padding: 0; }
-.adm-btn:hover, .adm-iconbtn:hover { background: #fff; border-color: rgba(91, 153, 220, .5); box-shadow: 0 8px 20px rgba(54, 104, 157, .12), inset 0 1px 0 #fff; }
+.adm-btn:hover, .adm-iconbtn:hover { background: rgba(255, 255, 255, .58); border-color: rgba(255, 255, 255, .9); }
 .adm-btn:active, .adm-iconbtn:active { transform: scale(.97); }
 .adm-btn:disabled { transform: none; box-shadow: none; }
 .adm-btn-sm { min-height: 36px; padding: 0 14px; font-size: 13px; }
@@ -23,24 +23,25 @@
 .adm-btn-danger { color: #fff; border-color: rgba(255, 255, 255, .65); background: var(--adm-danger-bg); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .4), 0 8px 20px rgba(169, 54, 63, .24); }
 .adm-btn-danger:hover { color: #fff; background: linear-gradient(160deg, #d25a65 0%, #b13a44 100%); }
 
-/* ---------- Kartu & permukaan ---------- */
-.adm-card, .adm-fieldset, .adm-stickybar {
-  border: 1px solid var(--adm-frost-border); border-radius: var(--adm-radius);
-  background: var(--adm-surface); box-shadow: var(--adm-shadow-1);
-}
-.adm-card { padding: 20px; transition: box-shadow .3s var(--adm-ease); }
-.adm-card:hover { box-shadow: var(--adm-shadow-2); }
+/* ---------- Kartu & permukaan ----------
+   Kartu = komponen LiquidGlass (kaca bening berpembiasan). Kelas di sini hanya mengatur isi (padding, tipografi).
+   :not(.lg) = cadangan bila suatu kartu dirender tanpa LiquidGlass: kaca CSS bening dengan tepi spekular. */
+.adm-card { padding: 20px; --lg-tint: rgba(255, 255, 255, .34); } /* kartu berisi teks/tabel: tint lebih tebal demi keterbacaan */
 .adm-card h2 { margin-bottom: 14px; font-size: 16px; }
+.adm-glass-card { transition: transform .38s var(--adm-ease), box-shadow .38s var(--adm-ease); }
 
-/* Kaca CSS untuk kartu ikhtisar (KPI, aksi cepat). Tanpa SDF: jumlahnya banyak. Satu definisi, tanpa pseudo-element. */
-.adm-glass-card {
+.adm-card:not(.lg), .adm-glass-card:not(.lg), .adm-fieldset, .adm-stickybar, .adm-filterbar, .adm-tablewrap {
   position: relative;
-  border: 1px solid var(--adm-frost-border); border-radius: var(--adm-radius);
-  background: linear-gradient(160deg, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0) 48%), var(--adm-frost-bg);
-  box-shadow: var(--adm-shadow-1);
+  border: 1px solid rgba(255, 255, 255, .7);
+  border-radius: var(--adm-radius);
+  background: var(--lg-tint-frost);
+  box-shadow: 0 0 0 1px var(--lg-edge), inset 0 1.5px 1px var(--lg-hi), inset 0 -2px 5px var(--lg-lo), var(--lg-drop);
   -webkit-backdrop-filter: var(--adm-frost-blur); backdrop-filter: var(--adm-frost-blur);
-  transition: transform .38s var(--adm-ease), box-shadow .38s var(--adm-ease), border-color .25s ease;
 }
+.adm[data-glass="on"] :is(.adm-card:not(.lg), .adm-fieldset, .adm-stickybar, .adm-filterbar, .adm-tablewrap) { background: rgba(255, 255, 255, .22); }
+/* Tabel/filter di dalam kartu kaca: datar saja (permukaan data tetap terbaca), tanpa kaca ganda. */
+.adm-card .adm-tablewrap, .adm-card .adm-filterbar { box-shadow: inset 0 1px 1px rgba(255, 255, 255, .8); border-color: rgba(255, 255, 255, .6); }
+.adm-card > .adm-tablewrap:only-child { padding: 0; border: 0; background: transparent; box-shadow: none; }
 
 /* ---------- Badge, status, alert ---------- */
 .adm-badge { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border: 1px solid transparent; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
@@ -58,7 +59,7 @@
 /* ---------- Form ---------- */
 .adm-form { display: grid; gap: 18px; }
 .adm-formgrid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-.adm-fieldset { display: grid; gap: 14px; min-width: 0; padding: 20px; background: rgba(255, 255, 255, .82); }
+.adm-fieldset { display: grid; gap: 14px; min-width: 0; padding: 20px; }
 .adm-fieldset legend { padding: 0 8px; font-size: 14px; font-weight: 800; color: #385a7b; }
 .adm-field { display: grid; gap: 6px; }
 .adm-field label, .adm-label { font-size: 13px; font-weight: 700; }
@@ -83,13 +84,13 @@
 .adm :where(input[type="checkbox"], input[type="radio"]) { width: 22px; height: 22px; accent-color: var(--adm-blue); }
 .adm :where(input[type="search"]) { padding-inline: 18px; border-radius: 999px; }
 
-.adm-stickybar { position: sticky; bottom: calc(var(--adm-dock-h) + var(--adm-gutter)); z-index: 10; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; background: rgba(255, 255, 255, .84); box-shadow: 0 8px 30px rgba(15, 33, 25, .12), inset 0 1px 0 #fff; -webkit-backdrop-filter: var(--adm-frost-blur); backdrop-filter: var(--adm-frost-blur); }
+.adm-stickybar { position: sticky; bottom: calc(var(--adm-dock-h) + var(--adm-gutter)); z-index: 10; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; }
 
-.adm-filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; padding: 15px; border: 1px solid var(--adm-frost-border); border-radius: 20px; background: rgba(255, 255, 255, .58); box-shadow: inset 0 1px 0 #fff; }
+.adm-filterbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; padding: 15px; border-radius: 20px; }
 .adm-search { flex: 1 1 220px; min-width: min(100%, 240px); }
 
 /* ---------- Tabel (desktop) & kartu (mobile) ---------- */
-.adm-tablewrap { overflow: auto; padding: 13px; border: 1px solid rgba(255, 255, 255, .9); border-radius: var(--adm-radius); background: rgba(255, 255, 255, .56); box-shadow: var(--adm-shadow-1); }
+.adm-tablewrap { overflow: auto; padding: 13px; }
 .adm-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; color: #2b4057; }
 .adm-table caption { padding: 0 0 10px; text-align: left; font-weight: 700; }
 .adm-table th, .adm-table td { padding: 12px 14px; border-bottom: 1px solid var(--adm-line); text-align: left; vertical-align: middle; }
@@ -127,7 +128,7 @@
 .adm-timeline time, .adm-timeline small { font-size: 12.5px; color: var(--adm-muted); }
 
 /* ---------- Dialog konfirmasi (hampir solid; aksi destruktif harus jelas) ---------- */
-.adm-dialog { width: min(440px, calc(100vw - 24px)); padding: 22px; border: 1px solid rgba(255, 255, 255, .9); border-radius: 26px; background: rgba(250, 253, 255, .92); color: var(--adm-ink); box-shadow: 0 28px 80px rgba(27, 52, 82, .28), inset 0 1px 0 #fff; -webkit-backdrop-filter: var(--adm-frost-blur); backdrop-filter: var(--adm-frost-blur); }
+.adm-dialog { width: min(440px, calc(100vw - 24px)); padding: 22px; border: 1px solid rgba(255, 255, 255, .9); border-radius: 26px; background: rgba(250, 253, 255, .78); color: var(--adm-ink); box-shadow: 0 0 0 1px var(--lg-edge), inset 0 1.5px 1px var(--lg-hi), inset 0 -2px 5px var(--lg-lo), 0 28px 80px rgba(20, 45, 90, .38); -webkit-backdrop-filter: var(--adm-frost-blur); backdrop-filter: var(--adm-frost-blur); }
 .adm-dialog::backdrop { background: rgba(28, 48, 70, .38); }
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .adm-dialog::backdrop { -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); } }
 .adm-dialog[open] { animation: adm-sheet-in .48s var(--adm-ease); }
@@ -145,7 +146,7 @@
 .adm-toast button { min-height: 32px; border: 0; background: transparent; color: inherit; font: inherit; text-decoration: underline; cursor: pointer; }
 
 @media (prefers-reduced-transparency: reduce) {
-  .adm-glass-card, .adm-stickybar, .adm-dialog, .adm-drawer { background: #fff; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .adm-stickybar, .adm-dialog, .adm-drawer, .adm-fieldset, .adm-filterbar, .adm-tablewrap { background: #fff !important; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
 @media (forced-colors: active) {
   .adm-glass-card, .adm-card, .adm-kpi, .adm-qa-tile, .adm-chip, .adm-avatar { border: 1px solid CanvasText; }

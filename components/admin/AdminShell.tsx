@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { activeNavId, NAV_GROUP_LABEL, type NavItem } from "../../lib/core/admin-nav";
 import { Icon } from "./icons";
-import { LiquidGlass, LiquidGlassDock, type DockItem } from "./liquid-glass";
+import { LiquidGlass, LiquidGlassDock, SharedGlassDefs, useRefractionSupport, type DockItem } from "./liquid-glass";
 import { LogoutButton } from "./LogoutButton";
 import { ToastProvider } from "./Toast";
 
@@ -88,9 +88,15 @@ function NavList({ nav, activeId, onNavigate }: { nav: NavItem[]; activeId: stri
               {items.map((i) => (
                 <li key={i.id}>
                   {i.available ? (
-                    <Link className="adm-nav-link" href={i.href} aria-current={activeId === i.id ? "page" : undefined} onClick={onNavigate}>
-                      <span className="adm-nav-label"><Icon name={i.icon} />{i.label}</span>
-                    </Link>
+                    activeId === i.id ? (
+                      <LiquidGlass as={Link} href={i.href} className="adm-nav-link" aria-current="page" onClick={onNavigate} radius={16} bevel={18} strength={34} glint>
+                        <span className="adm-nav-label"><Icon name={i.icon} />{i.label}</span>
+                      </LiquidGlass>
+                    ) : (
+                      <Link className="adm-nav-link" href={i.href} onClick={onNavigate}>
+                        <span className="adm-nav-label"><Icon name={i.icon} />{i.label}</span>
+                      </Link>
+                    )
                   ) : (
                     // Belum dibangun: bukan tautan, ditandai jelas (tidak ada tombol mati yang menyesatkan).
                     <span className="adm-nav-link" aria-disabled="true">
@@ -131,6 +137,7 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
   const drawer = useRef<HTMLDialogElement>(null);
   const menuBtn = useRef<HTMLButtonElement>(null);
   const activeId = activeNavId(pathname, nav);
+  const glass = useRefractionSupport(); // true: filter pembiasan bersama dipasang dan CSS [data-glass="on"] aktif
 
   // Tutup drawer saat pindah halaman.
   useEffect(() => { if (drawer.current?.open) drawer.current.close(); }, [pathname]);
@@ -158,11 +165,11 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
 
   return (
     <ToastProvider>
-      <div className="adm">
+      <div className="adm" data-glass={glass ? "on" : "off"}>
+        {glass ? <SharedGlassDefs /> : null}
         <a className="adm-skip" href="#adm-content">Lewati ke konten</a>
 
-        {/* Sidebar: latarnya statis (tidak ada konten bergeser di bawahnya) jadi cukup blur; pembiasan SVG tidak terlihat dan mahal. */}
-        <LiquidGlass as="aside" className="adm-sidebar" contentClassName="adm-sidebar__scroll" radius={24} refraction="off" blur={18} aria-label="Sidebar">
+        <LiquidGlass as="aside" className="adm-sidebar" contentClassName="adm-sidebar__scroll" radius={26} bevel={44} strength={72} aberration aria-label="Sidebar">
           <Brand />
           <NavList nav={nav} activeId={activeId} />
         </LiquidGlass>
@@ -180,7 +187,7 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
         </dialog>
 
         <div className="adm-main-wrap">
-          <LiquidGlass as="header" className="adm-topbar" contentClassName="adm-topbar__inner" radius={22} bevel={20} strength={30} blur={10}>
+          <LiquidGlass as="header" className="adm-topbar" radius={24} bevel={28} strength={56} aberration>
             <div className="adm-topbar-left">
               <Breadcrumbs pathname={pathname} />
             </div>

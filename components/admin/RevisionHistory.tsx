@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { ContentType } from "../../lib/core/content-fields";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 interface Revision {
   id: string;
@@ -46,7 +47,7 @@ export function RevisionHistory({ type, contentId }: { type: ContentType; conten
   }
 
   return (
-    <section className="adm-card" style={{ marginTop: 16 }}>
+    <LiquidGlass as="section" className="adm-card" style={{ marginTop: 16 }}>
       <div className="adm-pagehead">
         <div><h2>Riwayat revisi</h2><p>Snapshot otomatis dibuat sebelum konten diperbarui atau dihapus.</p></div>
         <button className="adm-btn" type="button" onClick={() => void load()} disabled={loading}>Muat ulang</button>
@@ -67,6 +68,6 @@ export function RevisionHistory({ type, contentId }: { type: ContentType; conten
         </ol>
       )}
       {!canRestore ? <p className="adm-hint">Pemulihan revisi hanya tersedia untuk Superadmin.</p> : null}
-    </section>
+    </LiquidGlass>
   );
 }

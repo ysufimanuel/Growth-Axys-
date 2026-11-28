@@ -2,6 +2,7 @@
 
 import { useState, type ChangeEvent } from "react";
 import { adminFetch } from "./api";
+import { LiquidGlass } from "../../components/admin/liquid-glass";
 
 interface BackupFile {
   format: string;
@@ -68,22 +69,22 @@ export function BackupManager({ projectId }: { projectId: string }) {
 
   return (
     <div className="adm-grid" style={{ gap: 16 }}>
-      <section className="adm-card">
+      <LiquidGlass as="section" className="adm-card">
         <h2>Ekspor backup Firestore</h2>
         <p>Ekspor proyek, layanan, artikel, sertifikasi, redirect, pengaturan situs, metadata media, dan riwayat revisi ke file JSON.</p>
         <p className="adm-hint">Project: <b>{projectId}</b></p>
         <button className="adm-btn adm-btn-primary" type="button" disabled={exporting || restoring} onClick={() => void exportBackup()}>
           {exporting ? "Membuat backup…" : "Unduh backup"}
         </button>
-      </section>
+      </LiquidGlass>
 
-      <section className="adm-card">
+      <LiquidGlass as="section" className="adm-card">
         <h2>Pulihkan dari file backup</h2>
         <p>Dokumen dengan ID yang sama akan ditimpa. Dokumen yang dibuat setelah backup dan tidak ada di file tidak akan dihapus.</p>
         <label className="adm-btn" htmlFor="backup-file">Pilih file JSON</label>
         <input id="backup-file" type="file" accept="application/json,.json" onChange={(event) => void importBackup(event)} disabled={restoring || exporting} />
         {restoring ? <p role="status">Memvalidasi dan memulihkan data…</p> : null}
-      </section>
+      </LiquidGlass>
 
       <div className="adm-alert adm-alert-warn">
         <b>Batasan backup saat ini</b>
