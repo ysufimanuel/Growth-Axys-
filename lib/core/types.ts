@@ -20,6 +20,8 @@ export interface Project {
   value: string;
   scope: string; // deskripsi lingkup pekerjaan (teks polos, paragraf dipisah baris kosong)
   cover: string;
+  instagramUrl: string;
+  mediaRatio: string;
   gallery: string[];
   mediaSettings: { autoplay: boolean; muted: boolean };
   publishStatus: PublishStatus;
@@ -36,6 +38,8 @@ export interface Service {
   content: string;
   bullets: string[];
   image: string;
+  instagramUrl: string;
+  mediaRatio: string;
   imageAlt: string;
   publishStatus: PublishStatus;
   seo: SeoFields;
@@ -49,6 +53,8 @@ export interface Article {
   excerpt: string;
   content: string;
   image: string;
+  instagramUrl: string;
+  mediaRatio: string;
   imageAlt: string;
   authorName: string;
   reviewerName: string;
