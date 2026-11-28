@@ -83,8 +83,8 @@ export function ContentEditor({ type, singular, doc, caps }: Props) {
       const result = await adminFetch<{ url: string; caption: string; thumbnailUrl?: string }>("/api/admin/instagram/import", { method: "POST", body: { url: instagramUrl.trim() } });
       if (!result.ok || !result.data) throw new Error(result.error || "Postingan Instagram gagal diimpor.");
       const caption = result.data.caption || "";
-      setValues((current) => ({ ...current, instagramUrl: result.data!.url,
-        ...(type === "projects" ? { scope: caption || current.scope, cover: "" } : type === "articles" ? { content: caption || current.content, excerpt: caption.slice(0, 400) || current.excerpt, image: "" } : { content: caption || current.content, image: "" }) }));
+      setValues((current) => ({ ...current, instagramUrl: result.data!.url, mediaRatio: current.mediaRatio || "4 / 5",
+        ...(type === "projects" ? { scope: caption || current.scope, cover: result.data!.thumbnailUrl || current.cover } : type === "articles" ? { content: caption || current.content, excerpt: caption.slice(0, 400) || current.excerpt, image: result.data!.thumbnailUrl || current.image } : { content: caption || current.content, image: result.data!.thumbnailUrl || current.image }) }));
       setInstagramUrl(result.data.url);
       toast("ok", caption ? "Link diimpor dan caption dimasukkan ke deskripsi." : "Link diimpor. Caption tidak tersedia dari Meta, isi deskripsi manual.");
     } catch (error) { setInstagramError(error instanceof Error ? error.message : "Impor Instagram gagal."); }
