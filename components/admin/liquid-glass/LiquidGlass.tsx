@@ -6,7 +6,13 @@ import { useRefractionSupport } from "./support";
 
 const BLOCK_TAGS = new Set(["div", "header", "aside", "nav", "section", "article", "form"]);
 
-export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
+export interface LiquidGlassProps extends Omit<HTMLAttributes<HTMLElement>, "children" | "onSubmit"> {
+  /** Handler submit longgar: akar bisa <form> (event HTMLFormElement) atau elemen lain. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onSubmit?: (event: any) => void;
+  /** Atribut milik elemen/komponen akar (href, target, rel, type, disabled, ...) diteruskan apa adanya lewat `as`. */
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [attr: string]: any;
   /** Elemen/komponen akar (default "div"). Dipakai agar semantik HTML benar: header, aside, nav, form, a, button, Link. */
   as?: ElementType;
   children?: ReactNode;
