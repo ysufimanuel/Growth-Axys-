@@ -48,6 +48,7 @@ function LoginForm() {
 
   return (
     <main className="adm adm-auth">
+      <div className="adm-backdrop" aria-hidden="true" />
       <LiquidGlass className="adm-auth-card" radius={30} bevel={42} strength={76} aberration>
         <form className="adm-auth-card__body" onSubmit={onSubmit}>
           <h1>Admin Pillarians</h1>

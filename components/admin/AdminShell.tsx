@@ -166,6 +166,7 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
   return (
     <ToastProvider>
       <div className="adm" data-glass={glass ? "on" : "off"}>
+        <div className="adm-backdrop" aria-hidden="true" />
         {glass ? <SharedGlassDefs /> : null}
         <a className="adm-skip" href="#adm-content">Lewati ke konten</a>
 

@@ -1,6 +1,6 @@
 /* =====================================================================
    Primitif Liquid Glass (.lg) — dipakai komponen components/admin/liquid-glass/*.
-   Struktur DOM: root.lg > [svg.lg__defs] [.lg__refract] [.lg__rim] [.lg__glint] + anak langsung
+   Struktur DOM: root.lg > [svg.lg__defs] [.lg__refract] [.lg__spec] [.lg__rim] [.lg__glint] + anak langsung
    - Posisi/tampilan dasar memakai :where() (spesifisitas 0) supaya kelas pemakai
      (.adm-sidebar → fixed, .adm-topbar → sticky, .adm-btn → inline-flex) selalu menang, bukan bertabrakan.
    - Pembiasan SVG (Chromium) dipasang inline oleh komponen; di sini hanya fallback blur untuk browser lain.
@@ -12,10 +12,10 @@
 .lg[data-refract="off"] { --lg-tint: var(--lg-tint-frost); }
 .lg__defs { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
 
-.lg__refract, .lg__rim, .lg__glint { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+.lg__refract, .lg__spec, .lg__rim, .lg__glint { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
 
-/* Layer dekoratif ada di belakang konten (z -1 di dalam stacking context akar .lg). Urutan DOM: refract → rim → glint. */
-.lg__refract, .lg__rim, .lg__glint { z-index: -1; }
+/* Layer dekoratif ada di belakang konten (z -1 di dalam stacking context akar .lg). Urutan DOM: refract → spec → rim → glint. */
+.lg__refract, .lg__spec, .lg__rim, .lg__glint { z-index: -1; }
 
 /* Latar yang dibiaskan. Saat pembiasan aktif, komponen memasang url(#filter) + blur kecil secara inline. */
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -25,6 +25,10 @@
   }
 }
 @media (prefers-reduced-transparency: reduce) { .lg__refract { display: none; } }
+
+/* Pantulan terpisah: peta specular dihitung dari normal permukaan yang sama dengan peta pembiasan, jadi sorotan
+   mengikuti lengkung kaca (kuat di sisi menghadap cahaya, lembut di sisi seberang). Hanya ada saat pembiasan aktif. */
+.lg__spec { background-size: 100% 100%; background-repeat: no-repeat; opacity: var(--lg-spec, .9); }
 
 /* Tepi kaca: garis luar tipis gelap (menegaskan bentuk), bevel dalam, dan sorotan spekular bergradien
    (terang di sisi atas-kiri & bawah-kanan, redup di tengah) seperti kaca sungguhan. */
@@ -78,7 +82,7 @@
 }
 @media (max-width: 1023px) { .lg-dock { display: flex; } }
 .lg-dock__glass { width: 100%; max-width: 420px; pointer-events: auto; --lg-tint: rgba(255, 255, 255, .5); --lg-drop: 0 22px 44px -12px rgba(20, 45, 90, .45); }
-.lg-dock__list { list-style: none; margin: 0; padding: 6px; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
+.lg-dock__list { position: relative; list-style: none; margin: 0; padding: 6px; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; }
 .lg-dock__item {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   width: 100%; min-height: calc(var(--adm-dock-size) - 12px); padding: 6px 8px;
@@ -87,12 +91,35 @@
   transition: background .25s ease, color .2s ease, transform .3s var(--adm-ease);
 }
 .lg-dock__item:active { transform: scale(.95); }
-.lg-dock__item[aria-current="page"] { background: rgba(255, 255, 255, .78); color: var(--adm-blue-ink); box-shadow: inset 0 1px 1px #fff, 0 3px 10px rgba(55, 91, 130, .14); }
+.lg-dock__item[aria-current="page"], .lg-dock__item[data-hover="on"] { color: var(--adm-blue-ink); }
+.lg-dock__list > li:not(.lg-dock__lensmove) { position: relative; z-index: 2; }   /* ikon & label di atas lensa: tetap tajam */
+.lg-dock__item:active { transform: none; }
+.lg-dock__item .lg-dock__icon { transition: transform .35s var(--adm-ease); }
+.lg-dock__item[data-hover="on"] .lg-dock__icon { transform: scale(1.18) translateY(-1px); }
+
+/* Lensa geser: kaca kecil yang berpindah mengikuti jari. Dibungkus elemen pembawa (digerakkan lewat JS, hanya transform),
+   sedangkan LiquidGlass di dalamnya membiaskan ikon/label di bawahnya seperti lensa sungguhan. */
+.lg-dock__lensmove {
+  position: absolute; top: 6px; bottom: 6px; left: 0; z-index: 1; pointer-events: none; list-style: none;
+  width: var(--lens-w, 0px);
+  transform: translate3d(var(--lens-x, 0px), 0, 0) scale(var(--lens-s, 1));
+  transition: transform .42s cubic-bezier(.34, 1.45, .5, 1), width .3s var(--adm-ease), opacity .2s ease;
+  opacity: 0;
+}
+.lg-dock__lensmove[data-ready="on"] { opacity: 1; }
+.lg-dock__lensmove[data-dragging="on"] { transition: transform .06s linear, width .3s var(--adm-ease); }
+.lg-dock__lensmove[data-pressing="on"] { --lens-s: 1.16; }
+.lg-dock__lens { display: block; width: 100%; height: 100%; --lg-tint: rgba(255, 255, 255, .26); --lg-drop: 0 8px 18px -8px rgba(20, 50, 100, .4); transition: --lg-tint .2s ease; }
+.lg-dock__lensmove[data-pressing="on"] .lg-dock__lens { --lg-tint: rgba(255, 255, 255, .08); --lg-spec: 1; --lg-drop: 0 14px 26px -8px rgba(20, 50, 100, .5); }
+@media (prefers-reduced-motion: reduce) {
+  .lg-dock__lensmove, .lg-dock__item .lg-dock__icon { transition: none; }
+}
 .lg-dock__icon { display: grid; place-items: center; }
 
 @media (forced-colors: active) {
   .lg__rim { border-color: CanvasText; }
   .lg-dock__item[aria-current="page"] { outline: 2px solid CanvasText; }
+  .lg-dock__lensmove { outline: 2px solid CanvasText; }
 }
 
 /* ---------- Tombol & chip biasa: kaca bening via filter bersama (SharedGlassDefs) ----------

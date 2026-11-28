@@ -74,6 +74,7 @@ export function LiquidGlass({
   const active = supported && refraction === "auto";
   const [size, setSize] = useState({ w: 0, h: 0 });
   const [mapUrl, setMapUrl] = useState("");
+  const [specUrl, setSpecUrl] = useState("");
 
   // Ukuran border-box (offsetWidth/Height): akurat walau elemen punya padding dan tidak terpengaruh transform hover.
   useEffect(() => {
@@ -94,17 +95,22 @@ export function LiquidGlass({
 
   // Peta dibuat ulang hanya saat ukuran/geometri berubah, bukan per frame.
   useEffect(() => {
-    if (!active || size.w <= 0 || size.h <= 0) { setMapUrl(""); return; }
+    if (!active || size.w <= 0 || size.h <= 0) { setMapUrl(""); setSpecUrl(""); return; }
     const map = computeBevelMap({ width: size.w, height: size.h, radius, bevel });
-    const canvas = document.createElement("canvas");
-    canvas.width = map.width;
-    canvas.height = map.height;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) { setMapUrl(""); return; }
-    const img = ctx.createImageData(map.width, map.height);
-    img.data.set(map.data);
-    ctx.putImageData(img, 0, 0);
-    setMapUrl(canvas.toDataURL("image/png"));
+    const toUrl = (px: Uint8ClampedArray) => {
+      const canvas = document.createElement("canvas");
+      canvas.width = map.width;
+      canvas.height = map.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return "";
+      const img = ctx.createImageData(map.width, map.height);
+      img.data.set(px);
+      ctx.putImageData(img, 0, 0);
+      return canvas.toDataURL("image/png");
+    };
+    const url = toUrl(map.data);
+    setMapUrl(url);
+    setSpecUrl(url ? toUrl(map.spec) : "");
   }, [active, size.w, size.h, radius, bevel]);
 
   const refracting = active && mapUrl !== "";
@@ -162,6 +168,7 @@ export function LiquidGlass({
         </svg>
       ) : null}
       <span aria-hidden="true" className="lg__refract" style={backdrop ? { backdropFilter: backdrop, WebkitBackdropFilter: backdrop } : undefined} />
+      {refracting && specUrl ? <span aria-hidden="true" className="lg__spec" style={{ backgroundImage: `url(${specUrl})` }} /> : null}
       <span aria-hidden="true" className="lg__rim" />
       {glint ? <span aria-hidden="true" className="lg__glint" /> : null}
       {contentClassName ? <Inner className={contentClassName}>{children}</Inner> : children}

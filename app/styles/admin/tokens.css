@@ -116,10 +116,9 @@
   color: var(--adm-ink);
   background-color: var(--adm-bg);
 }
-/* Latar bermotif (garis organik) bernilai kontras sedang: memberi kaca sesuatu untuk dibiaskan. Tetap (fixed) agar
+/* Layer latar khusus (.adm-backdrop, elemen sendiri di belakang semua kaca): sumber tekstur yang dibiaskan. Motif (garis organik) bernilai kontras sedang: memberi kaca sesuatu untuk dibiaskan. Tetap (fixed) agar
    konten bergeser di atasnya. Palet sengaja terang supaya teks tinta tetap >7:1 di atas motif tergelapnya. */
-.adm::before {
-  content: "";
+.adm-backdrop {
   position: fixed;
   inset: 0;
   z-index: -1;
