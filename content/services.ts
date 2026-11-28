@@ -4,7 +4,7 @@
 // Halaman detail dengan konten tipis otomatis noindex sampai diperkaya (lihat content-checks.ts).
 import type { Service } from "../lib/core/types";
 
-const base = { publishStatus: "published" as const, seo: {}, updatedAt: null };
+const base = { publishStatus: "published" as const, seo: {}, updatedAt: null, instagramUrl: "", mediaRatio: "4 / 5" };
 
 export const seedServices: Service[] = [
   {
