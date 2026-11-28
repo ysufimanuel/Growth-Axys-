@@ -46,6 +46,11 @@ export function Media({ url, alt, className, preview, priority, sizes = "(max-wi
     );
   }
 
+  if (info.kind === "instagram") {
+    if (preview) return <div className="media-link-preview" style={{ aspectRatio: ratio }}>Instagram post</div>;
+    return <iframe src={info.embedUrl} title={alt} className={className} style={{ ...box, border: 0, background: "#fff" }} loading="lazy" allow="encrypted-media; picture-in-picture; web-share" allowFullScreen referrerPolicy="strict-origin-when-cross-origin" />;
+  }
+
   if (info.kind === "youtube" || info.kind === "embed") {
     if (preview) {
       return <div className="media-link-preview" style={{ aspectRatio: ratio }}>▶ {info.kind === "embed" ? info.label : "Video proyek"}</div>;
