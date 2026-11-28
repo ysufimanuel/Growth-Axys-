@@ -25,7 +25,7 @@ export function RedirectManager() {
 
   useEffect(() => { void load(); }, [load]);
 
-  async function create(event: React.FormEvent<HTMLFormElement>) {
+  async function create(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault(); setSaving(true); setError(""); setNotice("");
     const result = await adminFetch<{ id: string }>("/api/admin/redirects", {
       method: "POST",

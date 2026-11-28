@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type SubmitEvent } from "react";
 import { adminFetch } from "./api";
 
 type Settings = { title: string; description: string; ogImage: string; index: boolean; follow: boolean };
@@ -24,7 +24,7 @@ export function GlobalSeoSettings() {
     return () => { live = false; };
   }, []);
 
-  async function save(e: FormEvent<HTMLFormElement>) {
+  async function save(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault(); setSaving(true); setError(""); setNotice("");
     const r = await adminFetch<{ settings: Settings }>("/api/admin/settings/seo", { method: "PUT", body: value });
     setSaving(false);
