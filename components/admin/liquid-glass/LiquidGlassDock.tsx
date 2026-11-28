@@ -131,7 +131,7 @@ export function LiquidGlassDock({ items, label, className }: Props) {
 
   return (
     <div className={className ? `lg-dock ${className}` : "lg-dock"}>
-      <LiquidGlass as="nav" aria-label={label} radius={999} bevel={30} strength={60} aberration glint className="lg-dock__glass">
+      <LiquidGlass as="nav" aria-label={label} radius={24} bevel={26} strength={48} blur={8} saturate={1.8} aberration glint className="lg-dock__glass">
         <ul
           ref={listRef}
           className="lg-dock__list"
@@ -167,7 +167,7 @@ export function LiquidGlassDock({ items, label, className }: Props) {
             );
           })}
           <li ref={lensRef} className="lg-dock__lensmove" aria-hidden="true">
-            <LiquidGlass as="span" className="lg-dock__lens" radius={999} bevel={22} strength={34} blur={0} saturate={1.1} aberration />
+            <LiquidGlass as="span" className="lg-dock__lens" radius={18} bevel={22} strength={34} blur={0} saturate={1.1} aberration />
           </li>
         </ul>
       </LiquidGlass>

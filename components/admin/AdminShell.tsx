@@ -203,7 +203,10 @@ export function AdminShell({ nav, email, roleLabel, children }: Props) {
               <span className="adm-logout-desktop"><LogoutButton /></span>
             </div>
           </LiquidGlass>
-          <main id="adm-content" className="adm-main" tabIndex={-1}>{children}</main>
+          <main id="adm-content" className="adm-main" tabIndex={-1}>
+            {/* key={pathname}: halaman lama di-unmount penuh sebelum halaman baru dipasang, sehingga tidak ada konten yang bertumpuk. */}
+            <div key={pathname} className="adm-page">{children}</div>
+          </main>
         </div>
 
         <LiquidGlassDock items={dockItems} label="Navigasi cepat" />
