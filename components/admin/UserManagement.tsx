@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, type FormEvent } from "react";
+import { useMemo, useState, useEffect, type SubmitEvent } from "react";
 import { useRouter } from "next/navigation";
 import { adminFetch } from "./api";
 import { ConfirmDialog } from "./ConfirmDialog";
@@ -43,7 +43,7 @@ export function UserManagement({ initialAccounts, truncated, actorUid }: { initi
       && (statusFilter === "all" || a.status === statusFilter);
   }), [accounts, query, roleFilter, statusFilter]);
 
-  async function invite(e: FormEvent<HTMLFormElement>) {
+  async function invite(e: SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     setBusy(true);
     const result = await adminFetch<{ setupLink: string; note: string }>("/api/admin/invitations", {
